@@ -20,3 +20,8 @@ export function ValidarInsercionAcceso(entrada)
 {
     return CuentaEsquema.safeParse(entrada);
 }
+
+export function ValidarEdicionParcialAcceso(entrada)
+{
+    return CuentaEsquema.partial().safeParse(entrada)
+}
