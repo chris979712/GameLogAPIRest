@@ -1,12 +1,18 @@
 
 export function ErrorEnLaConfiguracionDeConexion()
 {
-    return { estadoSalida: 400, mensajeSalida: "El tipo de usuario a conectar a la base de datos es inválido."}
+    return { estado: 400, mensaje: "El tipo de usuario a conectar a la base de datos es inválido."}
 }
 
-export function ErrorEnLaBaseDeDatos()
+export function ErrorEnLaBaseDeDatosAcceso()
 {
-    return {estadoSalida: 500, mensajeSalida: "Ha ocurrido un error en la base de datos"}
+    return {estado: 500, mensaje: "Ha ocurrido un error en la base de datos"}
+}
+
+export function MensajeDeRetornoBaseDeDatos({datos})
+{
+    const { estado, mensaje } = datos;
+    return { estado, mensaje };
 }
 
 export function MensajeDeRetornoBaseDeDatosAcceso({datos})
@@ -15,8 +21,12 @@ export function MensajeDeRetornoBaseDeDatosAcceso({datos})
     return {resultado, mensaje};
 }
 
-export function MensajeDeRetornoBaseDeDatos({datos})
+export function ErrorEnLaBaseDeDatosAccesoInsercion()
 {
-    const { estado, mensaje } = datos;
-    return { estado, mensaje };
+    return {resultado: 500, mensaje: "Ha ocurrido un error en la base de datos"}
+}
+
+export function ErrorEnLaConfiguracionDeConexionAcceso()
+{
+    return { resultado: 400, mensaje: "El tipo de usuario a conectar a la base de datos es inválido."}
 }

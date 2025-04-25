@@ -1,6 +1,6 @@
 import sql from 'mssql';
 import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
-import { MensajeDeRetornoBaseDeDatosAcceso, MensajeDeRetornoBaseDeDatos, ErrorEnLaConfiguracionDeConexion, ErrorEnLaBaseDeDatos } from '../../utilidades/Constantes.js';
+import { MensajeDeRetornoBaseDeDatosAcceso, MensajeDeRetornoBaseDeDatos, ErrorEnLaConfiguracionDeConexionAcceso,ErrorEnLaBaseDeDatosAccesoInsercion, ErrorEnLaConfiguracionDeConexion, ErrorEnLaBaseDeDatos } from '../../utilidades/Constantes.js';
 
 export class ModeloAcceso{
 
@@ -43,7 +43,51 @@ export class ModeloAcceso{
             }
             else
             {
-                resultadoInsercion = ErrorEnLaConfiguracionDeConexion();
+                resultadoInsercion = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            console.log(error);
+            resultadoInsercion = ErrorEnLaBaseDeDatosAccesoInsercion();
+            throw error;
+        }
+        finally
+        {
+            if(sql.conected)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoInsercion;
+    }
+
+    static async EditarAcceso({datos, tipoDeUsuario})
+    {
+        let resultadoEdicion;
+        try
+        {
+            const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+            if(ConfiguracionConexion)
+            {
+                const Conexion = await sql.connect(ConfiguracionConexion);
+                const {
+                    idAcceso,
+                    correo,
+                    contrasenia
+                } = datos;
+                const Solicitud = Conexion.request();
+                const ResultadoSolicitud = await Solicitud.input('idAcceso',sql.Int,idAcceso)
+                    .input('correo',sql.VarChar,correo)
+                    .input('contrasenia',sql.VarChar,contrasenia)
+                    .output('estado',sql.Int)
+                    .output('mensaje',sql.VarChar)
+                    .execute('spa_Acceso');
+                resultadoEdicion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
+            }
+            else
+            {
+                resultadoEdicion = ErrorEnLaConfiguracionDeConexion();
             }
         }
         catch(error)
@@ -59,17 +103,48 @@ export class ModeloAcceso{
                 await sql.close();
             }
         }
-        return resultadoInsercion;
-    }
-
-    static async EditarAcceso({datos, tipoDeUsuario})
-    {
-
     }
 
     static async EditarEstadoAcceso({datos, tipoDeUsuario})
     {
-
+        let resultadoEdicion;
+        try
+        {
+            const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+            if(ConfiguracionConexion)
+            {
+                const Conexion = await sql.connect(ConfiguracionConexion);
+                const
+                {
+                    idAcceso,
+                    estadoAcceso
+                } = datos;
+                const Solicitud = await Conexion.request();
+                const ResultadoSolicitud = await Solicitud.input('idAcceso',sql.Int,idAcceso)
+                    .input('estadoAcceso',sql.VarChar,estadoAcceso)
+                    .output('estado',sql.Int)
+                    .output('mensaje',sql.VarChar)
+                    .execute('spa_EstadoAccesos');
+                resultadoEdicion = MensajeDeRetornoBaseDeDatos(ResultadoSolicitud)
+            }
+            else
+            {
+                resultadoInsercion = ErrorEnLaConfiguracionDeConexion();
+            }
+        }
+        catch(error)
+        {
+            console.log(error);
+            resultadoInsercion = ErrorEnLaBaseDeDatos();
+            throw error;
+        }
+        finally
+        {
+            if(sql.connect)
+            {
+                await sql.close();
+            }
+        }
     }
 
 }

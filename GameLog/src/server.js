@@ -23,3 +23,20 @@ export const CrearServidor = ({ModeloAcceso}) =>
         console.log(`Servidor activo en la siguiente ruta http://localhost:${PUERTO}`);
     })
 }
+
+export const CrearServidorTest = ({ModeloAcceso}) => {
+    const app = express();
+    dotenv.config();
+    app.use(json());
+    app.use(cors());
+    app.disable('x-powered-by');
+    app.get('/',(req,res)=>{
+        res.json({message: 'Bienvenido al servidor de GameLogAPI'});
+    });
+    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
+    const PUERTO = process.env.PUERTO;
+    const server = app.listen(PUERTO, () => {
+        console.log(`Servidor activo en la siguiente ruta http://localhost:${PUERTO}`);
+    });
+    return { app, server };
+}
