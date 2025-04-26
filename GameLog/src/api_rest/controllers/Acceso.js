@@ -1,4 +1,5 @@
-import { ValidarInsercionAcceso } from "../schemas/Acceso.js";
+import { ValidarEdicionParcialAcceso, ValidarEliminacionAcceso, ValidarInsercionAcceso, ValidarCredencialesAcceso } from "../schemas/Acceso.js";
+import { logger } from "../utilidades/logger.js";
 
 export class AccesoControlador
 {
@@ -14,15 +15,25 @@ export class AccesoControlador
         {
             if(ResultadoValidacion.success)
             {
-                const {
-                    tipoDeUsuario
-                } = req.body;
-                const ResultadoInsercion = await this.modeloAcceso.InsertarNuevaCuenta({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario})
-                res.status(parseInt(ResultadoInsercion.resultado)).json(
-                    {
-                        estado: ResultadoInsercion.resultado,
-                        mensaje: ResultadoInsercion.mensaje
-                    });
+                const ResultadoInsercion = await this.modeloAcceso.InsertarNuevaCuenta({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario})
+                let resultadoInsercion = parseInt(ResultadoInsercion.resultado)
+                if(resultadoInsercion === 500)
+                {
+                    logger.log(ResultadoInsercion.mensaje);
+                    res.status(resultadoInsercion).json(
+                        {
+                            estado: ResultadoInsercion.resultado,
+                            mensaje: 'Ha ocurrido un error en la base de datos al querer insertar los datos una nueva cuenta de acceso'
+                        });
+                }
+                else
+                {
+                    res.status(resultadoInsercion).json(
+                        {
+                            estado: ResultadoInsercion.resultado,
+                            mensaje: ResultadoInsercion.mensaje
+                        });
+                }
             }
             else
             {
@@ -35,13 +46,257 @@ export class AccesoControlador
         }
         catch(error)
         {
-            console.log(error);
+            logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
                 detalles: "Ha ocurrido un error al querer registrar el Acceso."
             });
+        }
+    }
+
+    ObtenerUsuarioLogin = async (req, res) => 
+    {
+        const ResultadoValidacion = ValidarCredencialesAcceso(req.body);
+        try
+        {
+            if(ResultadoValidacion.success)
+            {
+                const ResultadoConsulta = await this.modeloAcceso.ObtenerCuentaDeJugadorLogin({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                let resultadoConsulta = parseInt(ResultadoConsulta.estado);
+                res.status(resultadoConsulta).json({
+                    error: resultadoConsulta !== 200,
+                    estado: resultadoConsulta,
+                    ...(resultadoConsulta === 200
+                        ? { cuenta: ResultadoConsulta.cuenta }
+                        : { mensaje: ResultadoConsulta.mensaje }
+                    )
+                });
+                
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    detalles: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                detalles: 'Ha ocurrido un error al obtener los datos del usuario.'
+            }
+            )
+        }
+    }
+
+    ObtenerIDDeCuentaDeAcceso = async (req,res) =>
+    {
+        const correo = req.params.correo;
+        const {tipoDeUsuario} = req.body;
+        const Datos = {correo,tipoDeUsuario};
+        const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
+        console.log(ResultadoValidacion);
+        console.log(correo);
+        try
+        {
+            if(ResultadoValidacion.success)
+            {
+                const ResultadoConsulta = await this.modeloAcceso.ObtenerIdDeAccesoPorCorreo({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                let resultadoConsulta = parseInt(ResultadoConsulta.estado);
+                res.status(resultadoConsulta).json({
+                    error: resultadoConsulta !== 200,
+                    estado: resultadoConsulta,
+                    ...(resultadoConsulta === 200
+                        ? { idAcceso: ResultadoConsulta.idAcceso }
+                        : { mensaje: ResultadoConsulta.mensaje }
+                    )
+                });
+                
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    detalles: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                detalles: 'Ha ocurrido un error al obtener los datos del usuario.'
+            }
+            )
+        }
+
+    }
+
+    EditarAcceso = async (req, res) =>
+    {
+        const idAcceso = req.params.idAcceso;
+        const {correo,contrasenia, tipoDeUsuario} = datos;
+        const Datos = {idAcceso, correo, contrasenia, tipoDeUsuario};
+        const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
+        try
+        {
+            if(ResultadoValidacion.success)
+            {
+                const ResultadoEdicion = await this.modeloAcceso.EditarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario})
+                let resultadoEdicion = parseInt(ResultadoEdicion.estado)
+                if(resultadoEdicion === 500)
+                {
+                    logger.log(ResultadoEdicion.mensaje);
+                    res.status(resultadoEdicion).json(
+                        {
+                            estado: ResultadoEdicion.resultado,
+                            mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
+                        });
+                }
+                else
+                {
+                    res.status(resultadoEdicion).json(
+                        {
+                            estado: ResultadoEdicion.resultado,
+                            mensaje: ResultadoEdicion.mensaje
+                        });
+                }
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    detalles: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                detalles: 'Ha ocurrido un error al editar el acceso del usuario.'
+            }
+            )
+        }
+    }
+
+    EditarEstadoAcceso = async (req, res) =>
+    {
+        const idAcceso= req.params.idAcceso;
+        const { tipoDeUsuario, estadoAcceso} = req.body;
+        const Datos = {idAcceso, tipoDeUsuario, estadoAcceso};
+        const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
+        try
+        {
+            if(ResultadoValidacion.success)
+            {
+                const ResultadoEdicion = await this.modeloAcceso.EditarEstadoAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                let resultadoEdicion = parseInt(ResultadoEdicion.estado)
+                if(resultadoEdicion === 500)
+                {
+                    logger.log(ResultadoEdicion.mensaje);
+                    res.status(resultadoEdicion).json(
+                        {
+                            estado: ResultadoEdicion.resultado,
+                            mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
+                        });
+                }
+                else
+                {
+                    res.status(resultadoEdicion).json(
+                        {
+                            estado: ResultadoEdicion.resultado,
+                            mensaje: ResultadoEdicion.mensaje
+                        });
+                }
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    detalles: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                detalles: 'Ha ocurrido un error al editar las credenciales de acceso'
+            }
+            )
+        }
+    }
+
+    BorrarAcceso = async (req, res) =>
+    {
+        try
+        {
+            const idAcceso = parseInt(req.params.idAcceso);
+            const { tipoDeUsuario, correo} = req.body;
+            const datos = { idAcceso, tipoDeUsuario, correo };
+            const ResultadoValidacion = ValidarEliminacionAcceso(datos);
+            if(ResultadoValidacion.success)
+            {
+                const ResultadoEliminacion = await this.modeloAcceso.BorrarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
+                if(resultadoEliminacion === 500)
+                {
+                    logger.log(ResultadoEliminacion.mensaje);
+                    res.status(resultadoEliminacion).json(
+                        {
+                            estado: ResultadoEliminacion.resultado,
+                            mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar una cuenta de acceso'
+                        });
+                }
+                else
+                {
+                    res.status(resultadoEliminacion).json(
+                        {
+                            estado: ResultadoEliminacion.resultado,
+                            mensaje: ResultadoEliminacion.mensaje
+                        });
+                }
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    detalles: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                detalles: 'Ha ocurrido un error al eliminar al usuario.'
+            }
+            )
         }
     }
 }

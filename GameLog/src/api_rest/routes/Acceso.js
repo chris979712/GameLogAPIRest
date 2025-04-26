@@ -7,8 +7,11 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
     const AccesoEnrutador = Router();
     const ControladorAccesoEnrutador = new AccesoControlador({ModeloAcceso});
     AccesoEnrutador.post('/',ControladorAccesoEnrutador.RegistrarAcceso);
-    AccesoEnrutador.patch('/:id');
-    AccesoEnrutador.patch('/:id/estado');
+    AccesoEnrutador.get('/',ControladorAccesoEnrutador.ObtenerUsuarioLogin);
+    AccesoEnrutador.get('/:correo',ControladorAccesoEnrutador.ObtenerIDDeCuentaDeAcceso)
+    AccesoEnrutador.put('/:idAcceso',ControladorAccesoEnrutador.EditarAcceso);
+    AccesoEnrutador.patch('/:idAcceso',ControladorAccesoEnrutador.EditarEstadoAcceso);
+    AccesoEnrutador.delete('/:idAcceso',ControladorAccesoEnrutador.BorrarAcceso);
 
     return AccesoEnrutador;
 }

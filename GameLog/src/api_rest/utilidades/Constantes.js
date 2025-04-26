@@ -1,4 +1,3 @@
-
 export function ErrorEnLaConfiguracionDeConexion()
 {
     return { estado: 400, mensaje: "El tipo de usuario a conectar a la base de datos es inválido."}

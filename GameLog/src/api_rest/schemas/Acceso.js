@@ -16,6 +16,24 @@ const CuentaEsquema = zod.object(
 }
 )
 
+const CuentaEliminacion = zod.object(
+{
+    idAcceso: zod.number({ invalid_type_error: 'El idAcceso ingresado no es válido',required_error: 'El idAcceso es un campo requerido'}).int().positive().nullable(),
+    correo: zod.string().email({ invalid_type_error: 'El correo ingresado no es válido',required_error: 'El correo es un campo requerido'}).nullable(),
+    tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido',required_error: 'El tipo de acceso es un campo requerido'}).min(7).max(13).regex(SoloLetras)
+}
+)
+
+const CuentaEsquemaEdicion = zod.object(
+{
+    idAcceso: zod.number({ invalid_type_error: 'El idAcceso ingresado no es válido',required_error: 'El idAcceso es un campo requerido'}).int().positive(),
+    correo: zod.string().email({ invalid_type_error: 'El correo ingresado no es válido',required_error: 'El correo es un campo requerido'}),
+    contrasenia: zod.string(),
+    estado: zod.string({ invalid_type_error: 'El estado ingresado no es válido',required_error: 'El estado es un campo requerido'}).min(7).max(13).regex(SoloLetras),
+    tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido',required_error: 'El tipo de acceso es un campo requerido'}).min(7).max(13).regex(SoloLetras)
+}
+)
+
 export function ValidarInsercionAcceso(entrada)
 {
     return CuentaEsquema.safeParse(entrada);
@@ -23,5 +41,15 @@ export function ValidarInsercionAcceso(entrada)
 
 export function ValidarEdicionParcialAcceso(entrada)
 {
-    return CuentaEsquema.partial().safeParse(entrada)
+    return CuentaEsquemaEdicion.partial().safeParse(entrada);
+}
+
+export function ValidarCredencialesAcceso(entrada)
+{
+    return CuentaEsquema.partial().safeParse(entrada);
+}
+
+export function ValidarEliminacionAcceso(entrada)
+{
+    return CuentaEliminacion.safeParse(entrada);
 }
