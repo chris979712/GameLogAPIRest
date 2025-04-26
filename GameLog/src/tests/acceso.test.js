@@ -13,7 +13,7 @@ afterAll(async () => {
     servidor.close();
 });
 
-describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta y estado de la cuenta)', () => 
+describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () => 
 {
     test('POST /acceso - Se crea una nueva cuenta de acceso', async () => 
     {
