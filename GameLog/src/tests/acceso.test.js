@@ -16,7 +16,7 @@ afterAll(async () => {
         .get(`/acceso/${correo}`)
         .set("Content-Type","application/json")
         .send(datos);
-    const idAcceso = resIdUsuario.body.data.idAcceso;
+    const idAcceso = resIdUsuario.body.idAcceso;
     const datosEliminacion = {
         idAcceso: idAcceso,
         tipoDeUsuario: "Administrador",
@@ -91,9 +91,9 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
             .get(`/acceso/${correo}`)
             .set("Content-Type","application/json")
             .send(datos);
-        const idAcceso = resIdUsuario.body.data.idAcceso;
+        const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
-            idAcceso: idAcceso,
+            idAcceso,
             correo: "chrisvasquez777@gmail.com",
             contrasenia: "0x1111111111313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
@@ -115,9 +115,9 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
             .get(`/acceso/${correo}`)
             .set("Content-Type","application/json")
             .send(datos);
-        const idAcceso = resIdUsuario.body.data.idAcceso;
+        const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
-            idAcceso: idAcceso,
+            idAcceso,
             tipoDeUsuario: "Administrador",
             estadoAcceso: "Baneado"
         }
