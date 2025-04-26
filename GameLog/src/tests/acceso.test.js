@@ -55,6 +55,30 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
         expect(res.body.mensaje).toBe("La nueva cuenta de acceso ha sido registrada correctamente")
     })
 
+    test('POST /acceso - Se crea una cuenta con datos duplicados', async () => 
+        {
+            const datos = 
+            {
+                correo: "oscarcito666@gmail.com",
+                contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                estado: "Desbaneado",
+                nombre: "Chris",
+                primerApellido: "Vasquez",
+                segundoApellido: "Zapata",
+                nombreDeUsuario: "christolin555",
+                descripcion: " ",
+                foto: "pepe",
+                tipoDeUsuario: "Administrador"
+            };
+            const res = await request(servidor)
+                .post("/acceso")
+                .set("Content-Type","application/json")
+                .send(datos);
+            expect(res.statusCode).toBe(400);
+            expect(res.body).toHaveProperty("mensaje");
+            expect(res.body.mensaje).toBe("El correo ingresado ya se encuentra registrado")
+        })
+
     test('GET /acceso - Obtiene la cuenta que se ingresa para iniciar sesión', async() => 
     {
         const datos =
@@ -71,6 +95,21 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
         expect(res.body).toHaveProperty("cuenta");
     })
 
+    test('GET /acceso - No se obtiene ninguna cuenta registrada dentro de la base de datos', async() => 
+        {
+            const datos =
+            {
+                correo: "chrisvasquez404@gmail.com",
+                contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                tipoDeUsuario: "Administrador"
+            }
+            const res = await request(servidor)
+                .get('/acceso')
+                .set("Content-Type","application/json")
+                .send(datos);
+            expect(res.statusCode).toBe(404);
+        })
+
     test('GET /acceso/:correo - Obtiene el id de la cuenta a través del correo ingresado', async() => 
     {
         const correo = "oscarcito666@gmail.com";
@@ -82,6 +121,17 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
         expect(resIdUsuario.status).toBe(200);
         expect(resIdUsuario.body).toHaveProperty("idAcceso");
     })
+
+    test('GET /acceso/:correo - Se intenta obtener el id de una cuenta inexistente', async() => 
+        {
+            const correo = "chrisvasquez404@gmail.com";
+            const datos = { tipoDeUsuario: "Administrador"};
+            const resIdUsuario = await request(servidor)
+                .get(`/acceso/${correo}`)
+                .set("Content-Type","application/json")
+                .send(datos);
+            expect(resIdUsuario.status).toBe(404);
+        })
 
     test('PUT /acceso/:id - Se editan las credenciales de acceso de una cuenta existente', async () => 
     {
