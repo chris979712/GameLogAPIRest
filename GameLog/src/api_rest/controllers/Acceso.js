@@ -19,7 +19,7 @@ export class AccesoControlador
                 let resultadoInsercion = parseInt(ResultadoInsercion.resultado)
                 if(resultadoInsercion === 500)
                 {
-                    logger.log(ResultadoInsercion.mensaje);
+                    logger(ResultadoInsercion.mensaje);
                     res.status(resultadoInsercion).json(
                         {
                             estado: ResultadoInsercion.resultado,
@@ -37,21 +37,23 @@ export class AccesoControlador
             }
             else
             {
+                console.log(error);
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    detalles: ResultadoValidacion.error.formErrors
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
         catch(error)
         {
+            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
-                detalles: "Ha ocurrido un error al querer registrar el Acceso."
+                mensaje: "Ha ocurrido un error al querer registrar el Acceso."
             });
         }
     }
@@ -77,21 +79,23 @@ export class AccesoControlador
             }
             else
             {
+                console.log(error);
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    detalles: ResultadoValidacion.error.formErrors
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
         catch(error)
         {
+            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
-                detalles: 'Ha ocurrido un error al obtener los datos del usuario.'
+                mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
             }
             )
         }
@@ -103,8 +107,6 @@ export class AccesoControlador
         const {tipoDeUsuario} = req.body;
         const Datos = {correo,tipoDeUsuario};
         const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
-        console.log(ResultadoValidacion);
-        console.log(correo);
         try
         {
             if(ResultadoValidacion.success)
@@ -126,18 +128,19 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    detalles: ResultadoValidacion.error.formErrors
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
         catch(error)
         {
             logger({mensaje: error});
+            console.log(error);
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
-                detalles: 'Ha ocurrido un error al obtener los datos del usuario.'
+                mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
             }
             )
         }
@@ -146,19 +149,19 @@ export class AccesoControlador
 
     EditarAcceso = async (req, res) =>
     {
-        const idAcceso = req.params.idAcceso;
-        const {correo,contrasenia, tipoDeUsuario} = datos;
-        const Datos = {idAcceso, correo, contrasenia, tipoDeUsuario};
-        const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
         try
         {
+            const idAcceso = parseInt(req.params.idAcceso);
+            const {correo,contrasenia, tipoDeUsuario} = req.body;
+            const Datos = {idAcceso, correo, contrasenia, tipoDeUsuario};
+            const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
             {
                 const ResultadoEdicion = await this.modeloAcceso.EditarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario})
                 let resultadoEdicion = parseInt(ResultadoEdicion.estado)
                 if(resultadoEdicion === 500)
                 {
-                    logger.log(ResultadoEdicion.mensaje);
+                    logger(ResultadoEdicion.mensaje);
                     res.status(resultadoEdicion).json(
                         {
                             estado: ResultadoEdicion.resultado,
@@ -179,18 +182,19 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    detalles: ResultadoValidacion.error.formErrors
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
         catch(error)
         {
+            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
-                detalles: 'Ha ocurrido un error al editar el acceso del usuario.'
+                mensaje: 'Ha ocurrido un error al editar el acceso del usuario.'
             }
             )
         }
@@ -198,19 +202,20 @@ export class AccesoControlador
 
     EditarEstadoAcceso = async (req, res) =>
     {
-        const idAcceso= req.params.idAcceso;
-        const { tipoDeUsuario, estadoAcceso} = req.body;
-        const Datos = {idAcceso, tipoDeUsuario, estadoAcceso};
-        const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
         try
         {
+            const idAcceso= parseInt(req.params.idAcceso);
+            const { tipoDeUsuario, estadoAcceso} = req.body;
+            const Datos = {idAcceso, tipoDeUsuario, estadoAcceso};
+            const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
             {
                 const ResultadoEdicion = await this.modeloAcceso.EditarEstadoAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
                 let resultadoEdicion = parseInt(ResultadoEdicion.estado)
                 if(resultadoEdicion === 500)
                 {
-                    logger.log(ResultadoEdicion.mensaje);
+                    logger(ResultadoEdicion);
+                    console.log(resultadoEdicion);
                     res.status(resultadoEdicion).json(
                         {
                             estado: ResultadoEdicion.resultado,
@@ -231,18 +236,19 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    detalles: ResultadoValidacion.error.formErrors
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
         catch(error)
         {
+            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
-                detalles: 'Ha ocurrido un error al editar las credenciales de acceso'
+                mensaje: 'Ha ocurrido un error al editar el estado de acceso'
             }
             )
         }
@@ -262,7 +268,7 @@ export class AccesoControlador
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
                 if(resultadoEliminacion === 500)
                 {
-                    logger.log(ResultadoEliminacion.mensaje);
+                    logger(ResultadoEliminacion.mensaje);
                     res.status(resultadoEliminacion).json(
                         {
                             estado: ResultadoEliminacion.resultado,
@@ -283,18 +289,19 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    detalles: ResultadoValidacion.error.formErrors
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
         catch(error)
         {
+            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,
                 estado: 500,
-                detalles: 'Ha ocurrido un error al eliminar al usuario.'
+                mensaje: 'Ha ocurrido un error al eliminar al usuario.'
             }
             )
         }

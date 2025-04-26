@@ -29,7 +29,7 @@ const CuentaEsquemaEdicion = zod.object(
     idAcceso: zod.number({ invalid_type_error: 'El idAcceso ingresado no es válido',required_error: 'El idAcceso es un campo requerido'}).int().positive(),
     correo: zod.string().email({ invalid_type_error: 'El correo ingresado no es válido',required_error: 'El correo es un campo requerido'}),
     contrasenia: zod.string(),
-    estado: zod.string({ invalid_type_error: 'El estado ingresado no es válido',required_error: 'El estado es un campo requerido'}).min(7).max(13).regex(SoloLetras),
+    estadoAcceso: zod.string({ invalid_type_error: 'El estado ingresado no es válido',required_error: 'El estado es un campo requerido'}).min(7).max(13).regex(SoloLetras),
     tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido',required_error: 'El tipo de acceso es un campo requerido'}).min(7).max(13).regex(SoloLetras)
 }
 )

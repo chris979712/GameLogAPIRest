@@ -10,22 +10,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    const correo = "chrisvasquez777@gmail.com";
-    const datos = { tipoDeUsuario: "Administrador"};
-    const resIdUsuario = await request(servidor)
-        .get(`/acceso/${correo}`)
-        .set("Content-Type","application/json")
-        .send(datos);
-    const idAcceso = resIdUsuario.body.idAcceso;
-    const datosEliminacion = {
-        idAcceso: idAcceso,
-        tipoDeUsuario: "Administrador",
-        correo: "Baneado"
-    }
-    const resEliminacion = await request(servidor)
-        .delete(`/acceso/:idAcceso`)
-        .set("Content-Type","application/json")
-        .send(datosEliminacion);
     servidor.close();
 });
 
@@ -143,18 +127,33 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
             .send(datos);
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
-            idAcceso,
             correo: "chrisvasquez777@gmail.com",
-            contrasenia: "0x1111111111313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
         const resEdicion = await request(servidor)
             .put(`/acceso/${idAcceso}`)
             .set("Content-Type","application/json")
             .send(datosEdicion);
+        expect(resEdicion.body.mensaje).toBe("Los datos de acceso han sido modificados con éxito.");
         expect(resEdicion.statusCode).toBe(200);
         expect(resEdicion.body).toHaveProperty("mensaje");
-        expect(resEdicion.body.mensaje).toBe("Los datos de acceso han sido modificados con éxito.");
+    })
+
+    test('PUT /acceso/:id - Se tratan de editar credenciales de una cuenta inexistente', async () => 
+    {
+        const datosEdicion = {
+            correo: "chrisvasquez777@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            tipoDeUsuario: "Administrador"
+        }
+        const resEdicion = await request(servidor)
+            .put(`/acceso/${24}`)
+            .set("Content-Type","application/json")
+            .send(datosEdicion);
+        expect(resEdicion.body.mensaje).toBe("El ID de la cuenta ingresada no existe.");
+        expect(resEdicion.statusCode).toBe(400);
+        expect(resEdicion.body).toHaveProperty("mensaje");
     })
 
     test('PATCH /acceso/:id - Se edita el estado de la cuenta de acceso a Baneado o Desbaneado', async() => 
@@ -175,8 +174,56 @@ describe('Test para el modelo de Acceso (Creaciond de cuenta, edicion de cuenta 
             .patch(`/acceso/${idAcceso}`)
             .set("Content-Type","application/json")
             .send(datosEdicion);
+        expect(resEdicion.body.mensaje).toBe("El estado de la cuenta ha sido modificada con éxito");
         expect(resEdicion.statusCode).toBe(200);
         expect(resEdicion.body).toHaveProperty("mensaje");
-        expect(resEdicion.body.mensaje).toBe("El estado de la cuenta ha sido modificada con éxito");
+    })
+
+    test("PATCH /acceso/:id - Se trata de editar el estado de una cuenta inexistente", async () => {
+        const datosEdicion = {
+            idAcceso: 24,
+            tipoDeUsuario: "Administrador",
+            estadoAcceso: "Baneado",
+        };
+        const resEdicion = await request(servidor)
+            .patch(`/acceso/${24}`)
+            .set("Content-Type", "application/json")
+            .send(datosEdicion);
+        expect(resEdicion.body.mensaje).toBe(
+            "El ID de la cuenta ingresada no existe."
+        );
+        expect(resEdicion.statusCode).toBe(400);
+        expect(resEdicion.body).toHaveProperty("mensaje");
+    });
+
+    test("DELTE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
+        const correo = "chrisvasquez777@gmail.com";
+        const datos = { tipoDeUsuario: "Administrador"};
+        const resIdUsuario = await request(servidor)
+            .get(`/acceso/${correo}`)
+            .set("Content-Type","application/json")
+            .send(datos);
+        const idAcceso = resIdUsuario.body.idAcceso;
+        const datosEliminacion = {
+            tipoDeUsuario: "Administrador",
+            correo: "chrisvasquez777@gmail.com"
+        }
+        const resEliminacion = await request(servidor)
+            .delete(`/acceso/${idAcceso}`)
+            .set("Content-Type","application/json")
+            .send(datosEliminacion);
+        expect(resEliminacion.statusCode).toBe(200);
+    })
+
+    test("DELETE /acceso/:id - Eliminar una cuenta inexistente de la base de datos", async() => {
+        const datosEliminacion = {
+            tipoDeUsuario: "Administrador",
+            correo: "chrisvasquez985@gmail.com"
+        }
+        const resEliminacion = await request(servidor)
+            .delete(`/acceso/${24}`)
+            .set("Content-Type","application/json")
+            .send(datosEliminacion);
+        expect(resEliminacion.statusCode).toBe(400);
     })
 })
