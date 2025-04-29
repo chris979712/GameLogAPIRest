@@ -5,7 +5,7 @@ import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
 let servidor;
 
 beforeAll(async () => {
-    const { app, server: servidorCreado } = CrearServidorTest({ModeloAcceso : ModeloAcceso});
+    const { server: servidorCreado } = CrearServidorTest({ModeloAcceso : ModeloAcceso});
     servidor = servidorCreado;
 });
 
@@ -65,43 +65,32 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
 
     test('GET /acceso - Obtiene la cuenta que se ingresa para iniciar sesión', async() => 
     {
-        const datos =
-        {
-            correo: "oscarcito666@gmail.com",
-            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-            tipoDeUsuario: "Administrador"
-        }
+        const correo = "oscarcito666@gmail.com";
+        const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        const tipoDeUsuario = "Administrador";
         const res = await request(servidor)
-            .get('/acceso')
-            .set("Content-Type","application/json")
-            .send(datos);
+            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`);
+        console.log(res.body.cuenta);
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveProperty("cuenta");
     })
 
     test('GET /acceso - No se obtiene ninguna cuenta registrada dentro de la base de datos', async() => 
         {
-            const datos =
-            {
-                correo: "chrisvasquez404@gmail.com",
-                contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-                tipoDeUsuario: "Administrador"
-            }
+            const correo= "chrisvasquez404@gmail.com";
+            const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+            const tipoDeUsuario = "Administrador";
             const res = await request(servidor)
-                .get('/acceso')
-                .set("Content-Type","application/json")
-                .send(datos);
+                .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`)
             expect(res.statusCode).toBe(404);
         })
 
     test('GET /acceso/:correo - Obtiene el id de la cuenta a través del correo ingresado', async() => 
     {
         const correo = "oscarcito666@gmail.com";
-        const datos = { tipoDeUsuario: "Administrador"};
+        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
-            .set("Content-Type","application/json")
-            .send(datos);
+            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`);
         expect(resIdUsuario.status).toBe(200);
         expect(resIdUsuario.body).toHaveProperty("idAcceso");
     })
@@ -109,22 +98,18 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('GET /acceso/:correo - Se intenta obtener el id de una cuenta inexistente', async() => 
         {
             const correo = "chrisvasquez404@gmail.com";
-            const datos = { tipoDeUsuario: "Administrador"};
+            const tipoDeUsuario = "Administrador";
             const resIdUsuario = await request(servidor)
-                .get(`/acceso/${correo}`)
-                .set("Content-Type","application/json")
-                .send(datos);
+                .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`);
             expect(resIdUsuario.status).toBe(404);
         })
 
     test('PUT /acceso/:id - Se editan las credenciales de acceso de una cuenta existente', async () => 
     {
         const correo = "oscarcito666@gmail.com";
-        const datos = { tipoDeUsuario: "Administrador"};
+        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
-            .set("Content-Type","application/json")
-            .send(datos);
+            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
             correo: "chrisvasquez777@gmail.com",
@@ -159,11 +144,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('PATCH /acceso/:id - Se edita el estado de la cuenta de acceso a Baneado o Desbaneado', async() => 
     {
         const correo = "chrisvasquez777@gmail.com";
-        const datos = { tipoDeUsuario: "Administrador"};
+        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
-            .set("Content-Type","application/json")
-            .send(datos);
+            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
             idAcceso,
@@ -196,13 +179,11 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         expect(resEdicion.body).toHaveProperty("mensaje");
     });
 
-    test("DELTE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
+    test("DELETE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
         const correo = "chrisvasquez777@gmail.com";
-        const datos = { tipoDeUsuario: "Administrador"};
+        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
-            .set("Content-Type","application/json")
-            .send(datos);
+            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEliminacion = {
             tipoDeUsuario: "Administrador",

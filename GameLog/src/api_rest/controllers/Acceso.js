@@ -10,9 +10,9 @@ export class AccesoControlador
 
     RegistrarAcceso = async (req, res) =>
     {
-        const ResultadoValidacion = ValidarInsercionAcceso(req.body);
         try
         {
+            const ResultadoValidacion = ValidarInsercionAcceso(req.body);
             if(ResultadoValidacion.success)
             {
                 const ResultadoInsercion = await this.modeloAcceso.InsertarNuevaCuenta({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario})
@@ -60,12 +60,15 @@ export class AccesoControlador
 
     ObtenerUsuarioLogin = async (req, res) => 
     {
-        const ResultadoValidacion = ValidarCredencialesAcceso(req.body);
         try
         {
+            const {correo, contrasenia} = req.query;
+            const Datos = {correo, contrasenia};
+            const {tipoDeUsuario} = req;
+            const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoConsulta = await this.modeloAcceso.ObtenerCuentaDeJugadorLogin({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                const ResultadoConsulta = await this.modeloAcceso.ObtenerCuentaDeJugadorLogin({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoConsulta = parseInt(ResultadoConsulta.estado);
                 res.status(resultadoConsulta).json({
                     error: resultadoConsulta !== 200,
@@ -103,15 +106,15 @@ export class AccesoControlador
 
     ObtenerIDDeCuentaDeAcceso = async (req,res) =>
     {
-        const correo = req.params.correo;
-        const {tipoDeUsuario} = req.body;
-        const Datos = {correo,tipoDeUsuario};
-        const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
         try
         {
+            const correo = req.params.correo;
+            const {tipoDeUsuario} = req;
+            const Datos = {correo};
+            const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoConsulta = await this.modeloAcceso.ObtenerIdDeAccesoPorCorreo({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                const ResultadoConsulta = await this.modeloAcceso.ObtenerIdDeAccesoPorCorreo({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoConsulta = parseInt(ResultadoConsulta.estado);
                 res.status(resultadoConsulta).json({
                     error: resultadoConsulta !== 200,
@@ -152,7 +155,8 @@ export class AccesoControlador
         try
         {
             const idAcceso = parseInt(req.params.idAcceso);
-            const {correo,contrasenia, tipoDeUsuario} = req.body;
+            const {correo,contrasenia} = req.body;
+            const {tipoDeUsuario} = req;
             const Datos = {idAcceso, correo, contrasenia, tipoDeUsuario};
             const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
@@ -205,7 +209,8 @@ export class AccesoControlador
         try
         {
             const idAcceso= parseInt(req.params.idAcceso);
-            const { tipoDeUsuario, estadoAcceso} = req.body;
+            const {estadoAcceso} = req.body;
+            const {tipoDeUsuario} = req;
             const Datos = {idAcceso, tipoDeUsuario, estadoAcceso};
             const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
@@ -259,12 +264,13 @@ export class AccesoControlador
         try
         {
             const idAcceso = parseInt(req.params.idAcceso);
-            const { tipoDeUsuario, correo} = req.body;
-            const datos = { idAcceso, tipoDeUsuario, correo };
+            const {correo} = req.body;
+            const datos = { idAcceso, correo };
+            const {tipoDeUsuario} = req;
             const ResultadoValidacion = ValidarEliminacionAcceso(datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoEliminacion = await this.modeloAcceso.BorrarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                const ResultadoEliminacion = await this.modeloAcceso.BorrarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
                 if(resultadoEliminacion === 500)
                 {
