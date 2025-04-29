@@ -2,8 +2,10 @@ import express, { json } from 'express';
 import { CrearRutaAcceso } from './api_rest/routes/Acceso.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { CrearRutaLogin } from './api_rest/routes/Login.js';
+import { ValidarJwt } from './api_rest/middlewares/jwt.js';
 
-export const CrearServidor = ({ModeloAcceso}) => 
+export const CrearServidor = ({ModeloAcceso, ModeloLogin}) => 
 {
     const app = express();
     dotenv.config();
@@ -16,6 +18,7 @@ export const CrearServidor = ({ModeloAcceso}) =>
     })
 
     app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
+    app.use('/login',CrearRutaLogin({ModeloLogin}));
 
     const PUERTO = process.env.PUERTO;
 
@@ -24,7 +27,7 @@ export const CrearServidor = ({ModeloAcceso}) =>
     })
 }
 
-export const CrearServidorTest = ({ModeloAcceso}) => {
+export const CrearServidorTest = ({ModeloAcceso, ModeloLogin}) => {
     const app = express();
     dotenv.config();
     app.use(json());
@@ -34,6 +37,8 @@ export const CrearServidorTest = ({ModeloAcceso}) => {
         res.json({message: 'Bienvenido al servidor de GameLogAPI'});
     });
     app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
+    app.use('/login',CrearRutaLogin({ModeloLogin}));
+
     const PUERTO = process.env.PUERTO;
     const server = app.listen(PUERTO, () => {
         console.log(`Servidor activo en la siguiente ruta http://localhost:${PUERTO}`);
