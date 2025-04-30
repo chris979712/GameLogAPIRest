@@ -1,15 +1,58 @@
 import request  from "supertest";
 import { CrearServidorTest } from "../server.js";
 import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
+import { ModeloLogin } from "../api_rest/model/sql/Login.js";
 
 let servidor;
+let token;
 
 beforeAll(async () => {
-    const { server: servidorCreado } = CrearServidorTest({ModeloAcceso : ModeloAcceso});
+    const { server: servidorCreado } = CrearServidorTest({ModeloAcceso : ModeloAcceso,ModeloLogin:ModeloLogin});
     servidor = servidorCreado;
+    servidor = servidorCreado;
+    const datos = 
+        {
+            correo: "usuarioprueba@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            estado: "Desbaneado",
+            nombre: "pruebaAcceso",
+            primerApellido: "prueba",
+            segundoApellido: "prueba",
+            nombreDeUsuario: "prueba",
+            descripcion: "login",
+            foto: "login.jpg",
+            tipoDeUsuario: "Administrador"
+        };
+    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datos);
+    const DatosUsuario = 
+        {
+            correo: "usuarioprueba@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            tipoDeUsuario: "Administrador"
+        }
+    const resLogin = await request(servidor).post('/login').set("Content-Type","application/json").send(DatosUsuario);
+    token = resLogin.headers['access_token'];
 });
 
 afterAll(async () => {
+    const correo = "usuarioprueba@gmail.com";
+    const tipoDeUsuario = "Administrador";
+    const resIdUsuario = await request(servidor)
+        .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+        .set({
+            "access_token": `Bearer ${token}`
+        })
+    const idAcceso = resIdUsuario.body.idAcceso;
+    const datosEliminacion = {
+            tipoDeUsuario: "Administrador",
+            correo: "usuarioprueba@gmail.com"
+        }
+    await request(servidor).delete(`/acceso/${idAcceso}`)
+        .set({
+            "Content-Type": "application/json",
+            "access_token": `Bearer ${token}`
+        })
+        .send(datosEliminacion);
     servidor.close();
 });
 
@@ -27,7 +70,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             segundoApellido: "Apodaca",
             nombreDeUsuario: "Garcia",
             descripcion: " ",
-            foto: "ranarene",
+            foto: "foto1.jpg",
             tipoDeUsuario: "Administrador"
         };
         const res = await request(servidor)
@@ -51,7 +94,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
                 segundoApellido: "Zapata",
                 nombreDeUsuario: "christolin555",
                 descripcion: " ",
-                foto: "pepe",
+                foto: "pepe.png",
                 tipoDeUsuario: "Administrador"
             };
             const res = await request(servidor)
@@ -69,7 +112,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
         const tipoDeUsuario = "Administrador";
         const res = await request(servidor)
-            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`);
+            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
         console.log(res.body.cuenta);
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveProperty("cuenta");
@@ -82,6 +128,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             const tipoDeUsuario = "Administrador";
             const res = await request(servidor)
                 .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`)
+                .set({
+                    "access_token": `Bearer ${token}`
+                })
             expect(res.statusCode).toBe(404);
         })
 
@@ -90,7 +139,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         const correo = "oscarcito666@gmail.com";
         const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`);
+            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
         expect(resIdUsuario.status).toBe(200);
         expect(resIdUsuario.body).toHaveProperty("idAcceso");
     })
@@ -100,7 +152,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             const correo = "chrisvasquez404@gmail.com";
             const tipoDeUsuario = "Administrador";
             const resIdUsuario = await request(servidor)
-                .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`);
+            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
             expect(resIdUsuario.status).toBe(404);
         })
 
@@ -110,6 +165,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
             .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
             correo: "chrisvasquez777@gmail.com",
@@ -118,7 +176,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         }
         const resEdicion = await request(servidor)
             .put(`/acceso/${idAcceso}`)
-            .set("Content-Type","application/json")
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
             .send(datosEdicion);
         expect(resEdicion.body.mensaje).toBe("Los datos de acceso han sido modificados con éxito.");
         expect(resEdicion.statusCode).toBe(200);
@@ -134,7 +195,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         }
         const resEdicion = await request(servidor)
             .put(`/acceso/${24}`)
-            .set("Content-Type","application/json")
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
             .send(datosEdicion);
         expect(resEdicion.body.mensaje).toBe("El ID de la cuenta ingresada no existe.");
         expect(resEdicion.statusCode).toBe(400);
@@ -147,6 +211,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
             .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEdicion = {
             idAcceso,
@@ -155,7 +222,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         }
         const resEdicion = await request(servidor)
             .patch(`/acceso/${idAcceso}`)
-            .set("Content-Type","application/json")
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
             .send(datosEdicion);
         expect(resEdicion.body.mensaje).toBe("El estado de la cuenta ha sido modificada con éxito");
         expect(resEdicion.statusCode).toBe(200);
@@ -170,7 +240,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         };
         const resEdicion = await request(servidor)
             .patch(`/acceso/${24}`)
-            .set("Content-Type", "application/json")
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
             .send(datosEdicion);
         expect(resEdicion.body.mensaje).toBe(
             "El ID de la cuenta ingresada no existe."
@@ -181,9 +254,11 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
 
     test("DELETE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
         const correo = "chrisvasquez777@gmail.com";
-        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .get(`/acceso/${correo}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            });
         const idAcceso = resIdUsuario.body.idAcceso;
         const datosEliminacion = {
             tipoDeUsuario: "Administrador",
@@ -191,7 +266,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         }
         const resEliminacion = await request(servidor)
             .delete(`/acceso/${idAcceso}`)
-            .set("Content-Type","application/json")
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
             .send(datosEliminacion);
         expect(resEliminacion.statusCode).toBe(200);
     })
@@ -203,7 +281,10 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         }
         const resEliminacion = await request(servidor)
             .delete(`/acceso/${24}`)
-            .set("Content-Type","application/json")
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
             .send(datosEliminacion);
         expect(resEliminacion.statusCode).toBe(400);
     })

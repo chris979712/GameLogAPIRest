@@ -1,11 +1,11 @@
 import express, { json } from 'express';
 import { CrearRutaAcceso } from './api_rest/routes/Acceso.js';
+import { CrearRutaLogin } from './api_rest/routes/Login.js';
+import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { CrearRutaLogin } from './api_rest/routes/Login.js';
-import { ValidarJwt } from './api_rest/middlewares/jwt.js';
 
-export const CrearServidor = ({ModeloAcceso, ModeloLogin}) => 
+export const CrearServidor = ({ModeloAcceso, ModeloLogin, ModeloJugador}) => 
 {
     const app = express();
     dotenv.config();
@@ -17,8 +17,9 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin}) =>
         res.json({message: 'Bienvenido al servidor de GameLogAPI'});
     })
 
-    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
     app.use('/login',CrearRutaLogin({ModeloLogin}));
+    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
+    app.use('/jugador',CrearRutaJugador({ModeloJugador}))
 
     const PUERTO = process.env.PUERTO;
 
@@ -27,17 +28,19 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin}) =>
     })
 }
 
-export const CrearServidorTest = ({ModeloAcceso, ModeloLogin}) => {
+export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador}) => {
     const app = express();
     dotenv.config();
     app.use(json());
     app.use(cors());
     app.disable('x-powered-by');
+
     app.get('/',(req,res)=>{
-        res.json({message: 'Bienvenido al servidor de GameLogAPI'});
+        res.json({message: 'Bienvenido al servidor de pruebas de GameLogAPI'});
     });
-    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
     app.use('/login',CrearRutaLogin({ModeloLogin}));
+    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
+    app.use('/jugador',CrearRutaJugador({ModeloJugador}))
 
     const PUERTO = process.env.PUERTO;
     const server = app.listen(PUERTO, () => {

@@ -1,6 +1,6 @@
 import sql from 'mssql';
 import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
-import { MensajeDeRetornoBaseDeDatosAcceso, MensajeDeRetornoBaseDeDatos, ErrorEnLaConfiguracionDeConexionAcceso,ErrorEnLaBaseDeDatosAccesoInsercion, ErrorEnLaConfiguracionDeConexion, ErrorEnLaBaseDeDatosAcceso } from '../../utilidades/Constantes.js';
+import { MensajeDeRetornoBaseDeDatosAcceso, MensajeDeRetornoBaseDeDatos, ErrorEnLaConfiguracionDeConexionAcceso,ErrorEnLaBaseDeDatosInsercion, ErrorEnLaConfiguracionDeConexion, ErrorEnLaBaseDeDatos } from '../../utilidades/Constantes.js';
 
 export class ModeloAcceso{
 
@@ -48,7 +48,7 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoInsercion = ErrorEnLaBaseDeDatosAccesoInsercion();
+            resultadoInsercion = ErrorEnLaBaseDeDatosInsercion();
             throw error;
         }
         finally
@@ -89,11 +89,12 @@ export class ModeloAcceso{
             }
             else
             {
-                resultadoConsulta = { estado: 400, mensaje: "El tipo de usuario a conectar a la base de datos es inválido."};
+                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
             }
         }
         catch(error)
         {
+            resultadoConsulta = ErrorEnLaBaseDeDatosAcceso();
             throw error;
         }
         finally
@@ -136,6 +137,7 @@ export class ModeloAcceso{
         }
         catch(error)
         {
+            resultadoConsulta = ErrorEnLaBaseDeDatosAcceso();
             throw error;
         }
         finally
@@ -178,7 +180,7 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoEdicion = ErrorEnLaBaseDeDatosAcceso();
+            resultadoEdicion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -220,7 +222,7 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoEdicion = ErrorEnLaBaseDeDatosAcceso();
+            resultadoEdicion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -262,7 +264,7 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoEliminacion = ErrorEnLaBaseDeDatosAcceso();
+            resultadoEliminacion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally

@@ -1,5 +1,5 @@
 import zod from 'zod';
-import { SoloLetras, SoloLetrasNumerosCaracteres, SoloLetrasYNumeros } from '../utilidades/RegexValidadores.js';
+import { SoloLetras, SoloLetrasNumerosCaracteres, SoloLetrasYNumeros, SoloRutas } from '../utilidades/RegexValidadores.js';
 
 const CuentaEsquema = zod.object(
 {
@@ -11,7 +11,7 @@ const CuentaEsquema = zod.object(
     segundoApellido: zod.string({ invalid_type_error: 'El segundo apellido no es válido',required_error: 'El segundo apellido es un campo requerido'}).min(0).max(80).regex(SoloLetras).nullable(),
     nombreDeUsuario: zod.string({ invalid_type_error: 'El nombre de usuario ingresado no es válido',required_error: 'El nombre de usuario es un campo requerido'}).min(2).max(20).regex(SoloLetrasYNumeros),
     descripcion: zod.string({ invalid_type_error: 'La descripcion ingresada no es válida',required_error: 'La descripcion de usuario es un campo requerido'}).min(0).max(200).regex(SoloLetrasNumerosCaracteres).nullable(),
-    foto: zod.string({ invalid_type_error: 'La foto ingresada no es válida',required_error: 'La foto de usuario es un campo requerido'}).min(1).max(255).regex(SoloLetrasYNumeros),
+    foto: zod.string({ invalid_type_error: 'La foto ingresada no es válida',required_error: 'La foto de usuario es un campo requerido'}).min(1).max(255).regex(SoloRutas),
     tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido',required_error: 'El tipo de acceso es un campo requerido'}).min(7).max(13).regex(SoloLetras)
 }
 )
@@ -51,5 +51,5 @@ export function ValidarCredencialesAcceso(entrada)
 
 export function ValidarEliminacionAcceso(entrada)
 {
-    return CuentaEliminacion.safeParse(entrada);
+    return CuentaEliminacion.partial().safeParse(entrada);
 }

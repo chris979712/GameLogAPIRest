@@ -22,6 +22,7 @@ export class AccesoControlador
                     logger(ResultadoInsercion.mensaje);
                     res.status(resultadoInsercion).json(
                         {
+                            error: true,
                             estado: ResultadoInsercion.resultado,
                             mensaje: 'Ha ocurrido un error en la base de datos al querer insertar los datos una nueva cuenta de acceso'
                         });
@@ -30,6 +31,7 @@ export class AccesoControlador
                 {
                     res.status(resultadoInsercion).json(
                         {
+                            error: resultadoInsercion !== 200,
                             estado: ResultadoInsercion.resultado,
                             mensaje: ResultadoInsercion.mensaje
                         });
@@ -37,7 +39,6 @@ export class AccesoControlador
             }
             else
             {
-                console.log(error);
                 res.status(400).json({
                     error: true,
                     estado: 400,
@@ -48,6 +49,7 @@ export class AccesoControlador
         catch(error)
         {
             console.log(error);
+            logger({mensaje: error});
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -161,13 +163,14 @@ export class AccesoControlador
             const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoEdicion = await this.modeloAcceso.EditarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario})
+                const ResultadoEdicion = await this.modeloAcceso.EditarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario})
                 let resultadoEdicion = parseInt(ResultadoEdicion.estado)
                 if(resultadoEdicion === 500)
                 {
                     logger(ResultadoEdicion.mensaje);
                     res.status(resultadoEdicion).json(
                         {
+                            error: true,
                             estado: ResultadoEdicion.resultado,
                             mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
                         });
@@ -176,6 +179,7 @@ export class AccesoControlador
                 {
                     res.status(resultadoEdicion).json(
                         {
+                            error: resultadoEdicion !== 200,
                             estado: ResultadoEdicion.resultado,
                             mensaje: ResultadoEdicion.mensaje
                         });
@@ -223,6 +227,7 @@ export class AccesoControlador
                     console.log(resultadoEdicion);
                     res.status(resultadoEdicion).json(
                         {
+                            error: true,
                             estado: ResultadoEdicion.resultado,
                             mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
                         });
@@ -231,6 +236,7 @@ export class AccesoControlador
                 {
                     res.status(resultadoEdicion).json(
                         {
+                            error: resultadoEdicion !== 200,
                             estado: ResultadoEdicion.resultado,
                             mensaje: ResultadoEdicion.mensaje
                         });
@@ -277,6 +283,7 @@ export class AccesoControlador
                     logger(ResultadoEliminacion.mensaje);
                     res.status(resultadoEliminacion).json(
                         {
+                            error: true,
                             estado: ResultadoEliminacion.resultado,
                             mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar una cuenta de acceso'
                         });
@@ -285,6 +292,7 @@ export class AccesoControlador
                 {
                     res.status(resultadoEliminacion).json(
                         {
+                            error: resultadoEliminacion !== 200,
                             estado: ResultadoEliminacion.resultado,
                             mensaje: ResultadoEliminacion.mensaje
                         });

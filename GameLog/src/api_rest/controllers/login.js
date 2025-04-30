@@ -42,7 +42,6 @@ export class LoginControlador
             }
             else
             {
-                console.log(error);
                 res.status(400).json({
                     error: true,
                     estado: 400,
