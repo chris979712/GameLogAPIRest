@@ -33,7 +33,7 @@ export class ModeloJugador
                     .input('foto',sql.VarChar,foto)
                     .output('estado',sql.Int)
                     .output('mensaje',sql.VarChar)
-                    .execute('spa_Acceso')
+                    .execute('spa_Jugadores')
                 resultadoModificacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
             }
             else

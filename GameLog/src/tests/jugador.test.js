@@ -1,0 +1,146 @@
+import request from "supertest";
+import { CrearServidorTest } from "../server.js";
+import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
+import { ModeloLogin } from "../api_rest/model/sql/Login.js";
+import { ModeloJugador } from "../api_rest/model/sql/Jugador.js";
+
+let servidor;
+let token;
+let idJugadorCreado;
+
+beforeAll(async () =>
+{
+    const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloJugador:ModeloJugador});
+    servidor = servidorCreado;
+    const datos = 
+        {
+            correo: "usuarioprueba@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            estado: "Desbaneado",
+            nombre: "pruebaJugador",
+            primerApellido: "prueba",
+            segundoApellido: "prueba",
+            nombreDeUsuario: "pruebaJugador",
+            descripcion: "login",
+            foto: "login.jpg",
+            tipoDeUsuario: "Administrador"
+        };
+    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datos);
+    const DatosUsuario = 
+        {
+            correo: "usuarioprueba@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            tipoDeUsuario: "Administrador"
+        }
+    const resLogin = await request(servidor).post('/login').set("Content-Type","application/json").send(DatosUsuario);
+    token = resLogin.headers['access_token'];
+    idJugadorCreado = resLogin.body.cuenta[0].idJugador;
+    console.log(idJugadorCreado)
+})
+
+afterAll(async() => 
+{
+    const correo = "usuarioprueba@gmail.com";
+    const tipoDeUsuario = "Administrador";
+    const resIdUsuario = await request(servidor)
+        .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+        .set({
+            "access_token": `Bearer ${token}`
+        })
+    const idAcceso = resIdUsuario.body.idAcceso;
+    const datosEliminacion = {
+            tipoDeUsuario: "Administrador",
+            correo: "usuarioprueba@gmail.com"
+        }
+    await request(servidor).delete(`/acceso/${idAcceso}`)
+        .set({
+            "Content-Type": "application/json",
+            "access_token": `Bearer ${token}`
+        })
+        .send(datosEliminacion);
+    servidor.close();
+})
+
+describe('Tests para el servicio de Jugadores donde se encuentra la modificacion, busqueda y eliminacion', () =>
+{
+    test('GET /jugador/:nombreDeUsuario - Obtener los datos de un jugador buscandolo por su nombre de usuario', async() => 
+    {
+        let nombreDeUsuario = "pruebaJugador";
+        const res = await request(servidor)
+            .get(`/jugador/${nombreDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty("cuenta");
+    })
+
+    test('GET /jugador/:nombreDeUsuario - Intentar obtener los datos de un jugador inexistente por su nombre de usuario',async() =>
+    {
+        let nombreDeUsuario = "pepito777";
+        const res = await request(servidor)
+            .get(`/jugador/${nombreDeUsuario}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
+        expect(res.statusCode).toBe(404);
+    })
+
+    test('PUT /jugador/:idJugador - Modificar los datos del perfil de un jugador existente en la base de datos', async() => 
+    {
+        const datosEdicion = {
+            nombre: "christolin",
+            primerApellido: "pruebaModificado",
+            nombreDeUsuario: "pruebaJugadores",
+            foto: "fotito.jpg",
+        };
+        const resEdicion = await request(servidor)
+            .put(`/jugador/${idJugadorCreado}`)
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
+            .send(datosEdicion);
+        expect(resEdicion.statusCode).toBe(200);
+        expect(resEdicion.body).toHaveProperty("mensaje");
+    })
+
+    test('PUT /jugador/:idJugador - Intentar modificar los datos de un perfil inexistente en la base de datos', async() => 
+    {
+        const datosEdicion = {
+            nombre: "christolin",
+            primerApellido: "pruebaModificado",
+            nombreDeUsuario: "pruebaJugador",
+            foto: "fotito.jpg",
+        };
+        const resEdicion = await request(servidor)
+            .put(`/jugador/${58}`)
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
+            .send(datosEdicion);
+        expect(resEdicion.statusCode).toBe(400);
+    })
+
+    test('DELETE /jugador/:idJugador - Eliminar un jugador registrado en la base de datos',async()=> 
+    {
+        const resEliminacion = await request(servidor)
+            .delete(`/jugador/${idJugadorCreado}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
+        expect(resEliminacion.status).toBe(200);
+    })
+
+    test('DELETE /jugador/:idJugador - Intentar eliminar un jugador inexistente en la base de datos',async()=> 
+    {
+        const resEliminacion = await request(servidor)
+            .delete(`/jugador/${59}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            })
+        expect(resEliminacion.status).toBe(400);
+    })
+})
+

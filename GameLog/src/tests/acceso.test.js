@@ -116,7 +116,6 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             .set({
                 "access_token": `Bearer ${token}`
             })
-        console.log(res.body.cuenta);
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveProperty("cuenta");
     })

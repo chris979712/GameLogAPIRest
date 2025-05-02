@@ -68,9 +68,9 @@ export class JugadorControlador
     {
         try
         {
-            const idJugador = parseInt(req.params.idJugador);
+            const nombreDeUsuario = req.params.nombreDeUsuario;
             const {tipoDeUsuario} = req;
-            const Datos = {idJugador};
+            const Datos = {nombreDeUsuario};
             const ResultadoValidacion = ValidarJugadorParcial(Datos);
             if(ResultadoValidacion)
             {
