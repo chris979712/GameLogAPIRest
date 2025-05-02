@@ -6,17 +6,18 @@ export class ModeloLogin
     static async Login({datos, tipoDeUsuario})
     {
         let resultadoConsulta;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const InstanciaBaseDeDatos = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const {
                     correo,
                     contrasenia
                 } = datos;
-                const QueryCuenta = await InstanciaBaseDeDatos.request()
+                const QueryCuenta = await conexion.request()
                     .input('correo',sql.VarChar,correo)
                     .input('contrasenia',sql.VarChar,contrasenia)
                     .query('SELECT a.idCuenta,a.correo,a.estado,ta.tipoDeAcceso,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto '+
@@ -44,7 +45,7 @@ export class ModeloLogin
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }

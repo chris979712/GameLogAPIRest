@@ -8,11 +8,12 @@ export class ModeloAcceso{
     {
         let resultadoInsercion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        let conexion;
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const {
                     correo,
                     contrasenia,
@@ -25,7 +26,7 @@ export class ModeloAcceso{
                     foto,
                     tipoDeUsuario
                 } = datos;
-                const Solicitud = Conexion.request();
+                const Solicitud = conexion.request();
                 const ResultadoSolicitud = await Solicitud.input('correo',sql.VarChar,correo)
                     .input('contrasenia',sql.VarChar,contrasenia)
                     .input('estado',sql.VarChar,estado)
@@ -53,7 +54,7 @@ export class ModeloAcceso{
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -65,16 +66,17 @@ export class ModeloAcceso{
     {
         let resultadoConsulta;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        let conexion;
         try
         {
             if(ConfiguracionConexion)
             {
-                const InstanciaBaseDeDatos = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const {
                     correo,
                     contrasenia
                 } = datos;
-                const QueryCuenta = await InstanciaBaseDeDatos.request()
+                const QueryCuenta = await conexion.request()
                     .input('correo',sql.VarChar,correo)
                     .input('contrasenia',sql.VarChar,contrasenia)
                     .query('SELECT * FROM Accesos a JOIN Jugadores j ON a.idCuenta = j.idAcceso WHERE a.correo = @correo AND a.contrasenia = @contrasenia');
@@ -99,7 +101,7 @@ export class ModeloAcceso{
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -110,15 +112,16 @@ export class ModeloAcceso{
     static async ObtenerIdDeAccesoPorCorreo({datos,tipoDeUsuario}){
         let resultadoConsulta;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        let conexion;
         try 
         {
             if(ConfiguracionConexion)
                 {
-                    const InstanciaBaseDeDatos = await sql.connect(ConfiguracionConexion);
+                    conexion = await sql.connect(ConfiguracionConexion);
                     const {
                         correo,
                     } = datos;
-                    const QueryCuenta = await InstanciaBaseDeDatos.request()
+                    const QueryCuenta = await conexion.request()
                         .input('correo',sql.VarChar,correo)
                         .query('SELECT idCuenta FROM Accesos where correo = @correo');
                     const ResultadoIdCuenta = QueryCuenta.recordset;
@@ -142,7 +145,7 @@ export class ModeloAcceso{
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -153,18 +156,19 @@ export class ModeloAcceso{
     static async EditarAcceso({datos, tipoDeUsuario})
     {
         let resultadoEdicion;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const {
                     idAcceso,
                     correo,
                     contrasenia
                 } = datos;
-                const Solicitud = Conexion.request();
+                const Solicitud = conexion.request();
                 const ResultadoSolicitud = await Solicitud.input('idAcceso',sql.Int,idAcceso)
                     .input('correo',sql.VarChar,correo)
                     .input('contrasenia',sql.VarChar,contrasenia)
@@ -185,7 +189,7 @@ export class ModeloAcceso{
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -196,18 +200,19 @@ export class ModeloAcceso{
     static async EditarEstadoAcceso({datos, tipoDeUsuario})
     {
         let resultadoEdicion;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const
                 {
                     idAcceso,
                     estadoAcceso
                 } = datos;
-                const Solicitud = await Conexion.request();
+                const Solicitud = await conexion.request();
                 const ResultadoSolicitud = await Solicitud.input('idAcceso',sql.Int,idAcceso)
                     .input('estadoAcceso',sql.VarChar,estadoAcceso)
                     .output('estado',sql.Int)
@@ -227,7 +232,7 @@ export class ModeloAcceso{
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -238,18 +243,19 @@ export class ModeloAcceso{
     static async BorrarAcceso({datos, tipoDeUsuario})
     {
         let resultadoEliminacion;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const
                 {
                     idAcceso,
                     correo
                 } = datos;
-                const Solicitud = await Conexion.request();
+                const Solicitud = await conexion.request();
                 const ResultadoSolicitud = await Solicitud.input('idAcceso',sql.Int,idAcceso)
                     .input('correo',sql.VarChar,correo)
                     .output('estado',sql.Int)
@@ -269,7 +275,7 @@ export class ModeloAcceso{
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }

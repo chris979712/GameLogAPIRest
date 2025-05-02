@@ -7,12 +7,13 @@ export class ModeloJugador
     static async ActualizarJugador({datos, tipoDeUsuario})
     {
         let resultadoModificacion;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const
                 {
                     idJugador,
@@ -23,7 +24,7 @@ export class ModeloJugador
                     descripcion,
                     foto
                 } = datos;
-                const Solicitud = Conexion.request();
+                const Solicitud = conexion.request();
                 const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
                     .input('nombre',sql.VarChar,nombre)
                     .input('primerApellido',sql.VarChar,primerApellido)
@@ -48,7 +49,7 @@ export class ModeloJugador
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -59,16 +60,17 @@ export class ModeloJugador
     static async BuscarJugador({datos, tipoDeUsuario})
     {
         let resultadoConsulta;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const {
                     nombreDeUsuario
                 } = datos;
-                const QueryJugador = await Conexion.request()
+                const QueryJugador = await conexion.request()
                     .input('nombreDeUsuario',sql.VarChar,nombreDeUsuario)
                     .query('SELECT a.idCuenta,a.correo,a.estado,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto '+
                         'FROM Jugadores j JOIN Accesos a ON a.idCuenta = j.idAcceso '+
@@ -95,7 +97,7 @@ export class ModeloJugador
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
@@ -106,12 +108,13 @@ export class ModeloJugador
     static async EliminarJugador({datos, tipoDeUsuario})
     {
         let resultadoEliminacion;
+        let conexion;
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
             if(ConfiguracionConexion)
             {
-                const Conexion = await sql.connect(ConfiguracionConexion);
+                conexion = await sql.connect(ConfiguracionConexion);
                 const
                 {
                     idJugador,
@@ -135,7 +138,7 @@ export class ModeloJugador
         }
         finally
         {
-            if(ConfiguracionConexion)
+            if(conexion)
             {
                 await sql.close();
             }
