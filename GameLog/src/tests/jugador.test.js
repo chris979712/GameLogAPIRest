@@ -86,6 +86,17 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
         expect(res.statusCode).toBe(404);
     })
 
+    test('GET /jugador/:nombreDeUsuario - Obtener jugador con datos inválidos',async() =>
+        {
+            const NombreDeUsuario = '{ñ,lkop´{.,ñ'
+            const res = await request(servidor)
+                .get(`/jugador/${NombreDeUsuario}`)
+                .set({
+                    "access_token": `Bearer ${token}`
+                })
+            expect(res.statusCode).toBe(400);
+        })
+
     test('PUT /jugador/:idJugador - Modificar los datos del perfil de un jugador existente en la base de datos', async() => 
     {
         const datosEdicion = {
@@ -123,6 +134,24 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
         expect(resEdicion.statusCode).toBe(400);
     })
 
+    test('PUT /jugador/:idJugador - Modificar los datos del perfil de un jugador con datos invalidos', async() => 
+        {
+            const datosEdicion = {
+                nombre: "chris{+12¿¿'0tolin",
+                primerApellido: "´09p´ñ{l,´{",
+                nombreDeUsuario: "{.l´p´.+}",
+                foto: "fotito.jpg",
+            };
+            const resEdicion = await request(servidor)
+                .put(`/jugador/${idJugadorCreado}`)
+                .set({
+                    "Content-Type": "application/json",
+                    "access_token": `Bearer ${token}`
+                })
+                .send(datosEdicion);
+            expect(resEdicion.statusCode).toBe(400);
+        })
+
     test('DELETE /jugador/:idJugador - Eliminar un jugador registrado en la base de datos',async()=> 
     {
         const resEliminacion = await request(servidor)
@@ -142,5 +171,15 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
             })
         expect(resEliminacion.status).toBe(400);
     })
+
+    test('DELETE /jugador/:idJugador - Intentar eliminar un jugador sin pasar datos como parámetros',async()=> 
+        {
+            const resEliminacion = await request(servidor)
+                .delete(`/jugador/${null}`)
+                .set({
+                    "access_token": `Bearer ${token}`
+                })
+            expect(resEliminacion.status).toBe(400);
+        })
 })
 

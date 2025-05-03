@@ -30,7 +30,6 @@ export class ModeloJuego
         }
         catch(error)
         {
-            resultadoInsercion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -76,7 +75,6 @@ export class ModeloJuego
         }
         catch(error)
         {
-            resultadoConsulta = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -122,7 +120,6 @@ export class ModeloJuego
         }
         catch(error)
         {
-            resultadoConsulta = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -160,7 +157,6 @@ export class ModeloJuego
         }
         catch(error)
         {
-            resultadoEliminacion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally

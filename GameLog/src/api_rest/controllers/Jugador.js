@@ -24,7 +24,6 @@ export class JugadorControlador
                 if(resultadoEdicion === 500)
                 {
                     logger(ResultadoEdicion);
-                    console.log(resultadoEdicion);
                     res.status(resultadoEdicion).json(
                     {
                         error: true,
@@ -53,7 +52,6 @@ export class JugadorControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -72,7 +70,7 @@ export class JugadorControlador
             const {tipoDeUsuario} = req;
             const Datos = {nombreDeUsuario};
             const ResultadoValidacion = ValidarJugadorParcial(Datos);
-            if(ResultadoValidacion)
+            if(ResultadoValidacion.success)
             {
                 const ResultadoConsulta = await this.modeloJugador.BuscarJugador({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoConsulta = parseInt(ResultadoConsulta.estado);
@@ -96,7 +94,6 @@ export class JugadorControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -150,7 +147,6 @@ export class JugadorControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {

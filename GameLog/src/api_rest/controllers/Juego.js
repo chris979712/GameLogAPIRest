@@ -18,11 +18,24 @@ export class JuegoControlador
             {
                 const ResultadoInsercion = await this.modeloJuego.RegistrarJuego({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
-                res.status(resultadoInsercion).json({
-                    error: resultadoInsercion !== 200,
-                    estado: resultadoInsercion,
-                    mensaje: ResultadoInsercion.mensaje
-                });
+                if(resultadoInsercion === 500)
+                {
+                    logger(resultadoInsercion);
+                    res.status(resultadoInsercion).json(
+                    {
+                        error: true,
+                        estado: resultadoInsercion.resultado,
+                        mensaje: 'Ha ocurrido un error en la base de datos al querer insertar un nuevo juego'
+                    });
+                }
+                else
+                {
+                    res.status(resultadoInsercion).json({
+                        error: resultadoInsercion !== 200,
+                        estado: resultadoInsercion,
+                        mensaje: ResultadoInsercion.mensaje
+                    });
+                }
             }
             else
             {
@@ -68,7 +81,6 @@ export class JuegoControlador
             }
             else
             {
-                console.log(error);
                 res.status(400).json({
                     error: true,
                     estado: 400,
@@ -137,18 +149,30 @@ export class JuegoControlador
         {
             const {tipoDeUsuario} = req;
             const idJuego = parseInt(req.params.idJuego);
-            console.log(idJuego)
             const Datos = {idJuego};
             const ResultadoValidacion = ValidarJuegoParcial(Datos);
             if(ResultadoValidacion.success)
             {
                 const ResultadoEliminacion = await this.modeloJuego.EliminarJuego({datos: ResultadoValidacion.data,tipoDeUsuario: tipoDeUsuario});
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado);
-                res.status(resultadoEliminacion).json({
-                    error: resultadoEliminacion !== 200,
-                    estado: resultadoEliminacion,
-                    mensaje: ResultadoEliminacion.mensaje
-                });
+                if(resultadoEliminacion === 500)
+                {
+                    logger(resultadoEliminacion);
+                    res.status(resultadoEliminacion).json(
+                    {
+                        error: true,
+                        estado: resultadoEliminacion.resultado,
+                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar un juego'
+                    });
+                }
+                else
+                {
+                    res.status(resultadoEliminacion).json({
+                        error: resultadoEliminacion !== 200,
+                        estado: resultadoEliminacion,
+                        mensaje: ResultadoEliminacion.mensaje
+                    });
+                }
             }
             else
             {

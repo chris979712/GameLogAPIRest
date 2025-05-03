@@ -51,7 +51,6 @@ export class LoginControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {

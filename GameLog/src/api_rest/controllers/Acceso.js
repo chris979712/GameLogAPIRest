@@ -48,7 +48,6 @@ export class AccesoControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -83,7 +82,6 @@ export class AccesoControlador
             }
             else
             {
-                console.log(error);
                 res.status(400).json({
                     error: true,
                     estado: 400,
@@ -93,7 +91,6 @@ export class AccesoControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -139,7 +136,6 @@ export class AccesoControlador
         catch(error)
         {
             logger({mensaje: error});
-            console.log(error);
             res.status(500).json(
             {
                 error: true,
@@ -195,7 +191,6 @@ export class AccesoControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -252,7 +247,6 @@ export class AccesoControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {
@@ -308,7 +302,6 @@ export class AccesoControlador
         }
         catch(error)
         {
-            console.log(error);
             logger({mensaje: error});
             res.status(500).json(
             {

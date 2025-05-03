@@ -105,14 +105,21 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             expect(res.body).toHaveProperty("mensaje");
             expect(res.body.mensaje).toBe("El correo ingresado ya se encuentra registrado")
         })
+    
+    test('POST /acceso - Se intenta crear una cuenta sin pasar datos de entrada', async () => 
+        {
+            const res = await request(servidor)
+                .post("/acceso")
+                .set("Content-Type","application/json");
+            expect(res.statusCode).toBe(400);
+        })
 
     test('GET /acceso - Obtiene la cuenta que se ingresa para iniciar sesión', async() => 
     {
         const correo = "oscarcito666@gmail.com";
         const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-        const tipoDeUsuario = "Administrador";
         const res = await request(servidor)
-            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`)
+            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -120,13 +127,43 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         expect(res.body).toHaveProperty("cuenta");
     })
 
+    test('GET /acceso - Se intenta obtener una cuenta con un token inválido', async() => 
+    {
+        const correo = "oscarcito666@gmail.com";
+        const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        const res = await request(servidor)
+            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`)
+            .set({
+                "access_token": `Bearer ${process.env.TOKEN_INVALIDO}`
+            });
+        expect(res.statusCode).toBe(401);
+    })
+
+    test('GET /acceso - Se intenta obtener una cuenta sin un token de sesion', async() => 
+    {
+        const correo = "oscarcito666@gmail.com";
+        const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        const res = await request(servidor)
+            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`);
+        expect(res.statusCode).toBe(401);
+    })
+
+    test('GET /acceso - Se intenta obtener una cuenta sin datos ingresados', async() => 
+        {
+            const res = await request(servidor)
+                .get(`/acceso/login?correo=${null}&contrasenia=${null}`)
+                .set({
+                    "access_token": `Bearer ${token}`
+                });
+            expect(res.statusCode).toBe(400);
+        })
+
     test('GET /acceso - No se obtiene ninguna cuenta registrada dentro de la base de datos', async() => 
         {
             const correo= "chrisvasquez404@gmail.com";
             const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-            const tipoDeUsuario = "Administrador";
             const res = await request(servidor)
-                .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}&tipoDeUsuario=${tipoDeUsuario}`)
+                .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`)
                 .set({
                     "access_token": `Bearer ${token}`
                 })
@@ -149,21 +186,29 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('GET /acceso/:correo - Se intenta obtener el id de una cuenta inexistente', async() => 
         {
             const correo = "chrisvasquez404@gmail.com";
-            const tipoDeUsuario = "Administrador";
             const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .get(`/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
             expect(resIdUsuario.status).toBe(404);
         })
+    
+    test('GET /acceso/:correo - Se intenta obtener el id de una cuenta sin datos ingresados', async() => 
+        {
+            const resIdUsuario = await request(servidor)
+            .get(`/acceso/${null}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            });
+            expect(resIdUsuario.status).toBe(400);
+        })
 
     test('PUT /acceso/:id - Se editan las credenciales de acceso de una cuenta existente', async () => 
     {
         const correo = "oscarcito666@gmail.com";
-        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .get(`/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -204,12 +249,21 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         expect(resEdicion.body).toHaveProperty("mensaje");
     })
 
+    test('PUT /acceso/:id - Se tratan de editar credenciales de una cuenta sin datos a ingresar como parámetros', async () => 
+        {
+            const resEdicion = await request(servidor)
+                .put(`/acceso/${null}`)
+                .set({
+                    "access_token": `Bearer ${token}`
+                });
+            expect(resEdicion.statusCode).toBe(500);
+        })
+
     test('PATCH /acceso/:id - Se edita el estado de la cuenta de acceso a Baneado o Desbaneado', async() => 
     {
         const correo = "chrisvasquez777@gmail.com";
-        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .get(`/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -251,6 +305,15 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         expect(resEdicion.body).toHaveProperty("mensaje");
     });
 
+    test("PATCH /acceso/:id - Se trata de editar el estado de una cuenta sin ingresar parámetros", async () => {
+        const resEdicion = await request(servidor)
+            .patch(`/acceso/${null}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            });
+        expect(resEdicion.statusCode).toBe(500);
+    });
+
     test("DELETE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
         const correo = "chrisvasquez777@gmail.com";
         const resIdUsuario = await request(servidor)
@@ -286,5 +349,14 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             })
             .send(datosEliminacion);
         expect(resEliminacion.statusCode).toBe(400);
+    })
+
+    test("DELETE /acceso/:id - Eliminar una cuenta sin ingresar datos como parámetros", async() => {
+        const resEliminacion = await request(servidor)
+            .delete(`/acceso/${null}`)
+            .set({
+                "access_token": `Bearer ${token}`
+            });
+        expect(resEliminacion.statusCode).toBe(500);
     })
 })

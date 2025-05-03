@@ -49,7 +49,6 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoInsercion = ErrorEnLaBaseDeDatosInsercion();
             throw error;
         }
         finally
@@ -96,7 +95,6 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoConsulta = ErrorEnLaBaseDeDatosAcceso();
             throw error;
         }
         finally
@@ -140,7 +138,6 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoConsulta = ErrorEnLaBaseDeDatosAcceso();
             throw error;
         }
         finally
@@ -184,7 +181,6 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoEdicion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -227,7 +223,6 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoEdicion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -270,7 +265,6 @@ export class ModeloAcceso{
         }
         catch(error)
         {
-            resultadoEliminacion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally

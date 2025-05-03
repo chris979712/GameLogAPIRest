@@ -76,4 +76,9 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         expect(resLogin.body.mensaje).toBe("No se ha encontrado la cuenta a buscar dentro del sistema");
         expect(resLogin.statusCode).toBe(404);
     })
+
+    test('POST /login - Se intenta acceder a la API sin ingresar datos para inicio de sesion', async() => {
+        const resLogin = await request(servidor).post('/login').set("Content-Type","application/json");
+        expect(resLogin.statusCode).toBe(400);
+    })
 })

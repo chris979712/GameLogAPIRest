@@ -113,6 +113,15 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
         expect(resInsercion.statusCode).toBe(400);
     })
 
+    test('POST /juego - Ingresa un juego sin pasar parámetros', async() => 
+        {
+            const resInsercion = await request(servidor).post('/juego')
+                .set({
+                    "access_token": `Bearer ${tokenAdmin}`
+                })
+            expect(resInsercion.statusCode).toBe(400);
+        })
+
     test('GET /juego/:idJuego - Buscar un juego por su ID', async() => 
     {
         const resBusqueda = await request(servidor).get(`/juego/${41437}`)
@@ -128,7 +137,14 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
         expect(resBusqueda.statusCode).toBe(404);
     })
 
-    test('GET /juego/:nombre - Buscar un juego a través de su nombre', async() => 
+    test('GET /juego/:idJuego - Buscar un juego por su ID sin pasar parámetros', async() => 
+        {
+            const resBusqueda = await request(servidor).get(`/juego/${null}`)
+                .set({"access_token": `Bearer ${tokenJugador}`});
+            expect(resBusqueda.statusCode).toBe(400);
+        })
+
+    test('GET /juego/ - Buscar un juego a través de su nombre', async() => 
     {
         const NombreJuego = "Fortnite battle royale";
         const resBusqueda = await request(servidor).get(`/juego/?nombre=${NombreJuego}`)
@@ -137,13 +153,21 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
         expect(resBusqueda.body).toHaveProperty("juego");
     })
 
-    test('GET /juego/:nombre - Buscar un juego inexistente en la base de datos a través de su nombre', async() => 
+    test('GET /juego/ - Buscar un juego inexistente en la base de datos a través de su nombre', async() => 
     {
         const NombreJuego = "Halo infinite";
         const resBusqueda = await request(servidor).get(`/juego/?nombre=${NombreJuego}`)
             .set({"access_token": `Bearer ${tokenJugador}`});
         expect(resBusqueda.statusCode).toBe(404);
     })
+
+    test('GET /juego/ - Buscar un juego por su nombre con datos inválidos', async() => 
+        {
+            const NombreJuego = "'o04p23k4i9201pol2,3{121}{}?¡¿*]";
+            const resBusqueda = await request(servidor).get(`/juego/?nombre=${NombreJuego}`)
+                .set({"access_token": `Bearer ${tokenJugador}`});
+            expect(resBusqueda.statusCode).toBe(400);
+        })
 
     test('DELETE /juego/:idJuego - Eliminar juego existente en la base de datos a través de su ID',async() => 
     {
@@ -158,4 +182,19 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
             .set({"access_token": `Bearer ${tokenAdmin}`});
         expect(resEliminacion.statusCode).toBe(400);
     })
+
+    test('DELETE /juego/:idJuego - Eliminar juego con datos inválidos',async() => 
+        {
+            const IdJuego = "ABCDEFG" 
+            const resEliminacion = await request(servidor).delete(`/juego/${IdJuego}`)
+                .set({"access_token": `Bearer ${tokenAdmin}`});
+            expect(resEliminacion.statusCode).toBe(400);
+        })
+
+    test('DELETE /juego/:idJuego - Eliminar juego sin pasarle parámetros',async() => 
+        {
+            const resEliminacion = await request(servidor).delete(`/juego/${null}`)
+                .set({"access_token": `Bearer ${tokenAdmin}`});
+            expect(resEliminacion.statusCode).toBe(400);
+        })
 })

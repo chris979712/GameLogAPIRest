@@ -44,7 +44,6 @@ export class ModeloJugador
         }
         catch(error)
         {
-            resultadoModificacion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -92,7 +91,6 @@ export class ModeloJugador
         }
         catch(error)
         {
-            resultadoConsulta = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
@@ -119,7 +117,7 @@ export class ModeloJugador
                 {
                     idJugador,
                 } = datos;
-                const Solicitud = await Conexion.request();
+                const Solicitud = await conexion.request();
                 const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
                     .output('estado',sql.Int)
                     .output('mensaje',sql.VarChar)
@@ -133,7 +131,6 @@ export class ModeloJugador
         }
         catch(error)
         {
-            resultadoEliminacion = ErrorEnLaBaseDeDatos();
             throw error;
         }
         finally
