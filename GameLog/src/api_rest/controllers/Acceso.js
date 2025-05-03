@@ -50,7 +50,6 @@ export class AccesoControlador
         {
             console.log(error);
             logger({mensaje: error});
-            logger({mensaje: error});
             res.status(500).json(
             {
                 error: true,

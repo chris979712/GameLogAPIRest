@@ -2,10 +2,11 @@ import express, { json } from 'express';
 import { CrearRutaAcceso } from './api_rest/routes/Acceso.js';
 import { CrearRutaLogin } from './api_rest/routes/Login.js';
 import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
+import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-export const CrearServidor = ({ModeloAcceso, ModeloLogin, ModeloJugador}) => 
+export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego}) => 
 {
     const app = express();
     dotenv.config();
@@ -20,6 +21,7 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin, ModeloJugador}) =>
     app.use('/login',CrearRutaLogin({ModeloLogin}));
     app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
     app.use('/jugador',CrearRutaJugador({ModeloJugador}))
+    app.use('/juego',CrearRutaJuego({ModeloJuego}))
 
     const PUERTO = process.env.PUERTO;
 
@@ -28,7 +30,7 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin, ModeloJugador}) =>
     })
 }
 
-export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador}) => {
+export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego}) => {
     const app = express();
     dotenv.config();
     app.use(json());
@@ -41,6 +43,7 @@ export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador}) =>
     app.use('/login',CrearRutaLogin({ModeloLogin}));
     app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
     app.use('/jugador',CrearRutaJugador({ModeloJugador}))
+    app.use('/juego',CrearRutaJuego({ModeloJuego}))
 
     const PUERTO = process.env.PUERTO;
     const server = app.listen(PUERTO, () => {
