@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { JuegoControlador } from "../controllers/Juego.js";
-import { ValidarJwt } from "../middlewares/jwt";
+import { ValidarJwt } from "../middlewares/jwt.js";
 
 export const CrearRutaJuego = ({ModeloJuego}) =>
 {
