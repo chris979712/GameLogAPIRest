@@ -23,7 +23,7 @@ export class JugadorControlador
                 let resultadoEdicion = parseInt(ResultadoEdicion.estado);
                 if(resultadoEdicion === 500)
                 {
-                    logger(ResultadoEdicion);
+                    logger({mensaje: ResultadoEdicion.mensaje});
                     res.status(resultadoEdicion).json(
                     {
                         error: true,
@@ -118,7 +118,7 @@ export class JugadorControlador
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
                 if(resultadoEliminacion === 500)
                 {
-                    logger(ResultadoEliminacion.mensaje);
+                    logger({mensaje: ResultadoEliminacion.mensaje});
                     res.status(resultadoEliminacion).json(
                     {
                         error: true,

@@ -20,7 +20,7 @@ export class JuegoControlador
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
                 if(resultadoInsercion === 500)
                 {
-                    logger(resultadoInsercion);
+                    logger({mensaje: ResultadoInsercion.mensaje});
                     res.status(resultadoInsercion).json(
                     {
                         error: true,
@@ -48,6 +48,7 @@ export class JuegoControlador
         }
         catch(error)
         {
+            logger({mensaje: error})
             res.status(500).json(
                 {
                     error: true,
@@ -90,6 +91,7 @@ export class JuegoControlador
         }
         catch(error)
         {
+            logger({mensaje: error})
             res.status(500).json(
             {
                 error: true,
@@ -157,7 +159,7 @@ export class JuegoControlador
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado);
                 if(resultadoEliminacion === 500)
                 {
-                    logger(resultadoEliminacion);
+                    logger({mensaje: ResultadoEliminacion.mensaje});
                     res.status(resultadoEliminacion).json(
                     {
                         error: true,

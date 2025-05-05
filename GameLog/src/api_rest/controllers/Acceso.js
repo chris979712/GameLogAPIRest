@@ -19,7 +19,7 @@ export class AccesoControlador
                 let resultadoInsercion = parseInt(ResultadoInsercion.resultado)
                 if(resultadoInsercion === 500)
                 {
-                    logger(ResultadoInsercion.mensaje);
+                    logger({mensaje: ResultadoInsercion.mensaje});
                     res.status(resultadoInsercion).json(
                         {
                             error: true,
@@ -162,7 +162,7 @@ export class AccesoControlador
                 let resultadoEdicion = parseInt(ResultadoEdicion.estado)
                 if(resultadoEdicion === 500)
                 {
-                    logger(ResultadoEdicion.mensaje);
+                    logger({mensaje: ResultadoEdicion.mensaje});
                     res.status(resultadoEdicion).json(
                         {
                             error: true,
@@ -217,7 +217,7 @@ export class AccesoControlador
                 let resultadoEdicion = parseInt(ResultadoEdicion.estado)
                 if(resultadoEdicion === 500)
                 {
-                    logger(ResultadoEdicion);
+                    logger({mensaje: ResultadoEdicion.mensaje});
                     console.log(resultadoEdicion);
                     res.status(resultadoEdicion).json(
                         {
@@ -273,7 +273,7 @@ export class AccesoControlador
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
                 if(resultadoEliminacion === 500)
                 {
-                    logger(ResultadoEliminacion.mensaje);
+                    logger({mensaje: ResultadoEliminacion.mensaje});
                     res.status(resultadoEliminacion).json(
                         {
                             error: true,
