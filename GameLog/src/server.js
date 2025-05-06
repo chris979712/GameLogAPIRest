@@ -4,12 +4,17 @@ import { CrearRutaLogin } from './api_rest/routes/Login.js';
 import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
 import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
+import { readFile } from 'fs/promises';
+import swaggerUI from 'swagger-ui-express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+const swaggerDocumentation = JSON.parse(await readFile(new URL('../swagger.json', import.meta.url)));
+const app = express();
+
+
 export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor}) => 
 {
-    const app = express();
     dotenv.config();
     app.use(json());
     app.use(cors());
@@ -19,6 +24,7 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJue
         res.json({message: 'Bienvenido al servidor de GameLogAPI'});
     })
 
+    app.use('/doc',swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
     app.use('/login',CrearRutaLogin({ModeloLogin}));
     app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
     app.use('/jugador',CrearRutaJugador({ModeloJugador}))
@@ -33,7 +39,6 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJue
 }
 
 export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor}) => {
-    const app = express();
     dotenv.config();
     app.use(json());
     app.use(cors());
