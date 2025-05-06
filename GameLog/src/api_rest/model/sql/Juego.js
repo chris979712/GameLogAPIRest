@@ -42,6 +42,82 @@ export class ModeloJuego
         return resultadoInsercion;
     }
 
+    static async RegistrarJuegoPendiente({datos, tipoDeUsuario})
+    {
+        let resultadoInsercion;
+        let conexion;
+        const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        try
+        {
+            if(ConfiguracionConexion)
+            {
+                conexion = await sql.connect(ConfiguracionConexion);
+                const {idJuego,idJugador} = datos;
+                const Solicitud = conexion.request();
+                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                    .input('idJuego',sql.Int,idJuego)
+                    .output('estado',sql.Int)
+                    .output('mensaje',sql.VarChar)
+                    .execute('spi_Pendientes');
+                resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
+            }
+            else
+            {
+                resultadoInsercion = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            throw error;
+        }
+        finally
+        {
+            if(conexion)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoInsercion;
+    }
+
+    static async RegistrarJuegoFavorito({datos, tipoDeUsuario})
+    {
+        let resultadoInsercion;
+        let conexion;
+        const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        try
+        {
+            if(ConfiguracionConexion)
+            {
+                conexion = await sql.connect(ConfiguracionConexion);
+                const {idJuego,idJugador} = datos;
+                const Solicitud = conexion.request();
+                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                    .input('idJuego',sql.Int,idJuego)
+                    .output('estado',sql.Int)
+                    .output('mensaje',sql.VarChar)
+                    .execute('spi_Favoritos');
+                resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
+            }
+            else
+            {
+                resultadoInsercion = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            throw error;
+        }
+        finally
+        {
+            if(conexion)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoInsercion;
+    }
+
     static async BuscarJuegoPorNombre({datos, tipoDeUsuario})
     {
         let resultadoConsulta;
@@ -132,6 +208,98 @@ export class ModeloJuego
         return resultadoConsulta;
     }
 
+    static async ObtenerJuegosPendientes({datos, tipoDeUsuario})
+    {
+        let resultadoConsulta;
+        let conexion;
+        const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        try
+        {
+            if(ConfiguracionConexion)
+            {
+                conexion = await sql.connect(ConfiguracionConexion);
+                const {idJugador} = datos;
+                const Solicitud = await conexion.request()
+                    .input('idJugador',sql.Int,idJugador)
+                    .query('SELECT j.idJuego, j.nombre '+
+                            'FROM Juegos AS j '+
+                            'JOIN Pendientes AS p ON j.idJuego = p.idJuego '+
+                            'WHERE  p.idJugador = @idJugador');
+                const ResultadoQueryJuegosPendientes = Solicitud.recordset;
+                if(ResultadoQueryJuegosPendientes.length >= 1)
+                {
+                    resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosPendientes};
+                }
+                else
+                {
+                    resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
+                }
+            }
+            else
+            {
+                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            throw error;
+        }
+        finally
+        {
+            if(conexion)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoConsulta;
+    }
+
+    static async ObtenerJuegosFavoritos({datos, tipoDeUsuario})
+    {
+        let resultadoConsulta;
+        let conexion;
+        const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        try
+        {
+            if(ConfiguracionConexion)
+            {
+                conexion = await sql.connect(ConfiguracionConexion);
+                const {idJugador} = datos;
+                const Solicitud = await conexion.request()
+                    .input('idJugador',sql.Int,idJugador)
+                    .query('SELECT j.idJuego, j.nombre '+
+                            'FROM Juegos AS j '+
+                            'JOIN Favoritos AS f ON j.idJuego = f.idJuego '+
+                            'WHERE  f.idJugador = @idJugador');
+                const ResultadoQueryJuegosFavoritos = Solicitud.recordset;
+                if(ResultadoQueryJuegosFavoritos.length >= 1)
+                {
+                    resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosFavoritos};
+                }
+                else
+                {
+                    resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
+                }
+            }
+            else
+            {
+                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            throw error;
+        }
+        finally
+        {
+            if(conexion)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoConsulta;
+    }
+
     static async EliminarJuego({datos, tipoDeUsuario})
     {
         let resultadoEliminacion;
@@ -149,6 +317,82 @@ export class ModeloJuego
                     .output('mensaje',sql.VarChar)
                     .execute('spd_Juego')
                 resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
+            }
+            else
+            {
+                resultadoEliminacion = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            throw error;
+        }
+        finally
+        {
+            if(conexion)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoEliminacion;
+    }
+
+    static async EliminarJuegoPendiente({datos, tipoDeUsuario})
+    {
+        let resultadoEliminacion;
+        let conexion;
+        const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        try
+        {
+            if(ConfiguracionConexion)
+            {
+                conexion = await sql.connect(ConfiguracionConexion);
+                const {idJugador,idJuego} = datos;
+                const Solicitud = conexion.request();
+                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                    .input('idJuego',sql.Int,idJuego)
+                    .output('estado',sql.Int)
+                    .output('mensaje',sql.VarChar)
+                    .execute('spd_Pendientes');
+                    resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
+            }
+            else
+            {
+                resultadoEliminacion = ErrorEnLaConfiguracionDeConexionAcceso();
+            }
+        }
+        catch(error)
+        {
+            throw error;
+        }
+        finally
+        {
+            if(conexion)
+            {
+                await sql.close();
+            }
+        }
+        return resultadoEliminacion;
+    }
+
+    static async EliminarJuegoFavorito({datos, tipoDeUsuario})
+    {
+        let resultadoEliminacion;
+        let conexion;
+        const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
+        try
+        {
+            if(ConfiguracionConexion)
+            {
+                conexion = await sql.connect(ConfiguracionConexion);
+                const {idJugador,idJuego} = datos;
+                const Solicitud = conexion.request();
+                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                    .input('idJuego',sql.Int,idJuego)
+                    .output('estado',sql.Int)
+                    .output('mensaje',sql.VarChar)
+                    .execute('spd_Favorito');
+                    resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
             }
             else
             {

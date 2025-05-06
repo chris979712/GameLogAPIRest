@@ -1,5 +1,5 @@
 import request from "supertest";
-import { CrearServidorTest } from "../server.js";
+import { CrearServidorTest } from "../serverTest.js";
 import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
 import { ModeloLogin } from "../api_rest/model/sql/Login";
 import {ModeloJuego} from "../api_rest/model/sql/Juego.js";
@@ -121,6 +121,87 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
                 })
             expect(resInsercion.statusCode).toBe(400);
         })
+    
+    test('POST /juego/favorito - Ingresa un juego como favorito dentro del sistema', async() => 
+    {
+        const DatosJuegoFavorito = {idJuego: 41437, idJugador: idJugadorCreado};
+        const DatosJuego = {idJuego: 12567, nombre: "Halo infinite"};
+        await request(servidor).post('/juego')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosJuego);
+        const resInsercion = await request(servidor).post('/juego/favorito')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosJuegoFavorito);
+        expect(resInsercion.statusCode).toBe(200);
+    })
+
+    test('POST /juego/favorito - Ingresa un juego como favorito repetido dentro del sistema', async() => 
+    {
+        const DatosJuegoFavorito = {idJuego: 41437, idJugador: idJugadorCreado};
+        const resInsercion = await request(servidor).post('/juego/favorito')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosJuegoFavorito);
+        expect(resInsercion.statusCode).toBe(400);
+    })
+
+    test('POST /juego/favorito - Ingresa un juego como favorito sin pasar parámetros', async() => 
+    {
+        const resInsercion = await request(servidor).post('/juego/favorito')
+            .set({
+                "access_token": `Bearer ${tokenAdmin}`
+            });
+        expect(resInsercion.statusCode).toBe(400);
+    })
+
+    test('POST /juego/pendiente - Ingresar un juego a la lista de pendientes', async() =>
+    {
+        const DatosJuegoPendiente = {idJuego: 12567, idJugador: idJugadorCreado};
+        const DatosJuegoPendienteDos = {idJuego: 41437, idJugador: idJugadorCreado};
+        const resInsercionPrimerInsercion = await request(servidor).post('/juego/pendiente')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosJuegoPendiente);
+        const resInsercionSegundaInsercion = await request(servidor).post('/juego/pendiente')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosJuegoPendienteDos);
+        expect(resInsercionPrimerInsercion.statusCode).toBe(200);
+        expect(resInsercionSegundaInsercion.statusCode).toBe(200);
+    })
+
+    test('POST /juego/pendiente - Ingresar un juego repetido a la lista de pendientes', async() =>
+    {
+        const DatosJuegoPendiente = {idJuego: 12567, idJugador: idJugadorCreado};
+        const resInsercionPrimerInsercion = await request(servidor).post('/juego/pendiente')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosJuegoPendiente);
+        expect(resInsercionPrimerInsercion.statusCode).toBe(400);
+    })
+
+    test('POST /juego/pendiente - Ingresar un juego repetido a la lista de pendientes sin parámetros ingresados', async() =>
+        {
+            const resInsercionPrimerInsercion = await request(servidor).post('/juego/pendiente')
+                .set({
+                    "access_token": `Bearer ${tokenAdmin}`
+                });
+            expect(resInsercionPrimerInsercion.statusCode).toBe(400);
+        })
 
     test('GET /juego/:idJuego - Buscar un juego por su ID', async() => 
     {
@@ -155,7 +236,7 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
 
     test('GET /juego/ - Buscar un juego inexistente en la base de datos a través de su nombre', async() => 
     {
-        const NombreJuego = "Halo infinite";
+        const NombreJuego = "Repo";
         const resBusqueda = await request(servidor).get(`/juego/?nombre=${NombreJuego}`)
             .set({"access_token": `Bearer ${tokenJugador}`});
         expect(resBusqueda.statusCode).toBe(404);
@@ -169,9 +250,122 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
             expect(resBusqueda.statusCode).toBe(400);
         })
 
+    test('GET /juego/favorito/:idJugador - Obtener los juegos favoritos de un jugador', async() => 
+    {
+        const resBusqueda = await request(servidor).get(`/juego/favorito/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenJugador}`});
+        console.log(resBusqueda.body);
+        expect(resBusqueda.statusCode).toBe(200);
+        expect(resBusqueda.body).toHaveProperty("juegos");
+    })
+
+    test('GET /juego/favorito/:idJugador - Obtener resultados sin juegos como favoritos de un jugador', async() => 
+    {
+        const resBusqueda = await request(servidor).get(`/juego/favorito/${202}`)
+            .set({"access_token": `Bearer ${tokenJugador}`});
+        expect(resBusqueda.statusCode).toBe(404);
+        expect(resBusqueda.body).toHaveProperty("mensaje");
+    })
+
+    test('GET /juego/favorito/:idJugador - Intentar obtener los juegos favoritos de un jugador con parámetros inválidos', async() =>
+    {
+        const idJugador = "'o04p23k4i9201pol2,3{121}{}?¡¿*]";
+        const resBusqueda = await request(servidor).get(`/juego/favorito/${idJugador}`)
+            .set({"access_token": `Bearer ${tokenJugador}`});
+        expect(resBusqueda.statusCode).toBe(400);
+    })
+
+    test('GET /juego/pendiente/:idJugador - Obtener los juegos pendientes de un jugador', async() => 
+    {
+        const resBusqueda = await request(servidor).get(`/juego/pendiente/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenJugador}`});
+        console.log(resBusqueda.body);
+        expect(resBusqueda.statusCode).toBe(200);
+        expect(resBusqueda.body).toHaveProperty("juegos");
+    })
+    
+    test('GET /juego/pendiente/:idJugador - Obtener resultados sin juegos como pendientes de un jugador', async() => 
+    {
+        const resBusqueda = await request(servidor).get(`/juego/pendiente/${202}`)
+            .set({"access_token": `Bearer ${tokenJugador}`});
+        expect(resBusqueda.statusCode).toBe(404);
+        expect(resBusqueda.body).toHaveProperty("mensaje");
+    })
+
+    test('GET /juego/pendiente/:idJugador - Intentar obtener los juegos pendientes de un jugador con parámetros inválidos', async() =>
+    {
+        const idJugador = "'o04p23k4i9201pol2,3{121}{}?¡¿*]";
+        const resBusqueda = await request(servidor).get(`/juego/pendiente/${idJugador}`)
+            .set({"access_token": `Bearer ${tokenJugador}`});
+        expect(resBusqueda.statusCode).toBe(400);
+    })
+    
+    test('DELETE /juego/pendiente/:idJuego/:idJugador - Eliminar juego de la lista de pendientes', async() =>
+    {
+        const resEliminacionPrimerJuego = await request(servidor).delete(`/juego/pendiente/${41437}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        const resEliminacionSegundoJuego = await request(servidor).delete(`/juego/pendiente/${12567}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacionPrimerJuego.statusCode).toBe(200);
+        expect(resEliminacionSegundoJuego.statusCode).toBe(200);
+    })
+
+    test('DELETE /juego/pendiente/:idJuego/:idJugador - Eliminar juego no registrado en la lista de pendientes', async() =>
+    {
+        const resEliminacion = await request(servidor).delete(`/juego/pendiente/${209811}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(400);
+    })
+
+    test('DELETE /juego/pendiente/:idJuego/:idJugador - Intentar eliminar juego con datos inválidos ', async() =>
+    {
+        const IdJuego = "ABCDEFG" 
+        const resEliminacion = await request(servidor).delete(`/juego/pendiente/${IdJuego}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(400);
+    })
+
+    test('DELETE /juego/pendiente/:idJuego/:idJugador - Intentar eliminar juego con parámetros nulos', async() =>
+    {
+        const resEliminacion = await request(servidor).delete(`/juego/pendiente/${null}/${null}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(400);
+    })
+
+    test('DELETE /juego/favorito/:idJuego/:idJugador - Eliminar juego de la lista de favoritos', async() =>
+    {
+        const resEliminacion = await request(servidor).delete(`/juego/favorito/${41437}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(200);
+    })
+
+    test('DELETE /juego/favorito/:idJuego/:idJugador - Eliminar juego de la lista de favoritos no registrado', async() =>
+    {
+        const resEliminacion = await request(servidor).delete(`/juego/favorito/${127940}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(400);
+    })
+
+    test('DELETE /juego/favorito/:idJuego/:idJugador - Eliminar juego de la lista de favoritos con datos inválidos', async() =>
+    {
+        const IdJuego = "ABCDEFG";
+        const resEliminacion = await request(servidor).delete(`/juego/favorito/${IdJuego}/${idJugadorCreado}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(400);
+    })
+
+    test('DELETE /juego/favorito/:idJuego/:idJugador - Eliminar juego de la lista de favoritos con parámetros nulos', async() =>
+    {
+        const resEliminacion = await request(servidor).delete(`/juego/favorito/${null}/${null}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        expect(resEliminacion.statusCode).toBe(400);
+    })
+
     test('DELETE /juego/:idJuego - Eliminar juego existente en la base de datos a través de su ID',async() => 
     {
         const resEliminacion = await request(servidor).delete(`/juego/${41437}`)
+            .set({"access_token": `Bearer ${tokenAdmin}`});
+        await request(servidor).delete(`/juego/${12567}`)
             .set({"access_token": `Bearer ${tokenAdmin}`});
         expect(resEliminacion.statusCode).toBe(200);
     })
@@ -197,4 +391,5 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
                 .set({"access_token": `Bearer ${tokenAdmin}`});
             expect(resEliminacion.statusCode).toBe(400);
         })
+    
 })

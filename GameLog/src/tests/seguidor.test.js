@@ -1,5 +1,5 @@
 import request from "supertest";
-import { CrearServidorTest } from "../server.js";
+import { CrearServidorTest } from "../serverTest.js";
 import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
 import { ModeloLogin } from "../api_rest/model/sql/Login";
 import {ModeloSeguidor} from "../api_rest/model/sql/Seguidor.js";
