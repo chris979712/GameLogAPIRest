@@ -58,50 +58,6 @@ export class AccesoControlador
         }
     }
 
-    ObtenerUsuarioLogin = async (req, res) => 
-    {
-        try
-        {
-            const {correo, contrasenia} = req.query;
-            const Datos = {correo, contrasenia};
-            const {tipoDeUsuario} = req;
-            const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
-            if(ResultadoValidacion.success)
-            {
-                const ResultadoConsulta = await this.modeloAcceso.ObtenerCuentaDeJugadorLogin({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
-                let resultadoConsulta = parseInt(ResultadoConsulta.estado);
-                res.status(resultadoConsulta).json({
-                    error: resultadoConsulta !== 200,
-                    estado: resultadoConsulta,
-                    ...(resultadoConsulta === 200
-                        ? { cuenta: ResultadoConsulta.cuenta }
-                        : { mensaje: ResultadoConsulta.mensaje }
-                    )
-                });
-                
-            }
-            else
-            {
-                res.status(400).json({
-                    error: true,
-                    estado: 400,
-                    mensaje: ResultadoValidacion.error.formErrors
-                });
-            }
-        }
-        catch(error)
-        {
-            logger({mensaje: error});
-            res.status(500).json(
-            {
-                error: true,
-                estado: 500,
-                mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
-            }
-            )
-        }
-    }
-
     ObtenerIDDeCuentaDeAcceso = async (req,res) =>
     {
         try

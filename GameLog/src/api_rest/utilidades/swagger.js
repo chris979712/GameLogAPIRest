@@ -1,15 +1,37 @@
-import swaggerAutogen from 'swagger-autogen';
+import swaggerJsdoc from 'swagger-jsdoc';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import dotenv from 'dotenv';
 
-const OutputFile = '../../../swagger.json';
-const EndPointsFiles = ['../../server.js'];
+const NombreArchivo = fileURLToPath(import.meta.url);
+const Directorio = dirname(NombreArchivo);
+dotenv.config();
 
-const Doc = {
-    info: {
-        title: 'API de GameLOG',
-        description: 'Esta API contiene los servicios de usuarios, seguidores, reseñas, juegos y favoritos para la mejora de reseñas sobre videojuegos.',
+const Documento = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Game Log API Rest',
+            version: '1.0.0',
+            description: 'API de GameLog, reseñas de videojuegos y más',
+        },
+        servers: [
+            {
+                url: 'http://localhost:'+process.env.PUERTO+'/gamelog'
+            },
+        ],
     },
-    host: 'localhost:1234',
-    schemes: ['http']
-}
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+            } 
+        }
+    },
+    apis: [path.resolve(Directorio, '../routes/*.js')],
+};
 
-swaggerAutogen()(OutputFile,EndPointsFiles,Doc);
+export const DocumentoSwagger = swaggerJsdoc(Documento);

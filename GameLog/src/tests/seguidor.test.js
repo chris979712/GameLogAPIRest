@@ -53,9 +53,9 @@ beforeAll( async() =>
         foto: "login.jpg",
         tipoDeUsuario: "Administrador"
     };
-    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datosPrimerJugador);
-    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datosSegundoJugador);
-    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datosTercerJugador);
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosPrimerJugador);
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosSegundoJugador);
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosTercerJugador);
     const datosPrimerJugadorLogin =
     {
         correo: "chris@gmail.com",
@@ -74,12 +74,12 @@ beforeAll( async() =>
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
-    const resLoginPrimerJugador = await request(servidor).post('/login').set("Content-Type","application/json").send(datosPrimerJugadorLogin);
+    const resLoginPrimerJugador = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(datosPrimerJugadorLogin);
     idPrimerJugador = resLoginPrimerJugador.body.cuenta[0].idJugador;
     token = resLoginPrimerJugador.headers['access_token'];
-    const resLoginSegundoJugador = await request(servidor).post('/login').set("Content-Type","application/json").send(datosSegundoJugadorLogin);
+    const resLoginSegundoJugador = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(datosSegundoJugadorLogin);
     idSegundoJugador = resLoginSegundoJugador.body.cuenta[0].idJugador;
-    const resLoginTercerJugador = await request(servidor).post('/login').set("Content-Type","application/json").send(datosTercerJugadorLogin);
+    const resLoginTercerJugador = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(datosTercerJugadorLogin);
     idTercerJugador = resLoginTercerJugador.body.cuenta[0].idJugador;
 })
 
@@ -97,19 +97,19 @@ afterAll( async() =>
         tipoDeUsuario: "Administrador",
         correo: "mario@gmail.com"
     }
-    await request(servidor).delete(`/acceso/${idPrimerJugador}`)
+    await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
             .send(datosEliminacionPrimerJugador);
-    await request(servidor).delete(`/acceso/${idSegundoJugador}`)
+    await request(servidor).delete(`/gamelog/acceso/${idSegundoJugador}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
             .send(datosEliminacionSegundoJugador);
-    await request(servidor).delete(`/acceso/${idTercerJugador}`)
+    await request(servidor).delete(`/gamelog/acceso/${idTercerJugador}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -124,13 +124,13 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
     {
         const DatosPrimerSeguido = {idJugadorSeguidor: idPrimerJugador, idJugadorSeguido: idSegundoJugador};
         const DatosSegundoSeguido = {idJugadorSeguidor: idPrimerJugador, idJugadorSeguido: idTercerJugador};
-        const resPrimerInsercion = await request(servidor).post('/seguidor')
+        const resPrimerInsercion = await request(servidor).post('/gamelog/seguidor')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
             .send(DatosPrimerSeguido);
-        const resSegundaInsercion = await request(servidor).post('/seguidor')
+        const resSegundaInsercion = await request(servidor).post('/gamelog/seguidor')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -143,7 +143,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
     test('POST /seguidor - Ingresar el mismo jugador a seguir y que ya está registrado', async () =>
     {
         const DatosPrimerSeguido = {idJugadorSeguidor: idPrimerJugador, idJugadorSeguido: idSegundoJugador};
-        const resInsercion = await request(servidor).post('/seguidor')
+        const resInsercion = await request(servidor).post('/gamelog/seguidor')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -155,7 +155,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
     test('POST /seguidor - Ingresar el registro de un seguidor con datos inválidos', async () =>
     {
         const DatosPrimerSeguido = {idJugadorSeguidor: "askmdan", idJugadorSeguido: "alsmdkans"};
-        const resInsercion = await request(servidor).post('/seguidor')
+        const resInsercion = await request(servidor).post('/gamelog/seguidor')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -166,7 +166,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('POST /seguidor - Ingresar el registro de un seguidor sin datos como body', async () =>
     {
-        const resInsercion = await request(servidor).post('/seguidor')
+        const resInsercion = await request(servidor).post('/gamelog/seguidor')
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -175,7 +175,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('GET /seguidor/seguidos - Obtener los jugadores seguidos', async() => 
     {
-        const resConsulta = await request(servidor).get(`/seguidor/seguidos/${idPrimerJugador}`)
+        const resConsulta = await request(servidor).get(`/gamelog/seguidor/seguidos/${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -186,7 +186,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('GET /seguidor/seguidos - Obtener los jugadores seguidos con un jugador sin jugadores seguidos', async() => 
     {
-        const resConsulta = await request(servidor).get(`/seguidor/seguidos/${idSegundoJugador}`)
+        const resConsulta = await request(servidor).get(`/gamelog/seguidor/seguidos/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -196,7 +196,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('GET /seguidor/seguidos - Obtener los jugadores seguidos ingresando parámetros inválidos', async() => 
     {
-        const resConsulta = await request(servidor).get(`/seguidor/seguidos/${null}`)
+        const resConsulta = await request(servidor).get(`/gamelog/seguidor/seguidos/${null}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -205,7 +205,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('GET /seguidor/seguidores - Obtener los seguidores de un jugador', async() =>
     {
-        const resConsulta = await request(servidor).get(`/seguidor/seguidores/${idSegundoJugador}`)
+        const resConsulta = await request(servidor).get(`/gamelog/seguidor/seguidores/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -216,7 +216,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('GET /seguidor/seguidores - Obtener los seguidores de un jugador que no cuenta con seguidores', async() =>
     {
-        const resConsulta = await request(servidor).get(`/seguidor/seguidores/${idPrimerJugador}`)
+        const resConsulta = await request(servidor).get(`/gamelog/seguidor/seguidores/${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -225,7 +225,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('GET /seguidor/seguidores - Obtener los seguidores de un jugador ingresando parámetros inválidos', async() => 
     {
-        const resConsulta = await request(servidor).get(`/seguidor/seguidores/${null}`)
+        const resConsulta = await request(servidor).get(`/gamelog/seguidor/seguidores/${null}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -234,11 +234,11 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('DELETE /seguidor/:idJugadorSeguidor/:idJugadorSeguido - Eliminar un jugador seguido', async() =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/seguidor/${idPrimerJugador}/${idSegundoJugador}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/seguidor/${idPrimerJugador}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
-        const resSegundaEliminacion = await request(servidor).delete(`/seguidor/${idPrimerJugador}/${idTercerJugador}`)
+        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/seguidor/${idPrimerJugador}/${idTercerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -248,7 +248,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
 
     test('DELETE /seguidor/:idJugadorSeguidor/:idJugadorSeguido - Eliminar un jugador seguido inexistente', async() =>
     {
-        const resEliminacion = await request(servidor).delete(`/seguidor/${idSegundoJugador}/${idPrimerJugador}`)
+        const resEliminacion = await request(servidor).delete(`/gamelog/seguidor/${idSegundoJugador}/${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -258,7 +258,7 @@ describe('Test para el servicio de seguidores donde se encuentran los métodos d
     test('DELETE /seguidor/:idJugadorSeguidor/:idJugadorSeguido - Eliminar un jugador seguido con parámetros inválidos', async() =>
     {
         const IdPrimerJugador = "ASKNJYU"
-        const resEliminacion = await request(servidor).delete(`/seguidor/${IdPrimerJugador}/${idSegundoJugador}`)
+        const resEliminacion = await request(servidor).delete(`/gamelog/seguidor/${IdPrimerJugador}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })

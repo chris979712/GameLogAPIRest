@@ -21,6 +21,8 @@ export const ValidarJwt = (request,response, next) =>
         {
             response.status(401).json(
             {
+                error: true,
+                estado: 401,
                 mensaje: 'No hay un token dentro de la solicitud'
             })
         }
@@ -29,6 +31,8 @@ export const ValidarJwt = (request,response, next) =>
     {
         logger(error);
         response.status(401).json({
+            error: true,
+            estado: 401,
             mensaje: 'Token inválido'
         })
     }

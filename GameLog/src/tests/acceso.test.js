@@ -23,14 +23,14 @@ beforeAll(async () => {
             foto: "login.jpg",
             tipoDeUsuario: "Administrador"
         };
-    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datos);
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datos);
     const DatosUsuario = 
         {
             correo: "usuarioprueba@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
-    const resLogin = await request(servidor).post('/login').set("Content-Type","application/json").send(DatosUsuario);
+    const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
     token = resLogin.headers['access_token'];
 });
 
@@ -38,7 +38,7 @@ afterAll(async () => {
     const correo = "usuarioprueba@gmail.com";
     const tipoDeUsuario = "Administrador";
     const resIdUsuario = await request(servidor)
-        .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+        .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
         .set({
             "access_token": `Bearer ${token}`
         })
@@ -47,7 +47,7 @@ afterAll(async () => {
             tipoDeUsuario: "Administrador",
             correo: "usuarioprueba@gmail.com"
         }
-    await request(servidor).delete(`/acceso/${idAcceso}`)
+    await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
         .set({
             "Content-Type": "application/json",
             "access_token": `Bearer ${token}`
@@ -74,7 +74,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             tipoDeUsuario: "Administrador"
         };
         const res = await request(servidor)
-            .post("/acceso")
+            .post("/gamelog/acceso")
             .set("Content-Type","application/json")
             .send(datos);
         expect(res.statusCode).toBe(200);
@@ -98,7 +98,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
                 tipoDeUsuario: "Administrador"
             };
             const res = await request(servidor)
-                .post("/acceso")
+                .post("/gamelog/acceso")
                 .set("Content-Type","application/json")
                 .send(datos);
             expect(res.statusCode).toBe(400);
@@ -109,65 +109,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('POST /acceso - Se intenta crear una cuenta sin pasar datos de entrada', async () => 
         {
             const res = await request(servidor)
-                .post("/acceso")
+                .post("/gamelog/acceso")
                 .set("Content-Type","application/json");
             expect(res.statusCode).toBe(400);
-        })
-
-    test('GET /acceso - Obtiene la cuenta que se ingresa para iniciar sesión', async() => 
-    {
-        const correo = "oscarcito666@gmail.com";
-        const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-        const res = await request(servidor)
-            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`)
-            .set({
-                "access_token": `Bearer ${token}`
-            })
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty("cuenta");
-    })
-
-    test('GET /acceso - Se intenta obtener una cuenta con un token inválido', async() => 
-    {
-        const correo = "oscarcito666@gmail.com";
-        const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-        const res = await request(servidor)
-            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`)
-            .set({
-                "access_token": `Bearer ${process.env.TOKEN_INVALIDO}`
-            });
-        expect(res.statusCode).toBe(401);
-    })
-
-    test('GET /acceso - Se intenta obtener una cuenta sin un token de sesion', async() => 
-    {
-        const correo = "oscarcito666@gmail.com";
-        const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-        const res = await request(servidor)
-            .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`);
-        expect(res.statusCode).toBe(401);
-    })
-
-    test('GET /acceso - Se intenta obtener una cuenta sin datos ingresados', async() => 
-        {
-            const res = await request(servidor)
-                .get(`/acceso/login?correo=${null}&contrasenia=${null}`)
-                .set({
-                    "access_token": `Bearer ${token}`
-                });
-            expect(res.statusCode).toBe(400);
-        })
-
-    test('GET /acceso - No se obtiene ninguna cuenta registrada dentro de la base de datos', async() => 
-        {
-            const correo= "chrisvasquez404@gmail.com";
-            const contrasenia = "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-            const res = await request(servidor)
-                .get(`/acceso/login?correo=${correo}&contrasenia=${contrasenia}`)
-                .set({
-                    "access_token": `Bearer ${token}`
-                })
-            expect(res.statusCode).toBe(404);
         })
 
     test('GET /acceso/:correo - Obtiene el id de la cuenta a través del correo ingresado', async() => 
@@ -175,7 +119,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         const correo = "oscarcito666@gmail.com";
         const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+            .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -187,7 +131,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
         {
             const correo = "chrisvasquez404@gmail.com";
             const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -197,7 +141,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('GET /acceso/:correo - Se intenta obtener el id de una cuenta sin datos ingresados', async() => 
         {
             const resIdUsuario = await request(servidor)
-            .get(`/acceso/${null}`)
+            .get(`/gamelog/acceso/${null}`)
             .set({
                 "access_token": `Bearer ${token}`
             });
@@ -208,7 +152,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     {
         const correo = "oscarcito666@gmail.com";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -219,7 +163,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             tipoDeUsuario: "Administrador"
         }
         const resEdicion = await request(servidor)
-            .put(`/acceso/${idAcceso}`)
+            .put(`/gamelog/acceso/${idAcceso}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -238,7 +182,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             tipoDeUsuario: "Administrador"
         }
         const resEdicion = await request(servidor)
-            .put(`/acceso/${24}`)
+            .put(`/gamelog/acceso/${24}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -252,7 +196,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('PUT /acceso/:id - Se tratan de editar credenciales de una cuenta sin datos a ingresar como parámetros', async () => 
         {
             const resEdicion = await request(servidor)
-                .put(`/acceso/${null}`)
+                .put(`/gamelog/acceso/${null}`)
                 .set({
                     "access_token": `Bearer ${token}`
                 });
@@ -263,7 +207,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     {
         const correo = "chrisvasquez777@gmail.com";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -274,7 +218,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             estadoAcceso: "Baneado"
         }
         const resEdicion = await request(servidor)
-            .patch(`/acceso/${idAcceso}`)
+            .patch(`/gamelog/acceso/${idAcceso}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -292,7 +236,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             estadoAcceso: "Baneado",
         };
         const resEdicion = await request(servidor)
-            .patch(`/acceso/${24}`)
+            .patch(`/gamelog/acceso/${24}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -307,7 +251,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
 
     test("PATCH /acceso/:id - Se trata de editar el estado de una cuenta sin ingresar parámetros", async () => {
         const resEdicion = await request(servidor)
-            .patch(`/acceso/${null}`)
+            .patch(`/gamelog/acceso/${null}`)
             .set({
                 "access_token": `Bearer ${token}`
             });
@@ -317,7 +261,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test("DELETE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
         const correo = "chrisvasquez777@gmail.com";
         const resIdUsuario = await request(servidor)
-            .get(`/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}`)
             .set({
                 "access_token": `Bearer ${token}`
             });
@@ -327,7 +271,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             correo: "chrisvasquez777@gmail.com"
         }
         const resEliminacion = await request(servidor)
-            .delete(`/acceso/${idAcceso}`)
+            .delete(`/gamelog/acceso/${idAcceso}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -342,7 +286,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             correo: "chrisvasquez985@gmail.com"
         }
         const resEliminacion = await request(servidor)
-            .delete(`/acceso/${24}`)
+            .delete(`/gamelog/acceso/${24}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -353,7 +297,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
 
     test("DELETE /acceso/:id - Eliminar una cuenta sin ingresar datos como parámetros", async() => {
         const resEliminacion = await request(servidor)
-            .delete(`/acceso/${null}`)
+            .delete(`/gamelog/acceso/${null}`)
             .set({
                 "access_token": `Bearer ${token}`
             });

@@ -17,11 +17,11 @@ export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,Mode
     app.get('/',(req,res)=>{
         res.json({message: 'Bienvenido al servidor de pruebas de GameLogAPI'});
     });
-    app.use('/login',CrearRutaLogin({ModeloLogin}));
-    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
-    app.use('/jugador',CrearRutaJugador({ModeloJugador}))
-    app.use('/juego',CrearRutaJuego({ModeloJuego}))
-    app.use('/seguidor',CrearRutaSeguidor({ModeloSeguidor}))
+    app.use('/gamelog/login',CrearRutaLogin({ModeloLogin}));
+    app.use('/gamelog/acceso', CrearRutaAcceso({ModeloAcceso}));
+    app.use('/gamelog/jugador',CrearRutaJugador({ModeloJugador}))
+    app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}))
+    app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}))
 
     const PUERTO = process.env.PUERTO;
     const server = app.listen(PUERTO, () => {

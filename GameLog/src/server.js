@@ -4,30 +4,34 @@ import { CrearRutaLogin } from './api_rest/routes/Login.js';
 import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
 import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
-import { readFile } from 'fs/promises';
+import { DocumentoSwagger } from './api_rest/utilidades/swagger.js';
 import swaggerUI from 'swagger-ui-express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-const swaggerDocumentation = JSON.parse(await readFile(new URL('../swagger.json', import.meta.url)));
+
 
 export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor}) => 
 {
     const app = express();
-    dotenv.config();
     app.use(json());
     app.use(cors());
     app.disable('x-powered-by');
 
-    app.get('/',(req,res)=>{
+    /**
+     * @swagger
+     * tags:
+     *  name: Welcome
+     *  description: Ruta de bienvenida a la API
+     */
+    app.get('/gamelog',(req,res)=>{
         res.json({message: 'Bienvenido al servidor de GameLogAPI'});
     })
 
-    app.use('/doc',swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
-    app.use('/login',CrearRutaLogin({ModeloLogin}));
-    app.use('/acceso', CrearRutaAcceso({ModeloAcceso}));
-    app.use('/jugador',CrearRutaJugador({ModeloJugador}))
-    app.use('/juego',CrearRutaJuego({ModeloJuego}))
-    app.use('/seguidor',CrearRutaSeguidor({ModeloSeguidor}))
+    app.use('/gamelog/login',CrearRutaLogin({ModeloLogin}));
+    app.use('/gamelog/acceso', CrearRutaAcceso({ModeloAcceso}));
+    app.use('/gamelog/jugador',CrearRutaJugador({ModeloJugador}));
+    app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}));
+    app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}));
+    app.use('/gamelog/doc',swaggerUI.serve, swaggerUI.setup(DocumentoSwagger));
 
     const PUERTO = process.env.PUERTO;
 

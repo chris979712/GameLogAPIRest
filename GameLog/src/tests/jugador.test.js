@@ -25,14 +25,14 @@ beforeAll(async () =>
             foto: "login.jpg",
             tipoDeUsuario: "Administrador"
         };
-    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datos);
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datos);
     const DatosUsuario = 
         {
             correo: "usuarioprueba@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
-    const resLogin = await request(servidor).post('/login').set("Content-Type","application/json").send(DatosUsuario);
+    const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
     token = resLogin.headers['access_token'];
     idJugadorCreado = resLogin.body.cuenta[0].idJugador;
     console.log(idJugadorCreado)
@@ -43,7 +43,7 @@ afterAll(async() =>
     const correo = "usuarioprueba@gmail.com";
     const tipoDeUsuario = "Administrador";
     const resIdUsuario = await request(servidor)
-        .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+        .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
         .set({
             "access_token": `Bearer ${token}`
         })
@@ -52,7 +52,7 @@ afterAll(async() =>
             tipoDeUsuario: "Administrador",
             correo: "usuarioprueba@gmail.com"
         }
-    await request(servidor).delete(`/acceso/${idAcceso}`)
+    await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
         .set({
             "Content-Type": "application/json",
             "access_token": `Bearer ${token}`
@@ -67,7 +67,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
     {
         let nombreDeUsuario = "pruebaJugador";
         const res = await request(servidor)
-            .get(`/jugador/${nombreDeUsuario}`)
+            .get(`/gamelog/jugador/${nombreDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -79,7 +79,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
     {
         let nombreDeUsuario = "pepito777";
         const res = await request(servidor)
-            .get(`/jugador/${nombreDeUsuario}`)
+            .get(`/gamelog/jugador/${nombreDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -90,7 +90,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
         {
             const NombreDeUsuario = '{ñ,lkop´{.,ñ'
             const res = await request(servidor)
-                .get(`/jugador/${NombreDeUsuario}`)
+                .get(`/gamelog/jugador/${NombreDeUsuario}`)
                 .set({
                     "access_token": `Bearer ${token}`
                 })
@@ -106,7 +106,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
             foto: "fotito.jpg",
         };
         const resEdicion = await request(servidor)
-            .put(`/jugador/${idJugadorCreado}`)
+            .put(`/gamelog/jugador/${idJugadorCreado}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -125,7 +125,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
             foto: "fotito.jpg",
         };
         const resEdicion = await request(servidor)
-            .put(`/jugador/${58}`)
+            .put(`/gamelog/jugador/${58}`)
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
@@ -143,7 +143,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
                 foto: "fotito.jpg",
             };
             const resEdicion = await request(servidor)
-                .put(`/jugador/${idJugadorCreado}`)
+                .put(`/gamelog/jugador/${idJugadorCreado}`)
                 .set({
                     "Content-Type": "application/json",
                     "access_token": `Bearer ${token}`
@@ -155,7 +155,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
     test('DELETE /jugador/:idJugador - Eliminar un jugador registrado en la base de datos',async()=> 
     {
         const resEliminacion = await request(servidor)
-            .delete(`/jugador/${idJugadorCreado}`)
+            .delete(`/gamelog/jugador/${idJugadorCreado}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -165,7 +165,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
     test('DELETE /jugador/:idJugador - Intentar eliminar un jugador inexistente en la base de datos',async()=> 
     {
         const resEliminacion = await request(servidor)
-            .delete(`/jugador/${59}`)
+            .delete(`/gamelog/jugador/${59}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -175,7 +175,7 @@ describe('Tests para el servicio de Jugadores donde se encuentra la modificacion
     test('DELETE /jugador/:idJugador - Intentar eliminar un jugador sin pasar datos como parámetros',async()=> 
         {
             const resEliminacion = await request(servidor)
-                .delete(`/jugador/${null}`)
+                .delete(`/gamelog/jugador/${null}`)
                 .set({
                     "access_token": `Bearer ${token}`
                 })

@@ -23,7 +23,7 @@ beforeAll(async () =>
         foto: "login.jpg",
         tipoDeUsuario: "Administrador"
     };
-    await request(servidor).post("/acceso").set("Content-Type","application/json").send(datos);
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datos);
 })
 
 afterAll(async() => 
@@ -31,7 +31,7 @@ afterAll(async() =>
     const correo = "usuarioprueba@gmail.com";
     const tipoDeUsuario = "Administrador";
     const resIdUsuario = await request(servidor)
-        .get(`/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
+        .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
         .set({
             "access_token": `Bearer ${token}`
         })
@@ -40,7 +40,7 @@ afterAll(async() =>
             tipoDeUsuario: "Administrador",
             correo: "usuarioprueba@gmail.com"
         }
-    await request(servidor).delete(`/acceso/${idAcceso}`)
+    await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
         .set({
             "Content-Type": "application/json",
             "access_token": `Bearer ${token}`
@@ -58,7 +58,7 @@ describe('Test para probar el login de cuentas a la API REST', () =>
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
-        const resLogin = await request(servidor).post('/login').set("Content-Type","application/json").send(DatosUsuario);
+        const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
         expect(resLogin.body).toHaveProperty("cuenta");
         expect(resLogin.statusCode).toBe(200);
         expect(resLogin.headers).toHaveProperty('access_token');
@@ -72,13 +72,13 @@ describe('Test para probar el login de cuentas a la API REST', () =>
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
-        const resLogin = await request(servidor).post('/login').set("Content-Type","application/json").send(DatosUsuario);
+        const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
         expect(resLogin.body.mensaje).toBe("No se ha encontrado la cuenta a buscar dentro del sistema");
         expect(resLogin.statusCode).toBe(404);
     })
 
     test('POST /login - Se intenta acceder a la API sin ingresar datos para inicio de sesion', async() => {
-        const resLogin = await request(servidor).post('/login').set("Content-Type","application/json");
+        const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json");
         expect(resLogin.statusCode).toBe(400);
     })
 })
