@@ -4,10 +4,11 @@ import { CrearRutaLogin } from './api_rest/routes/Login.js';
 import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
 import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
+import { CrearRutaReseña } from './api_rest/routes/Reseña.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor}) => {
+export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña}) => {
     const app = express();
     dotenv.config();
     app.use(json());
@@ -22,8 +23,9 @@ export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,Mode
     app.use('/gamelog/jugador',CrearRutaJugador({ModeloJugador}))
     app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}))
     app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}))
+    app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}))
 
-    const PUERTO = process.env.PUERTO;
+    const PUERTO = process.env.PUERTO_PRUEBAS;
     const server = app.listen(PUERTO, () => {
         console.log(`Servidor activo en la siguiente ruta http://localhost:${PUERTO}`);
     });

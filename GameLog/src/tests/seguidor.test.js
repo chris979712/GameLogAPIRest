@@ -6,6 +6,7 @@ import {ModeloSeguidor} from "../api_rest/model/sql/Seguidor.js";
 
 let servidor;
 let token;
+let tokenAdministrador;
 let idPrimerJugador;
 let idSegundoJugador;
 let idTercerJugador;
@@ -25,7 +26,7 @@ beforeAll( async() =>
         nombreDeUsuario: "christolin",
         descripcion: "soy el primer jugador :D",
         foto: "login.jpg",
-        tipoDeUsuario: "Administrador"
+        tipoDeUsuario: "Jugador"
     };
     const datosSegundoJugador =
     {
@@ -38,7 +39,7 @@ beforeAll( async() =>
         nombreDeUsuario: "oscarin",
         descripcion: "soy el segundo jugador :D",
         foto: "login.jpg",
-        tipoDeUsuario: "Administrador"
+        tipoDeUsuario: "Jugador"
     };
     const datosTercerJugador =
     {
@@ -60,13 +61,13 @@ beforeAll( async() =>
     {
         correo: "chris@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-        tipoDeUsuario: "Administrador"
+        tipoDeUsuario: "Jugador"
     };
     const datosSegundoJugadorLogin =
     {
         correo: "oscar@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-        tipoDeUsuario: "Administrador"
+        tipoDeUsuario: "Jugador"
     };
     const datosTercerJugadorLogin =
     {
@@ -81,6 +82,7 @@ beforeAll( async() =>
     idSegundoJugador = resLoginSegundoJugador.body.cuenta[0].idJugador;
     const resLoginTercerJugador = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(datosTercerJugadorLogin);
     idTercerJugador = resLoginTercerJugador.body.cuenta[0].idJugador;
+    tokenAdministrador = resLoginTercerJugador.headers['access_token'];
 })
 
 afterAll( async() =>
@@ -100,19 +102,19 @@ afterAll( async() =>
     await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
             .set({
                 "Content-Type": "application/json",
-                "access_token": `Bearer ${token}`
+                "access_token": `Bearer ${tokenAdministrador}`
             })
             .send(datosEliminacionPrimerJugador);
     await request(servidor).delete(`/gamelog/acceso/${idSegundoJugador}`)
             .set({
                 "Content-Type": "application/json",
-                "access_token": `Bearer ${token}`
+                "access_token": `Bearer ${tokenAdministrador}`
             })
             .send(datosEliminacionSegundoJugador);
     await request(servidor).delete(`/gamelog/acceso/${idTercerJugador}`)
             .set({
                 "Content-Type": "application/json",
-                "access_token": `Bearer ${token}`
+                "access_token": `Bearer ${tokenAdministrador}`
             })
             .send(datosEliminacionTercerJugador);  
     servidor.close();
