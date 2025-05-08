@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { LoginControlador } from "../controllers/login.js";
 
-export const CrearRutaLogin = ({ModeloLogin}) =>
+export const CrearRutaLogin = ({ModeloLogin,ModeloAcceso}) =>
 {
     /**
      * @swagger
@@ -11,7 +11,7 @@ export const CrearRutaLogin = ({ModeloLogin}) =>
      */
 
     const LoginEnrutador = Router();
-    const ControladorLoginEnrutador = new LoginControlador({ModeloLogin});
+    const ControladorLoginEnrutador = new LoginControlador({ModeloLogin,ModeloAcceso});
 
     /**
      * @swagger
@@ -47,6 +47,8 @@ export const CrearRutaLogin = ({ModeloLogin}) =>
      *         description: Error interno en el servidor al querer iniciar sesion
      */
     LoginEnrutador.post('/',ControladorLoginEnrutador.Login);
+
+    LoginEnrutador.post('/recuperacionDeCuenta',ControladorLoginEnrutador.IniciarRecuperacionDeContraseña);
 
     return LoginEnrutador;
 }

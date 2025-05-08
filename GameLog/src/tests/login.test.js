@@ -8,11 +8,11 @@ let token;
 
 beforeAll(async () => 
 {
-    const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin});
+    const {server: servidorCreado} = CrearServidorTest({ModeloLogin:ModeloLogin,ModeloAcceso:ModeloAcceso});
     servidor = servidorCreado;
     const datos = 
     {
-        correo: "usuarioprueba@gmail.com",
+        correo: "chrisvasquez985@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "pruebaLogin",
@@ -28,7 +28,7 @@ beforeAll(async () =>
 
 afterAll(async() => 
 {
-    const correo = "usuarioprueba@gmail.com";
+    const correo = "chrisvasquez985@gmail.com";
     const tipoDeUsuario = "Administrador";
     const resIdUsuario = await request(servidor)
         .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
@@ -38,7 +38,7 @@ afterAll(async() =>
     const idAcceso = resIdUsuario.body.idAcceso;
     const datosEliminacion = {
             tipoDeUsuario: "Administrador",
-            correo: "usuarioprueba@gmail.com"
+            correo: "chrisvasquez985@gmail.com"
         }
     await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
         .set({
@@ -54,7 +54,7 @@ describe('Test para probar el login de cuentas a la API REST', () =>
     test('POST /login - Se Accede a la API Rest desde una cuenta existente', async() => {
         const DatosUsuario = 
         {
-            correo: "usuarioprueba@gmail.com",
+            correo: "chrisvasquez985@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
@@ -80,5 +80,35 @@ describe('Test para probar el login de cuentas a la API REST', () =>
     test('POST /login - Se intenta acceder a la API sin ingresar datos para inicio de sesion', async() => {
         const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json");
         expect(resLogin.statusCode).toBe(400);
+    })
+
+    test('POST /login/recuperacionDeCuenta - Se intenta obtener un código de verificación para cambiar las credenciales de acceso', async() => {
+        const DatosUsuario = 
+        {
+            correo: "chrisvasquez985@gmail.com",
+            tipoDeUsuario: "Administrador"
+        }
+        const resRecuperacionDeCuenta = await request(servidor).post('/gamelog/login/recuperacionDeCuenta').set("Content-Type","application/json").send(DatosUsuario);
+        expect(resRecuperacionDeCuenta.statusCode).toBe(200);
+    })
+
+    test('POST /login/recuperacionDeCuenta - Se intenta obtener un código de verificación para cambiar las credenciales de acceso de un correo no registrado', async() => {
+        const DatosUsuario = 
+        {
+            correo: "vasquezchris986@gmail.com",
+            tipoDeUsuario: "Administrador"
+        }
+        const resRecuperacionDeCuenta = await request(servidor).post('/gamelog/login/recuperacionDeCuenta').set("Content-Type","application/json").send(DatosUsuario);
+        expect(resRecuperacionDeCuenta.statusCode).toBe(404);
+    })
+
+    test('POST /login/recuperacionDeCuenta - Se intenta obtener un código de verificación para cambiar las credenciales de acceso con datos inválidos', async() => {
+        const DatosUsuario = 
+        {
+            correo: "pko90o2k3p1",
+            tipoDeUsuario: "Administrador"
+        }
+        const resRecuperacionDeCuenta = await request(servidor).post('/gamelog/login/recuperacionDeCuenta').set("Content-Type","application/json").send(DatosUsuario);
+        expect(resRecuperacionDeCuenta.statusCode).toBe(400);
     })
 })

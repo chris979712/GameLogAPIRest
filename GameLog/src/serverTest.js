@@ -19,7 +19,7 @@ export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,Mode
     app.get('/',(req,res)=>{
         res.json({message: 'Bienvenido al servidor de pruebas de GameLogAPI'});
     });
-    app.use('/gamelog/login',CrearRutaLogin({ModeloLogin}));
+    app.use('/gamelog/login',CrearRutaLogin({ModeloLogin,ModeloAcceso}));
     app.use('/gamelog/acceso', CrearRutaAcceso({ModeloAcceso}));
     app.use('/gamelog/jugador',CrearRutaJugador({ModeloJugador}))
     app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}))

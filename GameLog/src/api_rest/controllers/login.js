@@ -1,12 +1,16 @@
-import { ValidarDatosLoginIngresados } from "../schemas/Login.js";
+import { ValidarDatosLoginIngresados,ValidarRecuperacionCuenta } from "../schemas/Login.js";
 import { logger } from "../utilidades/logger.js";
 import { GenerarJWT } from "../utilidades/generadorjwt.js";
+import { EnviarCorreoDeVerificacion } from "../utilidades/Correo.js";
+import path from 'path';
 
 export class LoginControlador
 {
-    constructor({ModeloLogin})
+    constructor({ModeloLogin,ModeloAcceso})
     {
         this.modeloLogin = ModeloLogin;
+        this.modeloAcceso = ModeloAcceso;
+        this.CodigosDeVerificacion = { };
     }
 
     Login = async(req, res) =>
@@ -37,6 +41,64 @@ export class LoginControlador
                         error: true,
                         estado: resultadoConsulta,
                         mensaje: ResultadoConsulta.mensaje
+                    })
+                }
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    mensaje: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
+            }
+            )
+        }
+    }
+
+    IniciarRecuperacionDeContraseña = async(req, res) =>
+    {
+        try
+        {
+            const {correo,tipoDeUsuario} = req.body;
+            const Datos = {correo, tipoDeUsuario};
+            const ResultadoValidacion = ValidarRecuperacionCuenta(Datos);
+            if(ResultadoValidacion.success)
+            {
+                const ResultadoConsulta = await this.modeloAcceso.ObtenerIdDeAccesoPorCorreo({datos: ResultadoValidacion.data, tipoDeUsuario:tipoDeUsuario})
+                let resultadoConsulta = parseInt(ResultadoConsulta.estado);
+                if(resultadoConsulta===200)
+                {
+                    const Codigo = Math.floor(100000 + Math.random() * 900000);
+                    this.CodigosDeVerificacion[correo] = {
+                        codigo: Codigo,
+                        expiracion: Date.now() + 30 * 60 * 1000
+                    };
+                    const PlantillaHTML = path.join(__dirname, '../utilidades/plantillacodigoverificacion.html');
+                    await EnviarCorreoDeVerificacion(PlantillaHTML,correo,Codigo);
+                    res.status(200).json({
+                        error: false,
+                        estado: 200,
+                        mensaje: 'El corre con el código de verificación ha sido enviado de manera exitosa'
+                    })
+                    
+                }
+                else
+                {
+                    res.status(resultadoConsulta).json({
+                        error: true,
+                        estado: resultadoConsulta,
+                        mensaje: 'El correo ingresado no se encuentra registrado dentro del sistema.'
                     })
                 }
             }
