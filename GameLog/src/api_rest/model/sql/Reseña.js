@@ -1,5 +1,5 @@
 import sql from 'mssql';
-import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion';
+import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
 import {MensajeDeRetornoBaseDeDatos,ErrorEnLaConfiguracionDeConexionAcceso} from '../../utilidades/Constantes.js';
 
 export class ModeloReseña
