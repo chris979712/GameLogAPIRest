@@ -5,12 +5,13 @@ import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
 import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
 import { CrearRutaReseña } from './api_rest/routes/Reseña.js';
+import { CrearRutaLike } from './api_rest/routes/Like.js';
 import { DocumentoSwagger } from './api_rest/utilidades/swagger.js';
 import swaggerUI from 'swagger-ui-express';
 import cors from 'cors';
 
 
-export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña}) => 
+export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike}) => 
 {
     const app = express();
     app.use(json());
@@ -32,7 +33,8 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJue
     app.use('/gamelog/jugador',CrearRutaJugador({ModeloJugador}));
     app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}));
     app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}));
-    app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}))
+    app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}));
+    app.use('/gamelog/like',CrearRutaLike({ModeloLike}));
     app.use('/gamelog/doc',swaggerUI.serve, swaggerUI.setup(DocumentoSwagger));
 
     const PUERTO = process.env.PUERTO;

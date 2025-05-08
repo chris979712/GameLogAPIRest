@@ -1,5 +1,5 @@
 import zod from 'zod';
-import { SoloLetrasNumerosCaracteres } from '../utilidades/RegexValidadores';
+import { SoloLetrasNumerosCaracteres } from '../utilidades/RegexValidadores.js';
 
 const ReseñaEsquemaInsercion = zod.object(
     {

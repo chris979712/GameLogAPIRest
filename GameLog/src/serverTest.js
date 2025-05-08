@@ -5,10 +5,11 @@ import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
 import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
 import { CrearRutaReseña } from './api_rest/routes/Reseña.js';
+import { CrearRutaLike } from './api_rest/routes/Like.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña}) => {
+export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike}) => {
     const app = express();
     dotenv.config();
     app.use(json());
@@ -23,6 +24,7 @@ export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,Mode
     app.use('/gamelog/jugador',CrearRutaJugador({ModeloJugador}))
     app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}))
     app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}))
+    app.use('/gamelog/like',CrearRutaLike({ModeloLike}));
     app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}))
 
     const PUERTO = process.env.PUERTO_PRUEBAS;

@@ -1,4 +1,4 @@
-import sql, { connect } from 'mssql';
+import sql from 'mssql';
 import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
 import { MensajeDeRetornoBaseDeDatos,ErrorEnLaConfiguracionDeConexionAcceso } from '../../utilidades/Constantes.js';
 

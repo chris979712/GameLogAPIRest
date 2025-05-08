@@ -222,17 +222,17 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
     /**
      * @swagger
      * /acceso/{idAcceso}:
-     *   put:
-     *     summary: Editar el estado de una cuenta de acceso
+     *   patch:
+     *     summary: Editar las credenciales de acceso de un correo
      *     tags: [Acceso]
-     *     description: Permite cambiar el estado (por ejemplo, baneado o desbaneado) de una cuenta de acceso existente. Requiere autenticación mediante token JWT.
+     *     description: Permite cambiar las credenciales de acceso de una cuenta de un jugador
      *     security:
      *       - bearerAuth: []
      *     parameters:
      *       - in: path
      *         name: idAcceso
      *         required: true
-     *         description: ID de la cuenta de acceso cuyo estado se desea modificar
+     *         description: ID de la cuenta de acceso cuyas credenciales se desea modificar
      *         schema:
      *           type: integer
      *     requestBody:
@@ -242,12 +242,15 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *           schema:
      *             type: object
      *             properties:
-     *               estadoAcceso:
+     *               correo:
      *                 type: string
-     *                 example: Desbaneado
+     *                 example: usuario@gmail.com
+     *               contrasenia:
+     *                 type: string
+     *                 example: contraseña encriptada
      *     responses:
      *       200:
-     *         description: Estado actualizado correctamente
+     *         description: Credenciales actualizadas de manera correcta
      *         content:
      *           application/json:
      *             schema:
@@ -261,7 +264,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   example: 200
      *                 mensaje:
      *                   type: string
-     *                   example: Estado actualizado correctamente
+     *                   example: La cuenta se ha actualizado con éxito
      *       400:
      *         description: Datos inválidos
      *         content:
@@ -295,7 +298,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al editar el estado de acceso
+     *                   example: Ha ocurrido un error al editar las credenciales de acceso
      */
     AccesoEnrutador.patch('/:idAcceso',ValidarJwt,ControladorAccesoEnrutador.EditarEstadoAcceso);
 
