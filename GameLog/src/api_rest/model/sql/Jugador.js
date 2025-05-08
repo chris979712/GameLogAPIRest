@@ -1,6 +1,6 @@
 import sql from 'mssql';
 import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
-import { MensajeDeRetornoBaseDeDatos,ErrorEnLaBaseDeDatos, ErrorEnLaConfiguracionDeConexionAcceso } from '../../utilidades/Constantes.js';
+import { MensajeDeRetornoBaseDeDatos } from '../../utilidades/Constantes.js';
 
 export class ModeloJugador
 {
@@ -11,36 +11,29 @@ export class ModeloJugador
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const
-                {
-                    idJugador,
-                    nombre,
-                    primerApellido,
-                    segundoApellido,
-                    nombreDeUsuario,
-                    descripcion,
-                    foto
-                } = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
-                    .input('nombre',sql.VarChar,nombre)
-                    .input('primerApellido',sql.VarChar,primerApellido)
-                    .input('segundoApellido',sql.VarChar,segundoApellido)
-                    .input('nombreDeUsuario',sql.VarChar,nombreDeUsuario)
-                    .input('descripcion',sql.VarChar,descripcion)
-                    .input('foto',sql.VarChar,foto)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spa_Jugadores')
-                resultadoModificacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoModificacion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+                idJugador,
+                nombre,
+                primerApellido,
+                segundoApellido,
+                nombreDeUsuario,
+                descripcion,
+                foto
+            } = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .input('nombre',sql.VarChar,nombre)
+                .input('primerApellido',sql.VarChar,primerApellido)
+                .input('segundoApellido',sql.VarChar,segundoApellido)
+                .input('nombreDeUsuario',sql.VarChar,nombreDeUsuario)
+                .input('descripcion',sql.VarChar,descripcion)
+                .input('foto',sql.VarChar,foto)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spa_Jugadores')
+            resultadoModificacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -63,30 +56,23 @@ export class ModeloJugador
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {
+                nombreDeUsuario
+            } = datos;
+            const QueryJugador = await conexion.request()
+                .input('nombreDeUsuario',sql.VarChar,nombreDeUsuario)
+                .query('SELECT a.idCuenta,a.correo,a.estado,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto '+
+                    'FROM Jugadores j JOIN Accesos a ON a.idCuenta = j.idAcceso '+
+                    'WHERE j.nombreDeUsuario = @nombreDeUsuario');
+            const ResultadoQueryJugador = QueryJugador.recordset;
+            if(ResultadoQueryJugador.length >= 1)
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {
-                    nombreDeUsuario
-                } = datos;
-                const QueryJugador = await conexion.request()
-                    .input('nombreDeUsuario',sql.VarChar,nombreDeUsuario)
-                    .query('SELECT a.idCuenta,a.correo,a.estado,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto '+
-                        'FROM Jugadores j JOIN Accesos a ON a.idCuenta = j.idAcceso '+
-                        'WHERE j.nombreDeUsuario = @nombreDeUsuario');
-                const ResultadoQueryJugador = QueryJugador.recordset;
-                if(ResultadoQueryJugador.length >= 1)
-                {
-                    resultadoConsulta = {estado: 200, cuenta: ResultadoQueryJugador}
-                }
-                else
-                {
-                    resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el jugador deseado a buscar.'}
-                }
+                resultadoConsulta = {estado: 200, cuenta: ResultadoQueryJugador}
             }
             else
             {
-                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el jugador deseado a buscar.'}
             }
         }
         catch(error)
@@ -110,24 +96,17 @@ export class ModeloJugador
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const
-                {
-                    idJugador,
-                } = datos;
-                const Solicitud = await conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spd_Jugador');
-                resultadoEliminacion =  MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoEliminacion = ErrorEnLaConfiguracionDeConexion();
-            }
+                idJugador,
+            } = datos;
+            const Solicitud = await conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spd_Jugador');
+            resultadoEliminacion =  MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {

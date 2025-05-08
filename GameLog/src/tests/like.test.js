@@ -216,7 +216,7 @@ describe('TEST para el servicio de Likes a reseñas, por parte de jugadores',() 
     {
         const DatosPrimerLike = {
             idJugador: idPrimerJugador,
-            idResena: idPrimerReseña,
+            idResena: idPrimerReseña
         }
         const DatosSegundoLike = {
             idJugador: idSegundoJugador,

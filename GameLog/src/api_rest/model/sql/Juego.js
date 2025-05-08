@@ -1,6 +1,6 @@
 import sql from 'mssql';
 import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
-import { MensajeDeRetornoBaseDeDatos,ErrorEnLaBaseDeDatos, ErrorEnLaConfiguracionDeConexionAcceso } from '../../utilidades/Constantes.js';
+import { MensajeDeRetornoBaseDeDatos } from '../../utilidades/Constantes.js';
 
 export class ModeloJuego
 {
@@ -11,22 +11,15 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
-            {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJuego,nombre} = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJuego',sql.Int,idJuego)
-                    .input('nombre',sql.VarChar,nombre)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spi_Juegos')
-                resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoInsercion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJuego,nombre} = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJuego',sql.Int,idJuego)
+                .input('nombre',sql.VarChar,nombre)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spi_Juegos')
+            resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -49,22 +42,15 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
-            {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJuego,idJugador} = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
-                    .input('idJuego',sql.Int,idJuego)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spi_Pendientes');
-                resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoInsercion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJuego,idJugador} = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .input('idJuego',sql.Int,idJuego)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spi_Pendientes');
+            resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -87,22 +73,15 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
-            {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJuego,idJugador} = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
-                    .input('idJuego',sql.Int,idJuego)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spi_Favoritos');
-                resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoInsercion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJuego,idJugador} = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .input('idJuego',sql.Int,idJuego)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spi_Favoritos');
+            resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -125,28 +104,21 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {nombre} = datos;
+            const Solicitud = await conexion.request()
+                .input('nombre',sql.VarChar,nombre)
+                .query('SELECT j.idJuego, j.nombre '+
+                        'FROM Juegos j '+
+                        'WHERE j.nombre = @nombre');
+            const ResultadoQueryJuego = Solicitud.recordset;
+            if(ResultadoQueryJuego.length >= 1)
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {nombre} = datos;
-                const Solicitud = await conexion.request()
-                    .input('nombre',sql.VarChar,nombre)
-                    .query('SELECT j.idJuego, j.nombre '+
-                            'FROM Juegos j '+
-                            'WHERE j.nombre = @nombre');
-                const ResultadoQueryJuego = Solicitud.recordset;
-                if(ResultadoQueryJuego.length >= 1)
-                {
-                    resultadoConsulta = {estado: 200, juego: ResultadoQueryJuego};
-                }
-                else
-                {
-                    resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'}
-                }
+                resultadoConsulta = {estado: 200, juego: ResultadoQueryJuego};
             }
             else
             {
-                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'}
             }
         }
         catch(error)
@@ -170,28 +142,21 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJuego} = datos;
+            const Solicitud = await conexion.request()
+                .input('idJuego',sql.Int,idJuego)
+                .query('SELECT j.idJuego, j.nombre '+
+                        'FROM Juegos j '+
+                        'WHERE j.idJuego = @idJuego');
+            const ResultadoQueryJuego = Solicitud.recordset;
+            if(ResultadoQueryJuego.length >= 1)
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJuego} = datos;
-                const Solicitud = await conexion.request()
-                    .input('idJuego',sql.Int,idJuego)
-                    .query('SELECT j.idJuego, j.nombre '+
-                            'FROM Juegos j '+
-                            'WHERE j.idJuego = @idJuego');
-                const ResultadoQueryJuego = Solicitud.recordset;
-                if(ResultadoQueryJuego.length >= 1)
-                {
-                    resultadoConsulta = {estado: 200, juego: ResultadoQueryJuego};
-                }
-                else
-                {
-                    resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'}
-                }
+                resultadoConsulta = {estado: 200, juego: ResultadoQueryJuego};
             }
             else
             {
-                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'}
             }
         }
         catch(error)
@@ -215,29 +180,22 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJugador} = datos;
+            const Solicitud = await conexion.request()
+                .input('idJugador',sql.Int,idJugador)
+                .query('SELECT j.idJuego, j.nombre '+
+                        'FROM Juegos AS j '+
+                        'JOIN Pendientes AS p ON j.idJuego = p.idJuego '+
+                        'WHERE  p.idJugador = @idJugador');
+            const ResultadoQueryJuegosPendientes = Solicitud.recordset;
+            if(ResultadoQueryJuegosPendientes.length >= 1)
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJugador} = datos;
-                const Solicitud = await conexion.request()
-                    .input('idJugador',sql.Int,idJugador)
-                    .query('SELECT j.idJuego, j.nombre '+
-                            'FROM Juegos AS j '+
-                            'JOIN Pendientes AS p ON j.idJuego = p.idJuego '+
-                            'WHERE  p.idJugador = @idJugador');
-                const ResultadoQueryJuegosPendientes = Solicitud.recordset;
-                if(ResultadoQueryJuegosPendientes.length >= 1)
-                {
-                    resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosPendientes};
-                }
-                else
-                {
-                    resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
-                }
+                resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosPendientes};
             }
             else
             {
-                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
             }
         }
         catch(error)
@@ -261,29 +219,22 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJugador} = datos;
+            const Solicitud = await conexion.request()
+                .input('idJugador',sql.Int,idJugador)
+                .query('SELECT j.idJuego, j.nombre '+
+                        'FROM Juegos AS j '+
+                        'JOIN Favoritos AS f ON j.idJuego = f.idJuego '+
+                        'WHERE  f.idJugador = @idJugador');
+            const ResultadoQueryJuegosFavoritos = Solicitud.recordset;
+            if(ResultadoQueryJuegosFavoritos.length >= 1)
             {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJugador} = datos;
-                const Solicitud = await conexion.request()
-                    .input('idJugador',sql.Int,idJugador)
-                    .query('SELECT j.idJuego, j.nombre '+
-                            'FROM Juegos AS j '+
-                            'JOIN Favoritos AS f ON j.idJuego = f.idJuego '+
-                            'WHERE  f.idJugador = @idJugador');
-                const ResultadoQueryJuegosFavoritos = Solicitud.recordset;
-                if(ResultadoQueryJuegosFavoritos.length >= 1)
-                {
-                    resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosFavoritos};
-                }
-                else
-                {
-                    resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
-                }
+                resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosFavoritos};
             }
             else
             {
-                resultadoConsulta = ErrorEnLaConfiguracionDeConexionAcceso();
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
             }
         }
         catch(error)
@@ -307,21 +258,14 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
-            {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJuego} = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJuego',sql.Int,idJuego)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spd_Juego')
-                resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoEliminacion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJuego} = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJuego',sql.Int,idJuego)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spd_Juego')
+            resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -344,22 +288,15 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
-            {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJugador,idJuego} = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
-                    .input('idJuego',sql.Int,idJuego)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spd_Pendientes');
-                    resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoEliminacion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJugador,idJuego} = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .input('idJuego',sql.Int,idJuego)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spd_Pendientes');
+            resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -382,22 +319,15 @@ export class ModeloJuego
         const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
         try
         {
-            if(ConfiguracionConexion)
-            {
-                conexion = await sql.connect(ConfiguracionConexion);
-                const {idJugador,idJuego} = datos;
-                const Solicitud = conexion.request();
-                const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
-                    .input('idJuego',sql.Int,idJuego)
-                    .output('estado',sql.Int)
-                    .output('mensaje',sql.VarChar)
-                    .execute('spd_Favorito');
-                    resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
-            }
-            else
-            {
-                resultadoEliminacion = ErrorEnLaConfiguracionDeConexionAcceso();
-            }
+            conexion = await sql.connect(ConfiguracionConexion);
+            const {idJugador,idJuego} = datos;
+            const Solicitud = conexion.request();
+            const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .input('idJuego',sql.Int,idJuego)
+                .output('estado',sql.Int)
+                .output('mensaje',sql.VarChar)
+                .execute('spd_Favorito');
+            resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {

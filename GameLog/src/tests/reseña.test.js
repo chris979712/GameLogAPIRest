@@ -284,6 +284,7 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         idPrimerReseña = resConsulta.body.reseñas[0].idResenia;
         idSegundaReseña = resConsulta.body.reseñas[1].idResenia;
         idTercerReseña = resConsulta.body.reseñas[2].idResenia;
+
     })
 
     test('GET /Juego/:idJuego - Obtener reseñas generales inexistentes de un juego en especifico por ID', async() =>
