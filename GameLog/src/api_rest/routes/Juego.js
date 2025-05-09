@@ -336,7 +336,7 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
 
     /**
      * @swagger
-     * /juego/:
+     * /juego:
      *   get:
      *     summary: Buscar un juego por su nombre
      *     tags: [Juegos]
@@ -678,7 +678,7 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
 
     /**
      * @swagger
-     * /juego/favorito/{idJugador}/{idJuego}:
+     * /juego/favorito/{idJuego}/{idJugador}:
      *   delete:
      *     summary: Eliminar juego favorito de un jugador
      *     tags: [Juegos]
@@ -752,7 +752,7 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
 
     /**
      * @swagger
-     * /juego/pendiente/{idJugador}/{idJuego}:
+     * /juego/pendiente/{idJuego}/{idJugador}:
      *   delete:
      *     summary: Eliminar juego pendiente de un jugador
      *     tags: [Juegos]

@@ -66,7 +66,7 @@ export class LoginControlador
         }
     }
 
-    IniciarRecuperacionDeContraseña = async(req, res) =>
+    SolicitudRecuperacionDeContraseña = async(req, res) =>
     {
         try
         {
@@ -89,7 +89,8 @@ export class LoginControlador
                     res.status(200).json({
                         error: false,
                         estado: 200,
-                        mensaje: 'El corre con el código de verificación ha sido enviado de manera exitosa'
+                        mensaje: 'El correo con el código de verificación ha sido enviado de manera exitosa',
+                        codigo: Codigo //El código se puso en la respuesta para fines de pruebas, en producción o despliegue, será eliminadod  el código
                     })
                     
                 }
@@ -118,9 +119,82 @@ export class LoginControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
+                mensaje: 'Ha ocurrido un error al obtener un código de verificación.'
             }
             )
+        }
+    }
+
+    ValidarCodigoDeVerificacion = async(req, res) =>
+    {
+        try
+        {
+            const {correo,codigo,tipoDeUsuario} = req.body;
+            const Datos = {correo,codigo,tipoDeUsuario};
+            const ResultadoValidacion = ValidarRecuperacionCuenta(Datos);
+            if(ResultadoValidacion.success)
+            {
+                const SolicitudValidacion = this.CodigosDeVerificacion[correo];
+                console.log(SolicitudValidacion)
+                if(SolicitudValidacion)
+                {
+                    if(SolicitudValidacion.expiracion < Date.now())
+                    {
+                        delete this.CodigosDeVerificacion[correo];
+                        res.status(400).json({
+                            error: true,
+                            estado: 400,
+                            mensaje: 'El código ingresado ha expirado.'
+                        })
+                    }
+                    else
+                    {
+                        if(SolicitudValidacion.codigo === parseInt(codigo))
+                        {
+                            res.status(200).json({
+                                error: false,
+                                estado: 200,
+                                mensaje: 'Código de verificación válido'
+                            })
+                            delete this.CodigosDeVerificacion[correo];
+                        }
+                        else
+                        {
+                            res.status(404).json({
+                                error: true,
+                                estado: 404,
+                                mensaje: 'El código ingresado no es correcto.'
+                            });                            
+                        }
+                    }
+                }
+                else
+                {
+                    res.status(400).json({
+                        error: true,
+                        estado: 404,
+                        mensaje: 'No se ha solicitado ningún código de verificación para el correo ingresado.'
+                    })
+                }
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    mensaje: ResultadoValidacion.error.formErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json(
+            {
+                error: true,
+                estado: 500,
+                mensaje: 'Ha ocurrido un error al verificar un código de verificación.'
+            })
         }
     }
 }

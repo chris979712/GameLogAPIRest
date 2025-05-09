@@ -15,7 +15,7 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
 
     /**
      * @swagger
-     * /jugadores/{nombreDeUsuario}:
+     * /jugador/{nombreDeUsuario}:
      *   get:
      *     summary: Buscar jugador por nombre de usuario
      *     tags: [Jugador]
@@ -132,7 +132,7 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
     
     /**
      * @swagger
-     * /jugadores/{idJugador}:
+     * /jugador/{idJugador}:
      *   put:
      *     summary: Actualizar datos de perfil de un jugador
      *     tags: [Jugador]
@@ -225,9 +225,9 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      */
     JugadorEnrutador.put('/:idJugador',ValidarJwt,ControladorJugadorEnrutador.ActualizarJugador);
 
-        /**
+    /**
      * @swagger
-     * /jugadores/{idJugador}:
+     * /jugador/{idJugador}:
      *   delete:
      *     summary: Eliminar un jugador por su ID
      *     tags: [Jugador]

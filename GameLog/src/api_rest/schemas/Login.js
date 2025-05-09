@@ -12,7 +12,7 @@ const LoginEsquema = zod.object(
 const RecuperacionCuentaEsquema = zod.object(
     {
         correo: zod.string().email({ invalid_type_error: 'El correo ingresado no es válido'}),
-        codigo: zod.number({ invalid_type_error: 'El codigo de verificacion ingresado no es válido'}).int(),
+        codigo: zod.number({ invalid_type_error: 'El codigo de verificacion ingresado no es válido'}).int().min(100000).max(999999),
         tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido',required_error: 'El tipo de acceso es un campo requerido'}).min(7).max(13).regex(SoloLetras)
     }
 )

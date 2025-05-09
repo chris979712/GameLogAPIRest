@@ -1,6 +1,5 @@
 import fs from 'fs';
 import nodemailer from 'nodemailer';
-import { logger } from './logger';
 
 export const EnviarCorreoDeVerificacion = async(plantilla,correo,codigo) =>
 {

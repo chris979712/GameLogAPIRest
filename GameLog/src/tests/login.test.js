@@ -5,6 +5,7 @@ import { ModeloLogin } from "../api_rest/model/sql/Login.js";
 
 let servidor;
 let token;
+let codigoDeVerificacion;
 
 beforeAll(async () => 
 {
@@ -89,6 +90,7 @@ describe('Test para probar el login de cuentas a la API REST', () =>
             tipoDeUsuario: "Administrador"
         }
         const resRecuperacionDeCuenta = await request(servidor).post('/gamelog/login/recuperacionDeCuenta').set("Content-Type","application/json").send(DatosUsuario);
+        codigoDeVerificacion = resRecuperacionDeCuenta.body.codigo;
         expect(resRecuperacionDeCuenta.statusCode).toBe(200);
     })
 
@@ -111,4 +113,56 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         const resRecuperacionDeCuenta = await request(servidor).post('/gamelog/login/recuperacionDeCuenta').set("Content-Type","application/json").send(DatosUsuario);
         expect(resRecuperacionDeCuenta.statusCode).toBe(400);
     })
+
+    test('POST /login/recuperacionDeCuenta/validacion - Se intenta verificar un código inválido', async() =>
+    {
+        const DatosUsuario = 
+        {
+            correo: "chrisvasquez985@gmail.com",
+            tipoDeUsuario: "Administrador",
+            codigo: 123456
+        }
+        const resValidacion = await request(servidor).post('/gamelog/login/recuperacionDeCuenta/validacion').set("Content-Type","application/json").send(DatosUsuario);
+        console.log(resValidacion.body)
+        expect(resValidacion.statusCode).toBe(404);
+    })
+
+    test('POST /login/recuperacionDeCuenta/validacion -Se ingresa un correo del cual no se ha solicitado ningún código de verificación', async() =>
+    {
+        const DatosUsuario = 
+        {
+            correo: "vasquezchris986@gmail.com",
+            tipoDeUsuario: "Administrador",
+            codigo: 123456
+        }
+        const resValidacion = await request(servidor).post('/gamelog/login/recuperacionDeCuenta/validacion').set("Content-Type","application/json").send(DatosUsuario);
+        console.log(resValidacion.body)
+        expect(resValidacion.statusCode).toBe(400);
+    })
+
+    test('POST /login/recuperacionDeCuenta/validacion - Se verifica un código de cambio de credenciales de manera exitosa', async() =>
+    {
+        const DatosUsuario = 
+        {
+            correo: "chrisvasquez985@gmail.com",
+            tipoDeUsuario: "Administrador",
+            codigo: codigoDeVerificacion
+        }
+        const resValidacion = await request(servidor).post('/gamelog/login/recuperacionDeCuenta/validacion').set("Content-Type","application/json").send(DatosUsuario);
+        console.log(resValidacion.body)
+        expect(resValidacion.statusCode).toBe(200);
+    })
+
+    test('POST /login/recuperacionDeCuenta/validacion - Se intenta verificar un código con datos inválidos', async() =>
+    {
+        const DatosUsuario = 
+        {
+            correo: "qke0i'123p1gmail.com",
+            tipoDeUsuario: "Administrador",
+            codigo: "pdjajiwoewk"
+        }
+        const resValidacion = await request(servidor).post('/gamelog/login/recuperacionDeCuenta/validacion').set("Content-Type","application/json").send(DatosUsuario);
+        expect(resValidacion.statusCode).toBe(400);
+    })
+
 })

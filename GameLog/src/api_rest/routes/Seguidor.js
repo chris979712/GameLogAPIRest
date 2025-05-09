@@ -15,7 +15,7 @@ export const CrearRutaSeguidor = ({ModeloSeguidor}) =>
 
     /**
      * @swagger
-     * /seguidor/:
+     * /seguidor:
      *   post:
      *     summary: Registrar un jugador a seguir
      *     tags: [Seguidor]

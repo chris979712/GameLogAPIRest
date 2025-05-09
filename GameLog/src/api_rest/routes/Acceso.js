@@ -15,7 +15,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
 
     /**
      *  @swagger
-     *  /acceso/:
+     *  /acceso:
      *    post:
      *      summary: Crear cuentas de acceso para iniciar sesión en el sistema.
      *      tags: [Acceso]
