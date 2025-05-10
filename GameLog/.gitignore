@@ -4,3 +4,4 @@ api.http
 .env
 logs
 coverage
+initdb-scripts

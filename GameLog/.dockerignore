@@ -1,0 +1,7 @@
+.husky
+.coverage
+.node_modules
+api.http
+.gitignore
+/src/tests
+/src/serverTest.js

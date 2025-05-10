@@ -1,0 +1,25 @@
+version: '3.0'
+
+services:
+  
+  gamelog_db:
+    build:
+      context:  ./initdb-scripts
+    container_name: gamelog_db
+    restart: always
+    ports:
+      - 1433:1433
+    environment:
+      - SA_PASSWORD=.JUg4d0rL0000g.
+      - ACCEPT_EULA=Y
+
+  gamelogs_apirest:
+    build:
+      context: .
+    container_name: gamelog_apirest
+    restart: always
+    ports:
+      - 1234:1234
+    depends_on:
+      - gamelog_db
+
