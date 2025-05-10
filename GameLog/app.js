@@ -6,9 +6,6 @@ import {ModeloJuego} from './src/api_rest/model/sql/Juego.js';
 import {ModeloReseña} from "./src/api_rest/model/sql/Reseña.js";
 import {ModeloSeguidor} from "./src/api_rest/model/sql/Seguidor.js";
 import { ModeloLike } from "./src/api_rest/model/sql/Like.js";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 CrearServidor({ModeloAcceso : ModeloAcceso, 
     ModeloLogin: ModeloLogin, 

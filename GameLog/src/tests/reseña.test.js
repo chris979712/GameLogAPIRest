@@ -100,7 +100,7 @@ beforeAll( async() =>
             "access_token": `Bearer ${token}`
         })
         .send(DatosSegundoSeguido);
-    const Datos = {idJuego: 41437, nombre: "Fortnite battle royale"};
+    const Datos = {idJuego: 41437, nombre: "Fortnite battle royale",fechaDeLanzamiento: "2025-05-09"};
     await request(servidor).post('/gamelog/juego')
         .set({
             "Content-Type": "application/json",

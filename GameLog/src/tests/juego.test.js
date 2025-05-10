@@ -66,7 +66,7 @@ afterAll(async() =>
 {
     const datosEliminacionAdmin = {
             tipoDeUsuario: "Administrador",
-            correo: "usuarioprueba@gmail.com"
+            correo: "usuarioprueba@gmail.com",
         }
     await request(servidor).delete(`/gamelog/acceso/${idAdminCreado}`)
         .set({
@@ -91,19 +91,41 @@ describe('Test para el servicio de Juegos donde se encuentran los métodos de Re
 {
     test('POST /juego - Ingresa un nuevo juego dentro del sistema', async() => 
     {
-        const Datos = {idJuego: 41437, nombre: "Fortnite battle royale"};
+        const DatosPrimerJuego = {idJuego: 41437, nombre: "Fortnite battle royale",fechaDeLanzamiento: "2025-05-09"};
+        const DatosSegundoJuego = {idJuego: 12567, nombre: "Halo infinite",fechaDeLanzamiento: "2025-05-09"};
+        const resInsercion = await request(servidor).post('/gamelog/juego')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosPrimerJuego);
+        const resSegundaInsercion = await request(servidor).post('/gamelog/juego')
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${tokenAdmin}`
+            })
+            .send(DatosSegundoJuego);
+        expect(resInsercion.statusCode).toBe(200);
+        expect(resSegundaInsercion.statusCode).toBe(200);
+        console.log('Juego insertado')
+        console.log(resInsercion.body);
+    })
+
+    test('POST /juego - Ingresa un juego repetido dentro del sistema', async() => 
+    {
+        const Datos = {idJuego: 41437, nombre: "Fortnite battle royale",fechaDeLanzamiento: "2025-05-09"};
         const resInsercion = await request(servidor).post('/gamelog/juego')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${tokenAdmin}`
             })
             .send(Datos);
-        expect(resInsercion.statusCode).toBe(200);
+        expect(resInsercion.statusCode).toBe(400);
     })
 
-    test('POST /juego - Ingresa un juego repetido dentro del sistema', async() => 
+    test('POST /juego - Tratar de ingresar un juego con datos inválidos',async() => 
     {
-        const Datos = {idJuego: 41437, nombre: "Fortnite battle royale"};
+        const Datos = {idJuego: "ojinjqjieq", nombre: "Fortnite battle royale",fechaDeLanzamiento: "asdawkpowe"};
         const resInsercion = await request(servidor).post('/gamelog/juego')
             .set({
                 "Content-Type": "application/json",

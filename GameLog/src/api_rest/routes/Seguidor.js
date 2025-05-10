@@ -69,7 +69,9 @@ export const CrearRutaSeguidor = ({ModeloSeguidor}) =>
      *                   type: array
      *                   items:
      *                     type: string
-     *                   example: ["idJugadorSeguido: campo requerido", "Ya se ha registrado el seguimiento al jugador seleccionado"]
+     *                   example: 
+     *                    - "los campos son inválidos"
+     *                    - "Ya se ha registrado el seguimiento al jugador seleccionado"
      *       500:
      *         description: Error interno del servidor al intentar registrar el seguimiento.
      *         content:
@@ -159,10 +161,8 @@ export const CrearRutaSeguidor = ({ModeloSeguidor}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: array
-     *                   items:
-     *                     type: string
-     *                   example: ["idJugadorSeguido: campo requerido"]
+     *                   type: string
+     *                   example: "idJugadorSeguido: campo requerido"
      *       404:
      *         description: No hay seguidores registrados para el jugador
      *         content:
@@ -268,10 +268,8 @@ export const CrearRutaSeguidor = ({ModeloSeguidor}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: array
-     *                   items:
-     *                     type: string
-     *                   example: ["idJugadorSeguidor: campo requerido"]
+     *                   type: string
+     *                   example: "idJugadorSeguidor: campo requerido"
      *       404:
      *         description: El jugador no sigue a nadie
      *         content:
@@ -360,10 +358,10 @@ export const CrearRutaSeguidor = ({ModeloSeguidor}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: array
-     *                   items:
-     *                     type: string
-     *                   example: ["idJugadorSeguidor: campo requerido", "No se ha encontrado un seguimiento entre ambos jugadores"]
+     *                   type: string
+     *                   example:
+     *                    - "idJugadorSeguidor: campo requerido"
+     *                    - "No se ha encontrado un seguimiento entre ambos jugadores"
      *       500:
      *         description: Error interno al eliminar el jugador seguido
      *         content:

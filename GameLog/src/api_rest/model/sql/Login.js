@@ -18,10 +18,7 @@ export class ModeloLogin
             const QueryCuenta = await conexion.request()
                 .input('correo',sql.VarChar,correo)
                 .input('contrasenia',sql.VarChar,contrasenia)
-                .query('SELECT a.idCuenta,a.correo,a.estado,ta.tipoDeAcceso,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto '+
-                    'FROM Accesos a JOIN Jugadores j ON a.idCuenta = j.idAcceso '+
-                    'JOIN TiposDeAccesos ta ON a.tipoDeAcceso = ta.idTipoDeAcceso '+
-                    'WHERE a.correo = @correo AND a.contrasenia = @contrasenia');
+                .execute('spb_BuscarLogin');
             const ResultadoQueryCuenta = QueryCuenta.recordset;
             if(ResultadoQueryCuenta.length >= 1)
             {

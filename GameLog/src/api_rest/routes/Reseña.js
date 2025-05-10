@@ -82,7 +82,9 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *                   example: 400
      *                 mensaje:
      *                   type: string
-     *                   example: [ "idJuego es requerido", "El id de juego ingresado o juego no se encuentra registrado" ]
+     *                   example: 
+     *                    - "idJuego es requerido"
+     *                    - "El id de juego ingresado o juego no se encuentra registrado" 
      *       500:
      *         description: Error interno del servidor o de la base de datos
      *         content:
@@ -512,7 +514,9 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *                   example: 400
      *                 mensaje:
      *                   type: string
-     *                   example: [ "idReseña es requerido","El id de reseña ingresado no se encuentra registrado" ]
+     *                   example: 
+     *                    - "idReseña es requerido"
+     *                    - "El id de reseña ingresado no se encuentra registrado"
      *       500:
      *         description: Error interno del servidor o de la base de datos
      *         content:

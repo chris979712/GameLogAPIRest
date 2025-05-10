@@ -8,12 +8,14 @@ import { CrearRutaReseña } from './api_rest/routes/Reseña.js';
 import { CrearRutaLike } from './api_rest/routes/Like.js';
 import { DocumentoSwagger } from './api_rest/utilidades/swagger.js';
 import swaggerUI from 'swagger-ui-express';
+import dotenv from 'dotenv';
 import cors from 'cors';
 
 
 export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike}) => 
 {
     const app = express();
+    dotenv.config();
     app.use(json());
     app.use(cors());
     app.disable('x-powered-by');

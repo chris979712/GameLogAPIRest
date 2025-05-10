@@ -60,10 +60,54 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *      responses:
      *        200:
      *          description: La cuenta ha sido creada de manera exitosa.
+     *          content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                 estado:
+     *                   type: integer
+     *                   example: 200
+     *                 mensaje:
+     *                   type: string
+     *                   example: "La cuenta ha sido creada de manera exitosa"
      *        400:
      *          description: Datos inválidos o correo y nombre de usuario registrados previamente
+     *          content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                 estado:
+     *                   type: integer
+     *                   example: 200
+     *                 mensaje:
+     *                   type: array
+     *                   items:
+     *                     type: string
+     *                   example: 
+     *                    - "Los datos ingresados son inválidos"
+     *                    - "Ya se ha registrado una cuenta con el correo o nombre de usuario ingresados"
      *        500:
      *          description: Error interno en el servidor al querer registrar la nueva cuenta de acceso
+     *          content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                 estado:
+     *                   type: integer
+     *                   example: 200
+     *                 mensaje:
+     *                   type: integer
+     *                   example: 
+     *                    - Ha ocurrido un error al querer registrar una cuenta de acceso dentro del sistema
      */
     AccesoEnrutador.post('/',ControladorAccesoEnrutador.RegistrarAcceso);
     
@@ -71,7 +115,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      * @swagger
      * /acceso/{correo}:
      *   get:
-     *     summary: Obtener el ID de acceso por correo
+     *     summary: Obtener el ID de acceso por correo.
      *     tags: [Acceso]
      *     description: Retorna el ID de la cuenta de acceso asociada a un correo electrónico si existe.
      *     security:
@@ -115,6 +159,22 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                 mensaje:
      *                   type: object
      *                   description: Detalle de los errores de validación
+     *       404:
+     *         description: Usuario no encontrado en el sistema
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 404
+     *                 mensaje:
+     *                   type: string
+     *                   description: El correo ingresado no se encuentra registrado dentro del sistema
      *       500:
      *         description: Error interno del servidor
      *         content:
@@ -129,10 +189,12 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   type: integer
      *                   example: 500
      *                 mensaje:
-     *                   type: string
-     *                   example: 
-     *                      - "Ha ocurrido un error al obtener los datos del usuario."
-     *                      - "Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso"
+     *                   type: array
+     *                   items:
+     *                     type: string
+     *                   example:
+     *                     - Ha ocurrido un error al obtener los datos del usuario.
+     *                     - Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso
      */
     AccesoEnrutador.get('/:correo',ValidarJwt,ControladorAccesoEnrutador.ObtenerIDDeCuentaDeAcceso);
 
@@ -181,7 +243,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   example: 200
      *                 mensaje:
      *                   type: string
-     *                   example: Datos actualizados correctamente
+     *                   example: "Datos actualizados correctamente"
      *       400:
      *         description: Datos inválidos, correo registrado a otra cuenta
      *         content:
@@ -215,7 +277,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al editar el acceso del usuario.
+     *                   example: "Ha ocurrido un error al editar el acceso del usuario."
      */
     AccesoEnrutador.put('/:idAcceso',ValidarJwt,ControladorAccesoEnrutador.EditarAcceso);
 
@@ -223,7 +285,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      * @swagger
      * /acceso/{idAcceso}:
      *   patch:
-     *     summary: Editar las credenciales de acceso de un correo
+     *     summary: Edita el estado de un usuario a Baneado o Desbaneado, requiere autenticación JWT.
      *     tags: [Acceso]
      *     description: Permite cambiar las credenciales de acceso de una cuenta de un jugador
      *     security:

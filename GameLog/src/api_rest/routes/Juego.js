@@ -38,6 +38,9 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *               nombre:
      *                 type: string
      *                 example: Ajedrez
+     *               fechaDeLanzamiento:
+     *                 type: date
+     *                 example: 2025-05-09
      *     responses:
      *       200:
      *         description: Juego registrado correctamente
@@ -69,8 +72,10 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación", "Juego a ingresar se encuentra duplicado"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "Juego a ingresar se encuentra duplicado"
      *       500:
      *         description: Error interno del servidor o de base de datos
      *         content:
@@ -146,8 +151,10 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación","Juego ya registrado previamente"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "Juego ya registrado previamente"
      *       500:
      *         description: Error interno del servidor o de base de datos
      *         content:
@@ -223,8 +230,10 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación","El juego ya ha sido agregado como favorito"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "El juego ya ha sido agregado como favorito"
      *       500:
      *         description: Error interno del servidor o de base de datos
      *         content:
@@ -655,8 +664,10 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación","No se ha encontrado el juego a eliminar"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "No se ha encontrado el juego a eliminar"
      *       500:
      *         description: Error interno del servidor o de la base de datos al intentar eliminar el juego
      *         content:
@@ -729,8 +740,10 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación","No se ha encontrado el juego favorito a eliminar"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "No se ha encontrado el juego favorito a eliminar"
      *       500:
      *         description: Error interno del servidor o de la base de datos
      *         content:
@@ -803,8 +816,10 @@ export const CrearRutaJuego = ({ModeloJuego}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación","No se ha encontrado el juego pendiente a eliminar"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "No se ha encontrado el juego pendiente a eliminar"
      *       500:
      *         description: Error interno del servidor o de la base de datos
      *         content:

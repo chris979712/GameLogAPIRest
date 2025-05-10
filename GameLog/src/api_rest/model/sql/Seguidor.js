@@ -46,10 +46,7 @@ export class ModeloSeguidor
             const {idJugadorSeguido} = datos;
             const Solicitud = await conexion.request()
                 .input('idJugadorSeguido',sql.Int,idJugadorSeguido)
-                .query('SELECT j.nombre, j.primerApellido, j.segundoApellido, j.nombreDeUsuario, j.descripcion, j.foto, j.idJugador '+
-                        'FROM Seguidor AS s '+
-                        'JOIN Jugadores AS j ON s.idJugadorSeguidor = j.idJugador '+
-                        'WHERE s.idJugadorSeguido = @idJugadorSeguido');
+                .execute('spb_ConsultarJugadoresSeguidores');
             const ResultadoQuerySeguidores = Solicitud.recordset;
             if(ResultadoQuerySeguidores.length >= 1)
             {
@@ -85,10 +82,7 @@ export class ModeloSeguidor
             const {idJugadorSeguidor} = datos;
             const Solicitud = await conexion.request()
                 .input('idJugadorSeguidor',sql.Int,idJugadorSeguidor)
-                .query('SELECT j.nombre, j.primerApellido, j.segundoApellido, j.nombreDeUsuario, j.descripcion, j.foto, j.idJugador '+
-                        'FROM Seguidor AS s '+
-                        'JOIN Jugadores AS j ON s.idJugadorSeguido = j.idJugador '+
-                        'WHERE s.idJugadorSeguidor = @idJugadorSeguidor');
+                .execute('spb_ConsultarJugadoresSeguidos');
             const ResultadoQuerySeguidos = Solicitud.recordset;
             if(ResultadoQuerySeguidos.length >= 1)
             {

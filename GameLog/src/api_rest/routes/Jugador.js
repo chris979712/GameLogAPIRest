@@ -202,8 +202,11 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   type: integer
      *                   example: 400
      *                 mensaje:
-     *                   type: object
-     *                   description: ["Detalles de los errores de validación","idJugador no encontrado","el nombre de usuario ingresado ya ha sido registrado previamente"]
+     *                   type: string
+     *                   description: 
+     *                    - "Detalles de los errores de validación"
+     *                    - "idJugador no encontrado"
+     *                    - "el nombre de usuario ingresado ya ha sido registrado previamente"
      *       500:
      *         description: Error interno del servidor o de base de datos
      *         content:

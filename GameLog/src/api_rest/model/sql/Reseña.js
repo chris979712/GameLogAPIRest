@@ -48,11 +48,7 @@ export class ModeloReseña
             const {idJugador} = datos;
             const Solicitud = conexion.request();
             const ResultadoConsultaReseñasJugador = await Solicitud.input('idJugador',sql.Int,idJugador)
-                .query('SELECT DISTINCT R.idResenia,R.idJugador,J.idJuego,J.nombre,R.fecha,R.opinion,R.calificacion,ISNULL(L.totalDeLikes,0) AS totalDeLikes '+
-                    'FROM Reseñas AS R '+
-                    'JOIN Juegos AS J ON J.idJuego = R.idJuego '+
-                    'OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L '+
-                    'WHERE R.idJugador = @idJugador');
+                .execute('spb_ObtenerReseñasDeJugador');
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugador.recordset;
             if(ResultadoQueryReseñas.length >= 1)
             {
@@ -88,12 +84,7 @@ export class ModeloReseña
             const {idJuego} = datos;
             const Solicitud = conexion.request();
             const ResultadoConsultaReseñasJugadores = await Solicitud.input('idJuego',sql.Int,idJuego)
-                .query('SELECT DISTINCT R.idResenia,J.idJugador,J.nombreDeUsuario,J.foto,JG.idJuego,JG.nombre,R.fecha,R.opinion,R.calificacion,ISNULL(L.totalDeLikes,0) AS totalDeLikes '+
-                    'FROM Reseñas AS R '+
-                    'JOIN Juegos AS JG ON JG.idJuego = R.idJuego '+
-                    'JOIN Jugadores AS J ON R.idJugador = J.idJugador '+
-                    'OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L '+
-                    'WHERE R.idJuego = @idJuego');
+                .execute('spb_ObtenerReseñasDeUnJuego');
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugadores.recordset;
             if(ResultadoQueryReseñas.length >= 1)
             {
@@ -130,13 +121,7 @@ export class ModeloReseña
             const Solicitud = conexion.request();
             const ResultadoConsultaReseñasJugadoresSeguidos = await Solicitud.input('idJuego',sql.Int,idJuego)
                 .input('idJugador',sql.Int,idJugador)
-                .query('SELECT DISTINCT R.idResenia,J.idJugador,J.nombreDeUsuario,J.foto,JG.idJuego,JG.nombre,R.fecha,R.opinion,R.calificacion,ISNULL(L.totalDeLikes,0) AS totalDeLikes '+
-                    'FROM Reseñas AS R '+
-                    'JOIN Juegos AS JG ON JG.idJuego = R.idJuego '+
-                    'JOIN Jugadores AS J ON R.idJugador = J.idJugador '+ 
-                    'JOIN Seguidor AS S ON S.idJugadorSeguido = R.idJugador '+
-                    'OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L '+
-                    'WHERE R.idJuego = @idJuego AND S.idJugadorSeguidor = @idJugador');
+                .execute('spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos');
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugadoresSeguidos.recordset;
             if(ResultadoQueryReseñas.length >= 1)
             {

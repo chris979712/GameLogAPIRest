@@ -39,12 +39,103 @@ export const CrearRutaLogin = ({ModeloLogin,ModeloAcceso}) =>
      *     responses:
      *       200:
      *         description: Inicio de sesión exitoso
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: false
+     *                 estado:
+     *                   type: integer
+     *                   example: 200
+     *                 cuenta:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                     properties:
+     *                       idCuenta:
+     *                         type: integer
+     *                         example: 21
+     *                       correo:
+     *                         type: string
+     *                         example: usuarioprueba@gmail.com
+     *                       estado:
+     *                         type: string
+     *                         example: Desbaneado
+     *                       tipoDeAcceso:
+     *                         type: string
+     *                         example: Administrador
+     *                       idJugador:
+     *                         type: integer
+     *                         example: 21
+     *                       nombre:
+     *                         type: string
+     *                         example: pruebaJuego
+     *                       primerApellido:
+     *                         type: string
+     *                         example: prueba
+     *                       segundoApellido:
+     *                         type: string
+     *                         example: prueba
+     *                       nombreDeUsuario:
+     *                         type: string
+     *                         example: pruebaJuego
+     *                       descripcion:
+     *                         type: string
+     *                         example: login
+     *                       foto:
+     *                         type: string
+     *                         example: login.jpg
      *       400:
      *         description: Credenciales inválidas, datos inválidos o inexistentes
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 400
+     *                 mensaje:
+     *                   type: string
+     *                   example: Los campos ingresados son inválidos
      *       404:
      *         description: La cuenta no se ha encontrado dentro del sistema
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 404
+     *                 mensaje:
+     *                   type: string
+     *                   example: No se han encontrado las credenciales de acceso ingresadas
      *       500:
-     *         description: Error interno en el servidor al querer iniciar sesion
+     *         description: Error interno en el servidor al querer iniciar sesión
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 500
+     *                 mensaje:
+     *                   type: string
+     *                   example: Ha ocurrido un error al buscar los datos de inicio de sesión
      */
     LoginEnrutador.post('/',ControladorLoginEnrutador.Login);
 

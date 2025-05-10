@@ -62,9 +62,7 @@ export class ModeloJugador
             } = datos;
             const QueryJugador = await conexion.request()
                 .input('nombreDeUsuario',sql.VarChar,nombreDeUsuario)
-                .query('SELECT a.idCuenta,a.correo,a.estado,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto '+
-                    'FROM Jugadores j JOIN Accesos a ON a.idCuenta = j.idAcceso '+
-                    'WHERE j.nombreDeUsuario = @nombreDeUsuario');
+                .execute('spb_BuscarJugador');
             const ResultadoQueryJugador = QueryJugador.recordset;
             if(ResultadoQueryJugador.length >= 1)
             {

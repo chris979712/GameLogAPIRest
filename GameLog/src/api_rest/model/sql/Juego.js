@@ -12,10 +12,11 @@ export class ModeloJuego
         try
         {
             conexion = await sql.connect(ConfiguracionConexion);
-            const {idJuego,nombre} = datos;
+            const {idJuego,nombre,fechaDeLanzamiento} = datos;
             const Solicitud = conexion.request();
             const ResultadoSolicitud = await Solicitud.input('idJuego',sql.Int,idJuego)
                 .input('nombre',sql.VarChar,nombre)
+                .input('fechaDeLanzamiento',sql.Date,fechaDeLanzamiento)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
                 .execute('spi_Juegos')
@@ -108,9 +109,7 @@ export class ModeloJuego
             const {nombre} = datos;
             const Solicitud = await conexion.request()
                 .input('nombre',sql.VarChar,nombre)
-                .query('SELECT j.idJuego, j.nombre '+
-                        'FROM Juegos j '+
-                        'WHERE j.nombre = @nombre');
+                .execute('spb_BuscarJuegoPorNombre');
             const ResultadoQueryJuego = Solicitud.recordset;
             if(ResultadoQueryJuego.length >= 1)
             {
@@ -146,9 +145,7 @@ export class ModeloJuego
             const {idJuego} = datos;
             const Solicitud = await conexion.request()
                 .input('idJuego',sql.Int,idJuego)
-                .query('SELECT j.idJuego, j.nombre '+
-                        'FROM Juegos j '+
-                        'WHERE j.idJuego = @idJuego');
+                .execute('spb_BuscarJuegoPorId');
             const ResultadoQueryJuego = Solicitud.recordset;
             if(ResultadoQueryJuego.length >= 1)
             {
@@ -184,10 +181,7 @@ export class ModeloJuego
             const {idJugador} = datos;
             const Solicitud = await conexion.request()
                 .input('idJugador',sql.Int,idJugador)
-                .query('SELECT j.idJuego, j.nombre '+
-                        'FROM Juegos AS j '+
-                        'JOIN Pendientes AS p ON j.idJuego = p.idJuego '+
-                        'WHERE  p.idJugador = @idJugador');
+                .execute('spb_ObtenerJuegosPendientes');
             const ResultadoQueryJuegosPendientes = Solicitud.recordset;
             if(ResultadoQueryJuegosPendientes.length >= 1)
             {
@@ -223,10 +217,7 @@ export class ModeloJuego
             const {idJugador} = datos;
             const Solicitud = await conexion.request()
                 .input('idJugador',sql.Int,idJugador)
-                .query('SELECT j.idJuego, j.nombre '+
-                        'FROM Juegos AS j '+
-                        'JOIN Favoritos AS f ON j.idJuego = f.idJuego '+
-                        'WHERE  f.idJugador = @idJugador');
+                .execute('spb_ObtenerJuegosFavoritos');
             const ResultadoQueryJuegosFavoritos = Solicitud.recordset;
             if(ResultadoQueryJuegosFavoritos.length >= 1)
             {

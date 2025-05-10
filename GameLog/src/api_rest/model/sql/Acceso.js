@@ -66,7 +66,7 @@ export class ModeloAcceso{
             } = datos;
             const QueryCuenta = await conexion.request()
                 .input('correo',sql.VarChar,correo)
-                .query('SELECT idCuenta FROM Accesos where correo = @correo');
+                .execute('spb_ObtenerIdDeAccesoPorCorreo');
             const ResultadoIdCuenta = QueryCuenta.recordset;
             if(ResultadoIdCuenta.length >= 1)
             {
