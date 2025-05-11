@@ -4,7 +4,7 @@ services:
   
   gamelog_db:
     build:
-      context:  ./initdb-scripts
+      context:  ./APIRest/initdb-scripts
     container_name: gamelog_db
     restart: always
     ports:
@@ -15,11 +15,22 @@ services:
 
   gamelogs_apirest:
     build:
-      context: .
+      context: ./APIRest
     container_name: gamelog_apirest
     restart: always
     ports:
       - 1234:1234
     depends_on:
       - gamelog_db
+  
+  nginx:
+    image: nginx:latest
+    container_name: gamelog_nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./Nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - gamelogs_apirest
 
