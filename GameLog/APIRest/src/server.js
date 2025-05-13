@@ -6,13 +6,14 @@ import { CrearRutaJuego } from './api_rest/routes/Juego.js';
 import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
 import { CrearRutaReseña } from './api_rest/routes/Reseña.js';
 import { CrearRutaLike } from './api_rest/routes/Like.js';
+import { CrearRutaReportesEstadisticos } from './api_rest/routes/Reportes.js';
 import { DocumentoSwagger } from './api_rest/utilidades/swagger.js';
 import swaggerUI from 'swagger-ui-express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
 
-export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike}) => 
+export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike,ModeloReportesEstadisticos}) => 
 {
     const app = express();
     dotenv.config();
@@ -37,6 +38,7 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJue
     app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}));
     app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}));
     app.use('/gamelog/like',CrearRutaLike({ModeloLike}));
+    app.use('/gamelog/reporte',CrearRutaReportesEstadisticos({ModeloReportesEstadisticos}));
     app.use('/gamelog/doc',swaggerUI.serve, swaggerUI.setup(DocumentoSwagger));
 
     const PUERTO = process.env.PUERTO;

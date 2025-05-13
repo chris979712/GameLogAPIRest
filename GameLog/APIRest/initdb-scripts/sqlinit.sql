@@ -1,0 +1,1301 @@
+
+CREATE DATABASE GameLogDB;
+
+GO
+
+USE GameLogDB;
+
+GO
+
+CREATE LOGIN adminGameLog WITH PASSWORD = 'ProvisionalPassword123.';
+
+GO
+
+CREATE LOGIN jugadorGameLog WITH PASSWORD = 'ProvisionalPassword123.';
+
+GO
+/****** Object:  User [adminGameLog]    Script Date: 07/05/2025 09:55:17 p. m. ******/
+
+CREATE USER [adminGameLog] FOR LOGIN [adminGameLog] WITH DEFAULT_SCHEMA=[dbo]
+
+GO
+/****** Object:  User [jugadorGameLog]    Script Date: 07/05/2025 09:55:17 p. m. ******/
+
+CREATE USER [jugadorGameLog] FOR LOGIN [jugadorGameLog] WITH DEFAULT_SCHEMA=[dbo]
+
+GO
+
+ALTER ROLE [db_owner] ADD MEMBER [adminGameLog]
+GO
+ALTER ROLE [db_accessadmin] ADD MEMBER [adminGameLog]
+GO
+ALTER ROLE [db_backupoperator] ADD MEMBER [adminGameLog]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [adminGameLog]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [adminGameLog]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [jugadorGameLog]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [jugadorGameLog]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Likes](
+	[idJugador] [int] NOT NULL,
+	[idResenia] [int] NOT NULL,
+	[idLike] [int] IDENTITY(1,1) NOT NULL,
+CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
+(
+	[idLike] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fn_ObtenerLikesDeReseña]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[fn_ObtenerLikesDeReseña]
+(	
+	@idResenia INT
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	SELECT COUNT(*) AS totalDeLikes
+    FROM Likes
+    WHERE idResenia = @idResenia
+	GROUP BY idResenia
+)
+GO
+/****** Object:  Table [dbo].[Accesos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Accesos](
+	[correo] [varchar](255) NOT NULL,
+	[contrasenia] [varchar](255) NOT NULL,
+	[idCuenta] [int] IDENTITY(1,1) NOT NULL,
+	[estado] [varchar](10) NOT NULL,
+	[tipoDeAcceso] [int] NOT NULL,
+ CONSTRAINT [PK_Accesos] PRIMARY KEY CLUSTERED 
+(
+	[idCuenta] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Favoritos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Favoritos](
+	[idJugador] [int] NOT NULL,
+	[idJuego] [int] NOT NULL,
+	[idFavorito] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Favoritos] PRIMARY KEY CLUSTERED 
+(
+	[idFavorito] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Juegos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Juegos](
+	[idJuego] [int] NOT NULL,
+	[nombre] [varchar](100) NOT NULL,
+	[fechaDeLanzamiento] [date] NOT NULL,
+ CONSTRAINT [PK_Juegos] PRIMARY KEY CLUSTERED 
+(
+	[idJuego] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Jugadores]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Jugadores](
+	[nombre] [varchar](80) NOT NULL,
+	[primerApellido] [varchar](80) NOT NULL,
+	[segundoApellido] [varchar](80) NULL,
+	[nombreDeUsuario] [varchar](20) NOT NULL,
+	[descripcion] [varchar](200) NULL,
+	[foto] [varchar](255) NOT NULL,
+	[idJugador] [int] IDENTITY(1,1) NOT NULL,
+	[idAcceso] [int] NOT NULL,
+ CONSTRAINT [PK_Jugadores] PRIMARY KEY CLUSTERED 
+(
+	[idJugador] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Pendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Pendientes](
+	[idPendientes] [int] IDENTITY(1,1) NOT NULL,
+	[idJugador] [int] NOT NULL,
+	[idJuego] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[idPendientes] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Reseñas]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Reseñas](
+	[idJugador] [int] NOT NULL,
+	[idJuego] [int] NOT NULL,
+	[fecha] [date] NOT NULL,
+	[opinion] [varchar](200) NULL,
+	[calificacion] [decimal](3, 1) NULL,
+	[idResenia] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Reseñas] PRIMARY KEY CLUSTERED 
+(
+	[idResenia] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Seguidor]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Seguidor](
+	[idSeguidor] [int] IDENTITY(1,1) NOT NULL,
+	[idJugadorSeguidor] [int] NOT NULL,
+	[idJugadorSeguido] [int] NOT NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TiposDeAccesos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TiposDeAccesos](
+	[idTipoDeAcceso] [int] IDENTITY(1,1) NOT NULL,
+	[tipoDeAcceso] [varchar](13) NOT NULL,
+ CONSTRAINT [PK_TiposDeAccesos] PRIMARY KEY CLUSTERED 
+(
+	[idTipoDeAcceso] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Accesos] ADD  DEFAULT ((2)) FOR [tipoDeAcceso]
+GO
+ALTER TABLE [dbo].[Accesos]  WITH NOCHECK ADD  CONSTRAINT [TipoDeAcceso-Acceso] FOREIGN KEY([tipoDeAcceso])
+REFERENCES [dbo].[TiposDeAccesos] ([idTipoDeAcceso])
+GO
+ALTER TABLE [dbo].[Accesos] NOCHECK CONSTRAINT [TipoDeAcceso-Acceso]
+GO
+ALTER TABLE [dbo].[Favoritos]  WITH NOCHECK ADD  CONSTRAINT [Juegos-Favoritos] FOREIGN KEY([idJuego])
+REFERENCES [dbo].[Juegos] ([idJuego])
+GO
+ALTER TABLE [dbo].[Favoritos] NOCHECK CONSTRAINT [Juegos-Favoritos]
+GO
+ALTER TABLE [dbo].[Favoritos]  WITH NOCHECK ADD  CONSTRAINT [Jugador-Favorito] FOREIGN KEY([idJugador])
+REFERENCES [dbo].[Jugadores] ([idJugador])
+GO
+ALTER TABLE [dbo].[Favoritos] NOCHECK CONSTRAINT [Jugador-Favorito]
+GO
+ALTER TABLE [dbo].[Jugadores]  WITH NOCHECK ADD  CONSTRAINT [Acceso-Jugador] FOREIGN KEY([idAcceso])
+REFERENCES [dbo].[Accesos] ([idCuenta])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Jugadores] NOCHECK CONSTRAINT [Acceso-Jugador]
+GO
+ALTER TABLE [dbo].[Likes]  WITH NOCHECK ADD  CONSTRAINT [Jugador-Like] FOREIGN KEY([idJugador])
+REFERENCES [dbo].[Jugadores] ([idJugador])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Likes] NOCHECK CONSTRAINT [Jugador-Like]
+GO
+ALTER TABLE [dbo].[Likes]  WITH NOCHECK ADD  CONSTRAINT [Reseña-Like] FOREIGN KEY([idResenia])
+REFERENCES [dbo].[Reseñas] ([idResenia])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Likes] NOCHECK CONSTRAINT [Reseña-Like]
+GO
+ALTER TABLE [dbo].[Pendientes]  WITH CHECK ADD  CONSTRAINT [Juego-Pendiente] FOREIGN KEY([idJuego])
+REFERENCES [dbo].[Juegos] ([idJuego])
+GO
+ALTER TABLE [dbo].[Pendientes] CHECK CONSTRAINT [Juego-Pendiente]
+GO
+ALTER TABLE [dbo].[Pendientes]  WITH CHECK ADD  CONSTRAINT [Jugador-Pendiente] FOREIGN KEY([idJugador])
+REFERENCES [dbo].[Jugadores] ([idJugador])
+GO
+ALTER TABLE [dbo].[Pendientes] CHECK CONSTRAINT [Jugador-Pendiente]
+GO
+ALTER TABLE [dbo].[Reseñas]  WITH NOCHECK ADD  CONSTRAINT [Juego-Reseña] FOREIGN KEY([idJuego])
+REFERENCES [dbo].[Juegos] ([idJuego])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Reseñas] NOCHECK CONSTRAINT [Juego-Reseña]
+GO
+ALTER TABLE [dbo].[Reseñas]  WITH CHECK ADD  CONSTRAINT [Jugador-Reseña] FOREIGN KEY([idJugador])
+REFERENCES [dbo].[Jugadores] ([idJugador])
+GO
+ALTER TABLE [dbo].[Reseñas] CHECK CONSTRAINT [Jugador-Reseña]
+GO
+ALTER TABLE [dbo].[Seguidor]  WITH NOCHECK ADD  CONSTRAINT [Jugador-Seguidor] FOREIGN KEY([idJugadorSeguidor])
+REFERENCES [dbo].[Jugadores] ([idJugador])
+GO
+ALTER TABLE [dbo].[Seguidor] NOCHECK CONSTRAINT [Jugador-Seguidor]
+GO
+/****** Object:  StoredProcedure [dbo].[spa_Acceso]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spa_Acceso]
+	@idAcceso INT,
+	@correo VARCHAR(255) = NULL,
+	@contrasenia VARCHAR(255) = NULL,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Accesos WHERE idCuenta = @idAcceso)
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM Accesos WHERE correo = @correo)
+			BEGIN
+				BEGIN TRANSACTION
+					UPDATE Accesos
+					SET correo = ISNULL(@correo,correo),
+					contrasenia = ISNULL(@contrasenia,contrasenia)
+					WHERE idCuenta = @idAcceso;
+				COMMIT TRANSACTION
+				SET @estado = 200;
+				SET @mensaje = 'Los datos de acceso han sido modificados con éxito.';
+			END
+			ELSE
+			BEGIN
+				SET @estado = 400;
+				SET @mensaje = 'El correo nuevo que desea ingresar ya se encuentra registrado.';
+			END
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'El ID de la cuenta ingresada no existe.';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spa_EstadoAccesos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spa_EstadoAccesos]
+	@idAcceso INT,
+	@estadoAcceso VARCHAR(10),
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+	IF EXISTS (SELECT * FROM Accesos WHERE idCuenta = @idAcceso)
+	BEGIN
+		BEGIN TRANSACTION
+			UPDATE Accesos
+			SET estado = @estadoAcceso
+			WHERE idCuenta = @idAcceso;
+		COMMIT TRANSACTION
+		SET @estado = 200;
+		SET @mensaje = 'El estado de la cuenta ha sido modificada con éxito';
+	END
+	ELSE
+	BEGIN
+		SET @estado = 400;
+		SET @mensaje = 'El ID de la cuenta ingresada no existe.';
+	END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spa_Jugadores]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spa_Jugadores]
+	@idJugador INT,
+	@nombre VARCHAR(80) = NULL,
+	@primerApellido VARCHAR(80) = NULL,
+	@segundoApellido VARCHAR(80) = NULL,
+	@nombreDeUsuario VARCHAR(20) = NULL,
+	@descripcion VARCHAR(200) = NULL,
+	@foto VARCHAR(255) = NULL,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Jugadores WHERE idJugador = @idJugador)
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM Jugadores WHERE nombreDeUsuario = @nombreDeUsuario )
+			BEGIN
+				BEGIN TRANSACTION
+					UPDATE Jugadores 
+					SET nombre = ISNULL(@nombre,nombre), 
+					primerApellido = ISNULL(@primerApellido,primerApellido), 
+					segundoApellido = ISNULL(@segundoApellido,segundoApellido), 
+					nombreDeUsuario = ISNULL(@nombreDeUsuario,nombreDeUsuario), 
+					descripcion = ISNULL(@descripcion,descripcion), 
+					foto = ISNULL(@foto,foto) 
+					WHERE idJugador = @idJugador;
+				COMMIT TRANSACTION
+				SET @estado = 200;
+				SET @mensaje = 'El perfil del jugador ha sido editado de manera exitosa'
+			END
+			ELSE
+			BEGIN
+				SET @estado = 400;
+				SET @mensaje = 'El nuevo nombre de usuario que desea ingresar ya se encuentra registrado'
+			END
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'La cuenta que desea editar, no se encuentra registrada'
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_BuscarJuegoPorId]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_BuscarJuegoPorId]
+	@idJuego INT
+AS
+BEGIN
+	SELECT j.idJuego, j.nombre
+    FROM Juegos j
+    WHERE j.idJuego = @idJuego;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_BuscarJuegoPorNombre]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_BuscarJuegoPorNombre]
+	@nombre VARCHAR(100)
+AS
+BEGIN
+	SELECT j.idJuego, j.nombre
+	FROM Juegos j 
+    WHERE j.nombre = @nombre;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_BuscarJugador]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_BuscarJugador] 
+	@nombreDeUsuario VARCHAR(20)
+AS
+BEGIN
+	SELECT a.idCuenta,a.correo,a.estado,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto
+    FROM Jugadores j JOIN Accesos a ON a.idCuenta = j.idAcceso 
+    WHERE j.nombreDeUsuario = @nombreDeUsuario;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_BuscarLogin]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_BuscarLogin]
+	@correo VARCHAR(255),
+	@contrasenia VARCHAR(255)
+AS
+BEGIN
+	SELECT a.idCuenta,a.correo,a.estado,ta.tipoDeAcceso,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto
+    FROM Accesos a JOIN Jugadores j ON a.idCuenta = j.idAcceso
+    JOIN TiposDeAccesos ta ON a.tipoDeAcceso = ta.idTipoDeAcceso 
+    WHERE a.correo = @correo AND a.contrasenia = @contrasenia;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ConsultarJugadoresSeguidores]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ConsultarJugadoresSeguidores]
+	@idJugadorSeguido INT
+AS
+BEGIN
+	SELECT j.nombre, j.primerApellido, j.segundoApellido, j.nombreDeUsuario, j.descripcion, j.foto, j.idJugador
+    FROM Seguidor AS s
+    JOIN Jugadores AS j ON s.idJugadorSeguidor = j.idJugador
+    WHERE s.idJugadorSeguido = @idJugadorSeguido;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ConsultarJugadoresSeguidos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ConsultarJugadoresSeguidos]
+	@idJugadorSeguidor INT
+AS
+BEGIN
+	SELECT j.nombre, j.primerApellido, j.segundoApellido, j.nombreDeUsuario, j.descripcion, j.foto, j.idJugador
+    FROM Seguidor AS s 
+    JOIN Jugadores AS j ON s.idJugadorSeguido = j.idJugador
+    WHERE s.idJugadorSeguidor = @idJugadorSeguidor;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_JuegosEnTendencia]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_JuegosEnTendencia]
+	@fechaInicioBusqueda DATE,
+	@fechaFinBusqueda DATE
+AS
+BEGIN
+	SELECT TOP 5
+	J.idJuego,
+	J.nombre,
+	COUNT(R.idJuego) AS totalReseñas
+	FROM Juegos J
+	INNER JOIN Reseñas R on R.idJuego = J.idJuego
+	WHERE R.fecha BETWEEN @fechaInicioBusqueda AND @fechaFinBusqueda
+	GROUP BY J.idJuego,J.nombre
+	ORDER BY totalReseñas DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_JuegosRevivalRetro]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_JuegosRevivalRetro]
+	@fechaInicioBusqueda DATE,
+	@fechaFinBusqueda DATE
+AS
+BEGIN
+	SELECT TOP 5
+	J.idJuego,
+	J.nombre,
+	COUNT(R.idJuego) AS totalReseñas
+	FROM Juegos J
+	INNER JOIN Reseñas R on R.idJuego = J.idJuego
+	WHERE (R.fecha BETWEEN @fechaInicioBusqueda AND @fechaFinBusqueda) AND (J.fechaDeLanzamiento < '2000-01-01')
+	GROUP BY J.idJuego,J.nombre
+	ORDER BY totalReseñas DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerIdDeAccesoPorCorreo]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerIdDeAccesoPorCorreo] 
+	@correo VARCHAR(255)
+AS
+BEGIN
+	SELECT idCuenta FROM Accesos where correo = @correo;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerJuegosFavoritos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerJuegosFavoritos] 
+	@idJugador INT
+AS
+BEGIN
+	SELECT j.idJuego, j.nombre
+    FROM Juegos AS j
+    JOIN Favoritos AS f ON j.idJuego = f.idJuego
+    WHERE  f.idJugador = @idJugador;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerJuegosPendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerJuegosPendientes]
+	@idJugador INT
+AS
+BEGIN
+	SELECT j.idJuego, j.nombre
+    FROM Juegos AS j 
+    JOIN Pendientes AS p ON j.idJuego = p.idJuego 
+    WHERE  p.idJugador = @idJugador
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeJugador]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerReseñasDeJugador]
+	@idJugador INT
+AS
+BEGIN
+	SELECT DISTINCT R.idResenia,R.idJugador,J.idJuego,J.nombre,R.fecha,R.opinion,R.calificacion,ISNULL(L.totalDeLikes,0) AS totalDeLikes
+    FROM Reseñas AS R
+    JOIN Juegos AS J ON J.idJuego = R.idJuego
+    OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L
+    WHERE R.idJugador = @idJugador;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuego]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerReseñasDeUnJuego]
+	@idJuego INT
+AS
+BEGIN
+	SELECT DISTINCT R.idResenia,J.idJugador,J.nombreDeUsuario,J.foto,JG.idJuego,JG.nombre,R.fecha,R.opinion,R.calificacion,ISNULL(L.totalDeLikes,0) AS totalDeLikes
+    FROM Reseñas AS R 
+    JOIN Juegos AS JG ON JG.idJuego = R.idJuego 
+    JOIN Jugadores AS J ON R.idJugador = J.idJugador
+    OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L 
+    WHERE R.idJuego = @idJuego;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos]
+	@idJuego INT,
+	@idJugador INT
+AS
+BEGIN
+	SELECT DISTINCT R.idResenia,J.idJugador,J.nombreDeUsuario,J.foto,JG.idJuego,JG.nombre,R.fecha,R.opinion,R.calificacion,ISNULL(L.totalDeLikes,0) AS totalDeLikes 
+    FROM Reseñas AS R
+    JOIN Juegos AS JG ON JG.idJuego = R.idJuego
+    JOIN Jugadores AS J ON R.idJugador = J.idJugador 
+    JOIN Seguidor AS S ON S.idJugadorSeguido = R.idJugador
+	OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L
+    WHERE R.idJuego = @idJuego AND S.idJugadorSeguidor = @idJugador;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Acceso]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Acceso]
+	@idAcceso INT = NULL,
+	@correo VARCHAR(255) = NULL,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Accesos WHERE idCuenta = @idAcceso OR correo = @correo)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Accesos WHERE idCuenta = @idAcceso;
+				DELETE FROM Jugadores WHERE idAcceso = @idAcceso;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El acceso ha sido eliminado con éxito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha encontrado el acceso a eliminar';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Favorito]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spd_Favorito]
+	@idJugador INT,
+	@idJuego INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+BEGIN TRY
+		IF EXISTS (SELECT * FROM Favoritos WHERE idJugador = @idJugador AND idJuego = @idJuego)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Favoritos WHERE idJugador = @idJugador AND idJuego = @idJuego;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El Juego favorito ha sido eliminado con éxito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha encontrado el juego favorito a eliminar';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Juego]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Juego]
+	@idJuego INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+BEGIN TRY
+		IF EXISTS (SELECT * FROM Juegos WHERE idJuego = @idJuego)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Reseñas WHERE idJuego = @idJuego;
+				DELETE FROM Favoritos WHERE idJuego = @idJuego;
+				DELETE FROM Pendientes WHERE idJuego = @idJuego;
+				DELETE FROM Juegos WHERE idJuego = @idJuego;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El Juego ha sido eliminado con éxito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha encontrado el juego a eliminar';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Jugador]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Jugador]
+	@idJugador INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Jugadores WHERE idJugador = @idJugador)
+		BEGIN
+			BEGIN TRANSACTION
+				DECLARE @idAcceso INT;
+				SET @idAcceso = (SELECT idAcceso FROM Jugadores WHERE idJugador = @idJugador);
+				DELETE FROM Accesos WHERE idCuenta = @idAcceso;
+				DELETE FROM Likes WHERE idJugador = @idJugador;
+				DELETE FROM Seguidor WHERE idJugadorSeguidor = @idJugador;
+				DELETE FROM Favoritos WHERE idJugador = @idJugador;
+				DELETE FROM Reseñas WHERE idJugador = @idJugador;
+				DELETE FROM Pendientes WHERE idJugador = @idJugador;
+				DELETE FROM Jugadores WHERE idJugador = @idJugador;
+				
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El Jugador ha sido eliminado con éxito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha encontrado el Jugador a eliminar';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Likes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Likes]
+	@idResenia INT,
+	@idJugador INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Likes WHERE idResenia = @idResenia)
+		BEGIN
+			IF EXISTS (SELECT * FROM Likes WHERE idJugador = @idJugador)
+			BEGIN
+				BEGIN TRANSACTION
+					DELETE FROM Likes WHERE idJugador = @idJugador AND idResenia = @idResenia;
+				COMMIT TRANSACTION
+				SET @estado = 200;
+				SET @mensaje = 'El me gusta ha sido eliminado correctamente.';
+			END
+			ELSE
+			BEGIN
+				SET @estado = 400;
+				SET @mensaje = 'El jugador que desea quitar el me gusta no ha sido encontrado.';
+			END
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'La reseña a quitarle me gusta no ha sido encontrada.';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Pendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Pendientes]
+	@idJugador INT,
+	@idJuego INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El juego ha sido eliminado de los pendientes de manera éxitosa';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha podido encontrar el pendiente a eliminar';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'ERROR: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Reseñas]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Reseñas]
+	@idReseña INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Reseñas WHERE idResenia = @idReseña)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Reseñas WHERE idResenia = @idReseña;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'La reseña ha sido eliminada con éxito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'El ID de reseña ingresado no se encuentra registrado';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Seguidor]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Seguidor]
+	@idJugadorSeguidor INT,
+	@idJugadorSeguido INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Seguidor WHERE idJugadorSeguidor = @idJugadorSeguidor AND idJugadorSeguido = @idJugadorSeguido)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Seguidor WHERE idJugadorSeguidor = @idJugadorSeguidor AND idJugadorSeguido = @idJugadorSeguido;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El jugador seguido ha sido eliminado con éxito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha encontrado el seguimiento a eliminar';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Acceso]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Chris>
+-- Create date: <22-04-2025>
+-- =============================================
+CREATE PROCEDURE [dbo].[spi_Acceso]
+	@correo varchar(255),
+	@contrasenia varchar(255),
+	@estado varchar(10),
+	@nombre varchar(80),
+	@primerApellido varchar(80),
+	@segundoApellido varchar(80) = NULL,
+	@nombreDeUsuario varchar(20),
+	@descripcion varchar(200) = NULL,
+	@foto varchar(255),
+	@tipoDeAcceso VARCHAR(13),
+	@resultado INT OUTPUT,
+	@mensaje NVARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF NOT EXISTS (SELECT * FROM Accesos WHERE correo = @correo)
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM Jugadores WHERE nombreDeUsuario = @nombreDeUsuario)
+			BEGIN
+				DECLARE @idTipoDeAcceso INT;
+				SET @idTipoDeAcceso = (SELECT idTipoDeAcceso FROM TiposDeAccesos WHERE tipoDeAcceso = @tipoDeAcceso);
+				IF @idTipoDeAcceso IS NOT NULL
+				BEGIN
+					BEGIN TRANSACTION
+						DECLARE @idAcceso INT;
+						INSERT INTO Accesos (correo,contrasenia,estado,tipoDeAcceso) VALUES (@correo,@contrasenia,@estado,@idTipoDeAcceso);
+						SET @idAcceso = SCOPE_IDENTITY();
+						INSERT INTO Jugadores (nombre,primerApellido,segundoApellido,nombreDeUsuario,descripcion,foto,idAcceso) VALUES (@nombre,@primerApellido,@segundoApellido,@nombreDeUsuario,@descripcion,@foto,@idAcceso);
+					COMMIT TRANSACTION
+					SET @resultado = 200;
+					SET @mensaje = 'La nueva cuenta de acceso ha sido registrada correctamente';
+				END
+				ELSE
+				BEGIN
+					SET @resultado = 400;
+					SET @mensaje = 'No se ha encontrado el tipo de acceso que desea asignarle al usuario';
+				END
+			END
+			ELSE
+			BEGIN
+				SET @resultado = 400;
+				SET @mensaje = 'El nombre de usuario ingresado ya se encuentra registrado';
+			END
+		END
+		ELSE
+		BEGIN
+			SET @resultado = 400;
+			SET @mensaje = 'El correo ingresado ya se encuentra registrado';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		SET @resultado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Favoritos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spi_Favoritos]
+	@idJugador INT,
+	@idJuego INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF NOT EXISTS (SELECT * FROM Favoritos where idJuego = @idJuego AND idJugador = @idJugador)
+		BEGIN
+			DECLARE @conteoJugador INT;
+			SELECT @conteoJugador = COUNT(*) 
+			FROM Favoritos 
+			WHERE idJugador = @idJugador;
+			IF @conteoJugador <= 3
+			BEGIN
+				BEGIN TRANSACTION
+				INSERT INTO Favoritos (idJuego,idJugador) VALUES (@idJuego,@idJugador);
+				COMMIT TRANSACTION
+				SET @estado = 200;
+				SET @mensaje = 'El juego ha sido agregado a favoritos de manera correcta'; 
+			END
+			ELSE
+			BEGIN
+				SET @estado = 400;
+				SET @mensaje = 'Solo se puede tener un máximo de 4 juegos agregados como favoritos'; 
+			END
+		END
+		ELSE
+		BEGIN 
+			SET @estado = 400;
+			SET @mensaje = 'El juego ya se encuentra agregado a favoritos'; 
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE(); 
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Juegos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spi_Juegos]
+	@idJuego INT,
+	@nombre VARCHAR(100),
+	@fechaDeLanzamiento DATE,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF NOT EXISTS (SELECT * FROM Juegos WHERE nombre = @nombre OR idJuego = @idJuego)
+		BEGIN 
+			BEGIN TRANSACTION
+				INSERT INTO Juegos (idJuego,nombre,fechaDeLanzamiento) VALUES (@idJuego,@nombre,@fechaDeLanzamiento);
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El juego se ha registrado con exito';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'El juego que desea ingresar, ya se encuentra registrado';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Likes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spi_Likes]
+	@idJugador INT,
+	@idResenia INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Jugadores WHERE idJugador = @idJugador)
+		BEGIN
+			IF EXISTS (SELECT * FROM Reseñas WHERE idResenia = @idResenia)
+			BEGIN
+				IF NOT EXISTS (SELECT * FROM Likes WHERE idJugador = @idJugador AND idResenia = @idResenia)
+				BEGIN
+					BEGIN TRANSACTION
+						INSERT INTO Likes (idJugador,idResenia) VALUES (@idJugador,@idResenia);
+					COMMIT TRANSACTION
+					SET @estado = 200;
+					SET @mensaje = 'Se ha registrado un me gusta de manera exitosa';
+				END
+				ELSE
+				BEGIN
+					SET @estado = 400;
+					SET @mensaje = 'No es posible darle me gusta, ya se ha dado me gusta a la reseña';
+				END
+			END
+			ELSE
+			BEGIN
+				SET @estado = 400;
+				SET @mensaje = 'El id de la reseña ingresada no existe en la base de datos';
+			END
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'El id del jugador ingresado no existe en la base de datos';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Pendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spi_Pendientes]
+	@idJugador INT,
+	@idJuego INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF NOT EXISTS (SELECT * FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador)
+		BEGIN
+			BEGIN TRANSACTION
+				INSERT INTO Pendientes (idJuego,idJugador) VALUES (@idJuego,@idJugador);
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'El juego ha sido guardado como pendiente, de manera éxitosa';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'El juego a guardar como pendiente ya ha sido guardado previamente como pendiente';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'ERROR: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Reseña]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spi_Reseña]
+	@idJugador INT,
+	@idJuego INT,
+	@opinion VARCHAR(200),
+	@calificacion DECIMAL(3,1),
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF NOT EXISTS (SELECT * FROM Reseñas WHERE idJugador = @idJugador AND idJuego = @idJuego)
+		BEGIN
+			BEGIN TRANSACTION
+				INSERT INTO Reseñas (idJugador,idJuego,fecha,opinion,calificacion) VALUES (@idJugador,@idJuego,CAST(GETDATE() AS DATE),@opinion,@calificacion);
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'Se ha registrado la reseña de manera correcta';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'Ya ha realizado una reseña para el juego seleccionado';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spi_Seguidor]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spi_Seguidor]
+	@idJugadorSeguido INT,
+	@idJugadorSeguidor INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF NOT EXISTS (SELECT * FROM Seguidor WHERE idJugadorSeguido = @idJugadorSeguido AND idJugadorSeguidor = @idJugadorSeguidor)
+		BEGIN
+			BEGIN TRANSACTION
+				INSERT INTO Seguidor (idJugadorSeguidor,idJugadorSeguido) VALUES (@idJugadorSeguidor,@idJugadorSeguido);
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'Se ha comenzado a seguir al jugador seleccionado';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'El usuario que desea seguir ya lo está siguiendo';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+Error_message();
+	END CATCH
+END
+GO
+
+INSERT INTO TiposDeAccesos (tipoDeAcceso) VALUES ('Administrador'),('Jugador');
+GO
+
+ALTER LOGIN adminGameLog WITH PASSWORD = 'G4m3LoG4dM1n.';
+GO 
+
+ALTER LOGIN jugadorGameLog WITH PASSWORD = 'G4m3LoGUs3R.';
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Acceso TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Favoritos TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Likes TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Reseña TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Seguidor TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spa_Acceso TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spa_Jugadores TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Likes TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Seguidor TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO jugadorGameLog;
+GO
+
+GRANT DELETE ON dbo.Likes TO jugadorGameLog;
+GO
+
+GRANT DELETE ON dbo.Pendientes TO jugadorGameLog;
+GO
+
+GRANT DELETE ON dbo.Favoritos TO jugadorGameLog;
+GO
+
+GRANT DELETE ON dbo.Seguidor TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON dbo.spb_BuscarJuegoPorId TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_BuscarJuegoPorNombre TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_BuscarJugador TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_BuscarLogin TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ConsultarJugadoresSeguidores TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ConsultarJugadoresSeguidos TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerIdDeAccesoPorCorreo TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerJuegosFavoritos TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerJuegosPendientes TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeJugador TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO jugadorGameLog;
+GO
+
+GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO jugadorGameLog;
+GO
+
