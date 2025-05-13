@@ -1,28 +1,19 @@
-
 CREATE DATABASE GameLogDB;
-
 GO
 
 USE GameLogDB;
-
 GO
 
 CREATE LOGIN adminGameLog WITH PASSWORD = 'ProvisionalPassword123.';
-
 GO
 
 CREATE LOGIN jugadorGameLog WITH PASSWORD = 'ProvisionalPassword123.';
-
 GO
-/****** Object:  User [adminGameLog]    Script Date: 07/05/2025 09:55:17 p. m. ******/
 
 CREATE USER [adminGameLog] FOR LOGIN [adminGameLog] WITH DEFAULT_SCHEMA=[dbo]
-
 GO
-/****** Object:  User [jugadorGameLog]    Script Date: 07/05/2025 09:55:17 p. m. ******/
 
 CREATE USER [jugadorGameLog] FOR LOGIN [jugadorGameLog] WITH DEFAULT_SCHEMA=[dbo]
-
 GO
 
 ALTER ROLE [db_owner] ADD MEMBER [adminGameLog]
@@ -40,6 +31,9 @@ GO
 ALTER ROLE [db_datawriter] ADD MEMBER [jugadorGameLog]
 GO
 
+USE [GameLogDB]
+GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -48,13 +42,13 @@ CREATE TABLE [dbo].[Likes](
 	[idJugador] [int] NOT NULL,
 	[idResenia] [int] NOT NULL,
 	[idLike] [int] IDENTITY(1,1) NOT NULL,
-CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
 (
 	[idLike] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  UserDefinedFunction [dbo].[fn_ObtenerLikesDeReseña]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -73,7 +67,7 @@ RETURN
 	GROUP BY idResenia
 )
 GO
-/****** Object:  Table [dbo].[Accesos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -90,7 +84,7 @@ CREATE TABLE [dbo].[Accesos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Favoritos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +99,7 @@ CREATE TABLE [dbo].[Favoritos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Juegos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  Table [dbo].[Juegos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -120,7 +114,7 @@ CREATE TABLE [dbo].[Juegos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Jugadores]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  Table [dbo].[Jugadores]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -140,7 +134,7 @@ CREATE TABLE [dbo].[Jugadores](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Pendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  Table [dbo].[Pendientes]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +149,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Reseñas]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  Table [dbo].[Reseñas]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -173,7 +167,7 @@ CREATE TABLE [dbo].[Reseñas](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Seguidor]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  Table [dbo].[Seguidor]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -184,7 +178,7 @@ CREATE TABLE [dbo].[Seguidor](
 	[idJugadorSeguido] [int] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TiposDeAccesos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  Table [dbo].[TiposDeAccesos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -259,7 +253,7 @@ REFERENCES [dbo].[Jugadores] ([idJugador])
 GO
 ALTER TABLE [dbo].[Seguidor] NOCHECK CONSTRAINT [Jugador-Seguidor]
 GO
-/****** Object:  StoredProcedure [dbo].[spa_Acceso]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spa_Acceso]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -306,7 +300,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spa_EstadoAccesos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spa_EstadoAccesos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -342,7 +336,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spa_Jugadores]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spa_Jugadores]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -396,7 +390,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_BuscarJuegoPorId]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_BuscarJuegoPorId]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -410,7 +404,7 @@ BEGIN
     WHERE j.idJuego = @idJuego;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_BuscarJuegoPorNombre]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_BuscarJuegoPorNombre]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -424,7 +418,7 @@ BEGIN
     WHERE j.nombre = @nombre;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_BuscarJugador]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_BuscarJugador]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -438,7 +432,7 @@ BEGIN
     WHERE j.nombreDeUsuario = @nombreDeUsuario;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_BuscarLogin]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_BuscarLogin]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -454,7 +448,7 @@ BEGIN
     WHERE a.correo = @correo AND a.contrasenia = @contrasenia;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ConsultarJugadoresSeguidores]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ConsultarJugadoresSeguidores]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -469,7 +463,7 @@ BEGIN
     WHERE s.idJugadorSeguido = @idJugadorSeguido;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ConsultarJugadoresSeguidos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ConsultarJugadoresSeguidos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -484,7 +478,7 @@ BEGIN
     WHERE s.idJugadorSeguidor = @idJugadorSeguidor;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_JuegosEnTendencia]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_JuegosEnTendencia]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -505,7 +499,7 @@ BEGIN
 	ORDER BY totalReseñas DESC;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_JuegosRevivalRetro]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_JuegosRevivalRetro]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -526,7 +520,7 @@ BEGIN
 	ORDER BY totalReseñas DESC;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ObtenerIdDeAccesoPorCorreo]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerIdDeAccesoPorCorreo]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -538,7 +532,7 @@ BEGIN
 	SELECT idCuenta FROM Accesos where correo = @correo;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ObtenerJuegosFavoritos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerJuegosFavoritos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -553,7 +547,7 @@ BEGIN
     WHERE  f.idJugador = @idJugador;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ObtenerJuegosPendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerJuegosPendientes]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -568,7 +562,7 @@ BEGIN
     WHERE  p.idJugador = @idJugador
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeJugador]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeJugador]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -584,7 +578,7 @@ BEGIN
     WHERE R.idJugador = @idJugador;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuego]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuego]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -601,7 +595,7 @@ BEGIN
     WHERE R.idJuego = @idJuego;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -620,7 +614,7 @@ BEGIN
     WHERE R.idJuego = @idJuego AND S.idJugadorSeguidor = @idJugador;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Acceso]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Acceso]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -655,7 +649,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Favorito]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Favorito]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -690,7 +684,7 @@ BEGIN TRY
 END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Juego]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Juego]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -726,7 +720,7 @@ BEGIN TRY
 END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Jugador]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Jugador]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -768,7 +762,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Likes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Likes]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -810,7 +804,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Pendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Pendientes]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -844,7 +838,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Reseñas]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Reseñas]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -877,7 +871,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Seguidor]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_Seguidor]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -911,15 +905,11 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Acceso]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Acceso]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
--- =============================================
--- Author:		<Chris>
--- Create date: <22-04-2025>
--- =============================================
 CREATE PROCEDURE [dbo].[spi_Acceso]
 	@correo varchar(255),
 	@contrasenia varchar(255),
@@ -978,7 +968,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Favoritos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Favoritos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1024,7 +1014,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Juegos]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Juegos]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1059,7 +1049,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Likes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Likes]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1109,16 +1099,11 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Pendientes]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Pendientes]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
 CREATE PROCEDURE [dbo].[spi_Pendientes]
 	@idJugador INT,
 	@idJuego INT,
@@ -1148,7 +1133,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Reseña]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Reseña]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1185,7 +1170,7 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Seguidor]    Script Date: 12/05/2025 07:59:40 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_Seguidor]    Script Date: 12/05/2025 08:50:49 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1219,6 +1204,7 @@ BEGIN
 	END CATCH
 END
 GO
+
 
 INSERT INTO TiposDeAccesos (tipoDeAcceso) VALUES ('Administrador'),('Jugador');
 GO
