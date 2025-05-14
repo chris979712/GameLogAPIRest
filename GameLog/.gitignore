@@ -7,3 +7,4 @@ coverage
 /APIgRPC/fotos
 /APIgRPC/env
 /APIgRPC/API/controllers/__pycache__
+/APIgRPC/API/ficheros/fotosDePerfil/__pycache__
