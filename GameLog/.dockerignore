@@ -5,3 +5,6 @@ api.http
 .gitignore
 /src/tests
 /src/serverTest.js
+/APIgRPC/env
+/APIgRPC/fotos
+/APIgRPC/API/controllers/__pycache__
