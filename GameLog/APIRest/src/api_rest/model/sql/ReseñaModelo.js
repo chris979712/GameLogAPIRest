@@ -45,9 +45,10 @@ export class ModeloReseña
         {
             const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
             conexion = await sql.connect(ConfiguracionConexion);
-            const {idJugador} = datos;
+            const {idJugador,idJugadorBuscador} = datos;
             const Solicitud = conexion.request();
             const ResultadoConsultaReseñasJugador = await Solicitud.input('idJugador',sql.Int,idJugador)
+                .input('idJugadorBuscador',sql.Int,idJugadorBuscador)
                 .execute('spb_ObtenerReseñasDeJugador');
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugador.recordset;
             if(ResultadoQueryReseñas.length >= 1)
@@ -81,9 +82,10 @@ export class ModeloReseña
         {
             const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
             conexion = await sql.connect(ConfiguracionConexion);
-            const {idJuego} = datos;
+            const {idJuego,idJugadorBuscador} = datos;
             const Solicitud = conexion.request();
             const ResultadoConsultaReseñasJugadores = await Solicitud.input('idJuego',sql.Int,idJuego)
+                .input('idJugadorBuscador',sql.Int,idJugadorBuscador)
                 .execute('spb_ObtenerReseñasDeUnJuego');
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugadores.recordset;
             if(ResultadoQueryReseñas.length >= 1)

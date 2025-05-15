@@ -1,11 +1,11 @@
 import request from "supertest";
 import { CrearServidorTest } from "../serverTest.js";
-import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
-import { ModeloLogin } from "../api_rest/model/sql/Login";
-import {ModeloSeguidor} from "../api_rest/model/sql/Seguidor.js";
-import {ModeloJuego} from "../api_rest/model/sql/Juego.js";
-import {ModeloReseña} from "../api_rest/model/sql/Reseña.js"
-import { ModeloLike } from "../api_rest/model/sql/Like.js";
+import { ModeloAcceso } from "../api_rest/model/sql/AccesoModelo.js";
+import { ModeloLogin } from "../api_rest/model/sql/LoginModelo.js";
+import {ModeloSeguidor} from "../api_rest/model/sql/SeguidorModelo.js";
+import {ModeloJuego} from "../api_rest/model/sql/JuegoModelo.js";
+import {ModeloReseña} from "../api_rest/model/sql/ReseñaModelo.js"
+import { ModeloLike } from "../api_rest/model/sql/LikeModelo.js";
 
 let servidor;
 let token;
@@ -144,7 +144,7 @@ beforeAll( async() =>
             "access_token": `Bearer ${token}`
         })
         .send(DatosReseñaTercerJugador);
-    const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${41437}`)
+    const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${41437}?idJugadorBuscador=${idPrimerJugador}`)
                 .set({
                     "access_token": `Bearer ${token}`
                 })

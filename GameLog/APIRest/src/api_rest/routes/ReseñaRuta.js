@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ReseñaControlador } from "../controllers/Reseña.js";
+import { ReseñaControlador } from "../controllers/ReseñaControlador.js";
 import { ValidarJwt } from '../middlewares/jwt.js';
 
 export const CrearRutaReseña =  ({ModeloReseña}) =>
@@ -121,6 +121,13 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *           type: integer
      *         description: ID del jugador del cual se quieren obtener las reseñas
      *         example: 12
+     *       - in: query
+     *         name: idJugadorBuscador
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: ID del jugador que realiza la búsqueda (Para validar si le ha dado like a alguna reseña obtenida)
+     *         example: 34  
      *     responses:
      *       200:
      *         description: Reseñas encontradas exitosamente
@@ -167,6 +174,9 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *                       totalDeLikes:
      *                         type: integer
      *                         example: 8
+     *                       existeLike:
+     *                         type: bit
+     *                         example: 0
      *       400:
      *         description: Error de validación en los parámetros de entrada
      *         content:
@@ -235,6 +245,13 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *           type: integer
      *         description: ID del juego del cual se desean obtener las reseñas
      *         example: 42
+     *       - in: query
+     *         name: idJugadorBuscador
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: ID del jugador que realiza la búsqueda (Para validar si le ha dado like a alguna reseña obtenida)
+     *         example: 34 
      *     responses:
      *       200:
      *         description: Reseñas encontradas exitosamente
@@ -287,6 +304,9 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *                       totalDeLikes:
      *                         type: integer
      *                         example: 14
+     *                       existeLike:
+     *                         type: bit
+     *                         example: 0
      *       400:
      *         description: Error de validación en los parámetros de entrada
      *         content:
@@ -414,6 +434,9 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *                       totalDeLikes:
      *                         type: integer
      *                         example: 8
+     *                       existeLike:
+     *                         type: bit
+     *                         example: 0
      *       400:
      *         description: Error de validación en los parámetros de entrada
      *         content:

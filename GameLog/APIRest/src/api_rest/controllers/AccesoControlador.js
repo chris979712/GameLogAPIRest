@@ -1,4 +1,4 @@
-import { ValidarEdicionParcialAcceso, ValidarEliminacionAcceso, ValidarInsercionAcceso, ValidarCredencialesAcceso } from "../schemas/Acceso.js";
+import { ValidarEdicionParcialAcceso, ValidarEliminacionAcceso, ValidarInsercionAcceso, ValidarCredencialesAcceso } from "../schemas/AccesoValidador.js";
 import { logger } from "../utilidades/logger.js";
 
 export class AccesoControlador

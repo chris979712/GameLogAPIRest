@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { SeguidorControlador } from "../controllers/Seguidor.js";
+import { SeguidorControlador } from "../controllers/SeguidorControlador.js";
 import { ValidarJwt } from "../middlewares/jwt.js";
 
 export const CrearRutaSeguidor = ({ModeloSeguidor}) =>

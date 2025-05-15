@@ -1,7 +1,7 @@
 import request from "supertest";
 import { CrearServidorTest } from "../serverTest.js";
-import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
-import { ModeloLogin } from "../api_rest/model/sql/Login.js";
+import { ModeloAcceso } from "../api_rest/model/sql/AccesoModelo.js";
+import { ModeloLogin } from "../api_rest/model/sql/LoginModelo.js";
 
 let servidor;
 let token;

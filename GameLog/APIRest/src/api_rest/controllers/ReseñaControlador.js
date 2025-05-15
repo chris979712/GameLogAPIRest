@@ -1,5 +1,5 @@
 import { logger } from "../utilidades/logger.js";
-import {ValidarDatosReseña,ValidarDatosBusquedaReseña} from '../schemas/Reseña.js';
+import {ValidarDatosReseña,ValidarDatosBusquedaReseña} from '../schemas/ReseñaValidador.js';
 
 export class ReseñaControlador
 {
@@ -65,7 +65,8 @@ export class ReseñaControlador
         {
             const {tipoDeUsuario} = req;
             const idJugador = parseInt(req.params.idJugador);
-            const Datos = {idJugador};
+            const idJugadorBuscador = parseInt(req.query.idJugadorBuscador);
+            const Datos = {idJugador,idJugadorBuscador};
             const ResultadoValidacion = ValidarDatosBusquedaReseña(Datos);
             if(ResultadoValidacion.success)
             {
@@ -108,7 +109,8 @@ export class ReseñaControlador
         {
             const {tipoDeUsuario} = req;
             const idJuego = parseInt(req.params.idJuego);
-            const Datos = {idJuego};
+            const idJugadorBuscador = parseInt(req.query.idJugadorBuscador);
+            const Datos = {idJuego,idJugadorBuscador};
             const ResultadoValidacion = ValidarDatosBusquedaReseña(Datos);
             if(ResultadoValidacion.success)
             {
@@ -151,7 +153,7 @@ export class ReseñaControlador
         {
             const {tipoDeUsuario} = req;
             const idJuego = parseInt(req.params.idJuego);
-            const idJugador = parseInt(req.query.idJugador)
+            const idJugador = parseInt(req.query.idJugador);
             const Datos = {idJuego,idJugador};
             const ResultadoValidacion = ValidarDatosBusquedaReseña(Datos);
             if(ResultadoValidacion.success)

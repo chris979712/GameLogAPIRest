@@ -13,6 +13,7 @@ const ReseñaEsquemaInsercion = zod.object(
 const ReseñaBusqueda = zod.object(
     {
         idJugador: zod.number({ invalid_type_error: 'El idJugador ingresado no es válido'}).int().positive(),
+        idJugadorBuscador: zod.number({invalid_type_error: 'El idJugadorBuscador ingresado no es válido'}),
         idJuego: zod.number({ invalid_type_error: 'El idJuego ingresado no es válido'}).int().positive(),
         idReseña: zod.number({ invalid_type_error: 'El idReseña ingresado no es válido'}).int().positive(),
     }

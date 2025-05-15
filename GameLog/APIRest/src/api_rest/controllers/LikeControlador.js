@@ -1,5 +1,5 @@
 import { logger } from "../utilidades/logger.js";
-import { ValidarLike } from "../schemas/Like.js";
+import { ValidarLike } from "../schemas/LikeValidador.js";
 
 export class LikeControlador
 {

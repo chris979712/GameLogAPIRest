@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { LikeControlador } from "../controllers/Like.js";
+import { LikeControlador } from "../controllers/LikeControlador.js";
 import { ValidarJwt } from '../middlewares/jwt.js';
 
 export const CrearRutaLike = ({ModeloLike}) =>

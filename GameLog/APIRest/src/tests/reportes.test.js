@@ -1,11 +1,11 @@
 import request from "supertest";
 import { CrearServidorTest } from "../serverTest.js";
-import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
-import { ModeloLogin } from "../api_rest/model/sql/Login";
-import {ModeloSeguidor} from "../api_rest/model/sql/Seguidor.js";
-import {ModeloJuego} from "../api_rest/model/sql/Juego.js";
-import {ModeloReseña} from "../api_rest/model/sql/Reseña.js"
-import { ModeloReportesEstadisticos } from "../api_rest/model/sql/Reportes.js";
+import { ModeloAcceso } from "../api_rest/model/sql/AccesoModelo.js";
+import { ModeloLogin } from "../api_rest/model/sql/LoginModelo.js";
+import {ModeloSeguidor} from "../api_rest/model/sql/SeguidorModelo.js";
+import {ModeloJuego} from "../api_rest/model/sql/JuegoModelo.js";
+import {ModeloReseña} from "../api_rest/model/sql/ReseñaModelo.js"
+import { ModeloReportesEstadisticos } from "../api_rest/model/sql/ReportesModelo.js";
 
 let servidor;
 let token;
@@ -280,38 +280,38 @@ beforeAll( async() =>
 
 afterAll( async() => 
 {
-    let resConsultaPrimerJuego = await request(servidor).get(`/gamelog/resena/juego/${41437}`)
+    let resConsultaPrimerJuego = await request(servidor).get(`/gamelog/resena/juego/${41437}?idJugadorBuscador=${idPrimerJugador}`)
         .set({
             "access_token": `Bearer ${token}`
         })
     let idPrimerJuegoPrimerReseña = resConsultaPrimerJuego.body.reseñas[0].idResenia;
     let idPrimerJuegoSegundaReseña = resConsultaPrimerJuego.body.reseñas[1].idResenia;
     let idPrimerJuegoTercerReseña = resConsultaPrimerJuego.body.reseñas[2].idResenia;
-    let resConsultaSegundoJuego = await request(servidor).get(`/gamelog/resena/juego/${10101}`)
+    let resConsultaSegundoJuego = await request(servidor).get(`/gamelog/resena/juego/${10101}?idJugadorBuscador=${idPrimerJugador}`)
         .set({
             "access_token": `Bearer ${token}`
         })
     let idSegundoJuegoPrimerReseña = resConsultaSegundoJuego.body.reseñas[0].idResenia;
     let idSegundoJuegoSegundaReseña = resConsultaSegundoJuego.body.reseñas[1].idResenia;
-    let resConsultaTercerJuego =await request(servidor).get(`/gamelog/resena/juego/${20202}`)
+    let resConsultaTercerJuego =await request(servidor).get(`/gamelog/resena/juego/${20202}?idJugadorBuscador=${idPrimerJugador}`)
         .set({
             "access_token": `Bearer ${token}`
         })
     let idTercerJuegoPrimerReseña = resConsultaTercerJuego.body.reseñas[0].idResenia;
-    let resConsultaCuartoJuego = await request(servidor).get(`/gamelog/resena/juego/${30303}`)
+    let resConsultaCuartoJuego = await request(servidor).get(`/gamelog/resena/juego/${30303}?idJugadorBuscador=${idPrimerJugador}`)
         .set({
             "access_token": `Bearer ${token}`
         })
     let idCuartoJuegoPrimerReseña = resConsultaCuartoJuego.body.reseñas[0].idResenia;
     let idCuartoJuegoSegundaReseña = resConsultaCuartoJuego.body.reseñas[1].idResenia;
     let idCuartoJuegoTercerReseña = resConsultaCuartoJuego.body.reseñas[2].idResenia;
-    let resConsultaQuintoJuego = await request(servidor).get(`/gamelog/resena/juego/${40404}`)
+    let resConsultaQuintoJuego = await request(servidor).get(`/gamelog/resena/juego/${40404}?idJugadorBuscador=${idPrimerJugador}`)
         .set({
             "access_token": `Bearer ${token}`
         })
     let idQuintoJuegoPrimerReseña = resConsultaQuintoJuego.body.reseñas[0].idResenia;
     let idQuintoJuegoSegundaReseña = resConsultaQuintoJuego.body.reseñas[1].idResenia;
-    let resConsultaSextoJuego =await request(servidor).get(`/gamelog/resena/juego/${50505}`)
+    let resConsultaSextoJuego =await request(servidor).get(`/gamelog/resena/juego/${50505}?idJugadorBuscador=${idPrimerJugador}`)
         .set({
             "access_token": `Bearer ${token}`
         })

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AccesoControlador } from "../controllers/Acceso.js";
+import { AccesoControlador } from "../controllers/AccesoControlador.js";
 import { ValidarJwt } from '../middlewares/jwt.js';
 
 export const CrearRutaAcceso = ({ModeloAcceso}) =>

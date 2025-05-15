@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ReportesEstadisticosControlador } from "../controllers/Reportes.js";
+import { ReportesEstadisticosControlador } from "../controllers/ReportesControlador.js";
 import { ValidarJwt } from "../middlewares/jwt.js";
 
 export const CrearRutaReportesEstadisticos = ({ModeloReportesEstadisticos}) =>

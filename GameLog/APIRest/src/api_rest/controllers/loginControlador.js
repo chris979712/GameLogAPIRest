@@ -1,4 +1,4 @@
-import { ValidarDatosLoginIngresados,ValidarRecuperacionCuenta } from "../schemas/Login.js";
+import { ValidarDatosLoginIngresados,ValidarRecuperacionCuenta } from "../schemas/LoginValidador.js";
 import { logger } from "../utilidades/logger.js";
 import { GenerarJWT } from "../utilidades/generadorjwt.js";
 import { EnviarCorreoDeVerificacion } from "../utilidades/Correo.js";

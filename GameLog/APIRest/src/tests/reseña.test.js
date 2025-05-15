@@ -1,10 +1,10 @@
 import request from "supertest";
 import { CrearServidorTest } from "../serverTest.js";
-import { ModeloAcceso } from "../api_rest/model/sql/Acceso.js";
-import { ModeloLogin } from "../api_rest/model/sql/Login";
-import {ModeloSeguidor} from "../api_rest/model/sql/Seguidor.js";
-import {ModeloJuego} from "../api_rest/model/sql/Juego.js";
-import {ModeloReseña} from "../api_rest/model/sql/Reseña.js"
+import { ModeloAcceso } from "../api_rest/model/sql/AccesoModelo.js";
+import { ModeloLogin } from "../api_rest/model/sql/LoginModelo.js";
+import {ModeloSeguidor} from "../api_rest/model/sql/SeguidorModelo.js";
+import {ModeloJuego} from "../api_rest/model/sql/JuegoModelo.js";
+import {ModeloReseña} from "../api_rest/model/sql/ReseñaModelo.js"
 
 let servidor;
 let token;
@@ -242,9 +242,9 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         expect(resInsercion.statusCode).toBe(400);
     })
 
-    test('GET /jugador/:idJugador - Obtener las reseñas realizadas por un jugador', async() =>
+    test('GET /jugador/:idJugador?idJugadorBuscador - Obtener las reseñas realizadas por un jugador', async() =>
     {
-        const resConsulta = await request(servidor).get(`/gamelog/resena/jugador/${idPrimerJugador}`)
+        const resConsulta = await request(servidor).get(`/gamelog/resena/jugador/${idPrimerJugador}?idJugadorBuscador=${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -252,9 +252,9 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         expect(resConsulta.body).toHaveProperty("reseñas");
     })
 
-    test('GET /jugador/:idJugador - Obtener reseñas inexistentes de un jugador', async() =>
+    test('GET /jugador/:idJugado?idJugadorBuscador- Obtener reseñas inexistentes de un jugador', async() =>
     {
-        const resConsulta = await request(servidor).get(`/gamelog/resena/jugador/${100}`)
+        const resConsulta = await request(servidor).get(`/gamelog/resena/jugador/${100}?idJugadorBuscador=${100}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -262,19 +262,19 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         expect(resConsulta.body).toHaveProperty("mensaje");
     })
 
-    test('GET /jugador/:idJugador - Obtener reseñas con parámetros inválidos', async() =>
+    test('GET /jugador/:idJugador?idJugadorBuscador - Obtener reseñas con parámetros inválidos', async() =>
     {
         const IdJugador = "AJIUI"
-        const resConsulta = await request(servidor).get(`/gamelog/resena/jugador/${IdJugador}`)
+        const resConsulta = await request(servidor).get(`/gamelog/resena/jugador/${IdJugador}?idJugadorBuscador=${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
         expect(resConsulta.statusCode).toBe(400);
     })
 
-    test('GET /Juego/:idJuego - Obtener reseñas generales de un juego en especifico por ID', async() =>
+    test('GET /Juego/:idJuego?idJugadorBuscador - Obtener reseñas generales de un juego en especifico por ID', async() =>
     {
-        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${41437}`)
+        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${41437}?idJugadorBuscador=${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -287,9 +287,9 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
 
     })
 
-    test('GET /Juego/:idJuego - Obtener reseñas generales inexistentes de un juego en especifico por ID', async() =>
+    test('GET /Juego/:idJuego?idJugadorBuscador - Obtener reseñas generales inexistentes de un juego en especifico por ID', async() =>
     {
-        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${90909}`)
+        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${90909}?idJugadorBuscador=${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -297,10 +297,10 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         expect(resConsulta.body).toHaveProperty("mensaje");
     })
 
-    test('GET /Juego/:idJuego - Obtener reseñas generales por parámetros inválidos', async() =>
+    test('GET /Juego/:idJuego?idJugadorBuscador - Obtener reseñas generales por parámetros inválidos', async() =>
     {
         const idJuego = "pkmsndauis"
-        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${idJuego}`)
+        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${idJuego}?idJugadorBuscador=${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })

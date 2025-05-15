@@ -1,4 +1,4 @@
-import { ValidarSeguidor, ValidarSeguidorParcial } from "../schemas/Seguidor.js";
+import { ValidarSeguidor, ValidarSeguidorParcial } from "../schemas/SeguidorValidador.js";
 import { logger } from "../utilidades/logger.js";
 
 export class SeguidorControlador

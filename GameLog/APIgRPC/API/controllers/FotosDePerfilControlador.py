@@ -11,6 +11,8 @@ class FotosDePerfilControlador(Fotos_De_Perfil_pb2_grpc.FotosDePerfilServicer):
         rutaFinalArchivo = os.path.join(carpetaDeFotos,f"{nombreDeUsuario}.jpg")
 
         try:
+            if os.path.exists(rutaFinalArchivo):
+                os.remove(rutaFinalArchivo)
             with open(rutaFinalArchivo,"wb") as archivo:
                 archivo.write(datosImagen)
         except Exception:

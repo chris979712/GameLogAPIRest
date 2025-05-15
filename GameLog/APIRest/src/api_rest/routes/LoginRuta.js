@@ -1,37 +1,44 @@
-import { Router } from 'express';
-import { JugadorControlador } from '../controllers/Jugador.js';
-import { ValidarJwt } from '../middlewares/jwt.js';
+import { Router } from "express";
+import { LoginControlador } from "../controllers/loginControlador.js";
 
-export const CrearRutaJugador = ({ModeloJugador}) => 
+export const CrearRutaLogin = ({ModeloLogin,ModeloAcceso}) =>
 {
     /**
      * @swagger
      * tags:
-     *  name: Jugador
-     *  description: Gestión de los perfiles de los jugadores.
+     *  name: Login
+     *  description: Rutas del inicio de sesion
      */
-    const JugadorEnrutador = Router();
-    const ControladorJugadorEnrutador = new JugadorControlador({ModeloJugador});
+
+    const LoginEnrutador = Router();
+    const ControladorLoginEnrutador = new LoginControlador({ModeloLogin,ModeloAcceso});
 
     /**
      * @swagger
-     * /jugador/{nombreDeUsuario}:
-     *   get:
-     *     summary: Buscar jugador por nombre de usuario
-     *     tags: [Jugador]
-     *     description: Retorna la información de un jugador a partir de su nombre de usuario si existe en el sistema.
-     *     security:
-     *       - bearerAuth: []
-     *     parameters:
-     *       - in: path
-     *         name: nombreDeUsuario
-     *         required: true
-     *         schema:
-     *           type: string
-     *         description: Nombre de usuario del jugador a buscar
+     * /login:
+     *   post:
+     *     summary: Iniciar sesión en la API
+     *     tags: [Login]
+     *     description: Verifica correo, contraseña y tipo de usuario para poder iniciar sesión en el API.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               correo:
+     *                 type: string
+     *                 example: usuario@gmail.com
+     *               contrasenia:
+     *                 type: string
+     *                 example: (contraseña encriptada)
+     *               tipoDeUsuario:
+     *                 type: string
+     *                 example: Administrador
      *     responses:
      *       200:
-     *         description: Jugador encontrado exitosamente
+     *         description: Inicio de sesión exitoso
      *         content:
      *           application/json:
      *             schema:
@@ -45,42 +52,136 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 200
      *                 cuenta:
      *                   type: array
-     *                   description: Información de la cuenta y del jugador
      *                   items:
      *                     type: object
      *                     properties:
      *                       idCuenta:
      *                         type: integer
-     *                         example: 12
+     *                         example: 21
      *                       correo:
      *                         type: string
-     *                         example: jugador@email.com
+     *                         example: usuarioprueba@gmail.com
      *                       estado:
      *                         type: string
-     *                         example: activo
+     *                         example: Desbaneado
+     *                       tipoDeAcceso:
+     *                         type: string
+     *                         example: Administrador
      *                       idJugador:
      *                         type: integer
-     *                         example: 5
+     *                         example: 21
      *                       nombre:
      *                         type: string
-     *                         example: Juan
+     *                         example: pruebaJuego
      *                       primerApellido:
      *                         type: string
-     *                         example: Pérez
+     *                         example: prueba
      *                       segundoApellido:
      *                         type: string
-     *                         example: Gómez
+     *                         example: prueba
      *                       nombreDeUsuario:
      *                         type: string
-     *                         example: juanperez123
+     *                         example: pruebaJuego
      *                       descripcion:
      *                         type: string
-     *                         example: Defensa central con gran experiencia.
+     *                         example: login
      *                       foto:
      *                         type: string
-     *                         example: foto.jpg
+     *                         example: login.jpg
      *       400:
-     *         description: Datos inválidos o mal formateados
+     *         description: Credenciales inválidas, datos inválidos o inexistentes
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 400
+     *                 mensaje:
+     *                   type: string
+     *                   example: Los campos ingresados son inválidos
+     *       404:
+     *         description: La cuenta no se ha encontrado dentro del sistema
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 404
+     *                 mensaje:
+     *                   type: string
+     *                   example: No se han encontrado las credenciales de acceso ingresadas
+     *       500:
+     *         description: Error interno en el servidor al querer iniciar sesión
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 500
+     *                 mensaje:
+     *                   type: string
+     *                   example: Ha ocurrido un error al buscar los datos de inicio de sesión
+     */
+    LoginEnrutador.post('/',ControladorLoginEnrutador.Login);
+
+    /**
+     * @swagger
+     * /login/recuperacionDeCuenta:
+     *   post:
+     *     summary: Solicita un código de verificación para recuperar contraseña
+     *     tags: [Login]
+     *     description: Envía un código de verificación al correo proporcionado para iniciar el proceso de recuperación de contraseña. No requiere autenticación.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - correo
+     *               - tipoDeUsuario
+     *             properties:
+     *               correo:
+     *                 type: string
+     *                 format: email
+     *                 example: usuario@ejemplo.com
+     *               tipoDeUsuario:
+     *                 type: string
+     *                 example: jugador
+     *     responses:
+     *       200:
+     *         description: Código de verificación enviado exitosamente
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: false
+     *                 estado:
+     *                   type: integer
+     *                   example: 200
+     *                 mensaje:
+     *                   type: string
+     *                   example: El correo con el código de verificación ha sido enviado de manera exitosa
+     *       400:
+     *         description: Error de validación en los datos enviados
      *         content:
      *           application/json:
      *             schema:
@@ -96,7 +197,7 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   type: object
      *                   description: Detalles de los errores de validación
      *       404:
-     *         description: Jugador no encontrado
+     *         description: Correo no registrado en el sistema
      *         content:
      *           application/json:
      *             schema:
@@ -110,7 +211,7 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 404
      *                 mensaje:
      *                   type: string
-     *                   example: No se ha encontrado el jugador deseado a buscar.
+     *                   example: El correo ingresado no se encuentra registrado dentro del sistema.
      *       500:
      *         description: Error interno del servidor
      *         content:
@@ -126,54 +227,41 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al querer buscar el jugador.
+     *                   example: Ha ocurrido un error al obtener un código de verificación.
      */
-    JugadorEnrutador.get('/:nombreDeUsuario',ValidarJwt,ControladorJugadorEnrutador.BuscarJugador);
-    
+    LoginEnrutador.post('/recuperacionDeCuenta',ControladorLoginEnrutador.SolicitudRecuperacionDeContraseña);
+
     /**
      * @swagger
-     * /jugador/{idJugador}:
-     *   put:
-     *     summary: Actualizar datos de perfil de un jugador
-     *     tags: [Jugador]
-     *     description: Permite actualizar la información del perfil de un jugador existente. Requiere autenticación mediante token JWT.
-     *     security:
-     *       - bearerAuth: []
-     *     parameters:
-     *       - in: path
-     *         name: idJugador
-     *         required: true
-     *         schema:
-     *           type: integer
-     *         description: ID del jugador a actualizar
+     * /login/recuperacionDeCuenta/validacion:
+     *   post:
+     *     summary: Valida el código de verificación enviado al correo
+     *     tags: [Login]
+     *     description: Valida si el código ingresado por el usuario es correcto y está vigente. No requiere autenticación.
      *     requestBody:
      *       required: true
      *       content:
      *         application/json:
      *           schema:
      *             type: object
+     *             required:
+     *               - correo
+     *               - codigo
+     *               - tipoDeUsuario
      *             properties:
-     *               nombre:
+     *               correo:
      *                 type: string
-     *                 example: Juan
-     *               primerApellido:
+     *                 format: email
+     *                 example: usuario@ejemplo.com
+     *               codigo:
+     *                 type: integer
+     *                 example: 123456
+     *               tipoDeUsuario:
      *                 type: string
-     *                 example: Pérez
-     *               segundoApellido:
-     *                 type: string
-     *                 example: Gómez
-     *               nombreDeUsuario:
-     *                 type: string
-     *                 example: juanperez123
-     *               descripcion:
-     *                 type: string
-     *                 example: Defensa central con gran experiencia.
-     *               foto:
-     *                 type: string
-     *                 example: foto.jpg
+     *                 example: jugador
      *     responses:
      *       200:
-     *         description: Jugador actualizado correctamente
+     *         description: Código válido
      *         content:
      *           application/json:
      *             schema:
@@ -187,9 +275,9 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 200
      *                 mensaje:
      *                   type: string
-     *                   example: "Los datos del jugador fueron actualizados exitosamente."
+     *                   example: Código de verificación válido
      *       400:
-     *         description: Datos inválidos o incompletos
+     *         description: Error de validación o código expirado/no solicitado
      *         content:
      *           application/json:
      *             schema:
@@ -203,82 +291,9 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 400
      *                 mensaje:
      *                   type: string
-     *                   description: 
-     *                    - "Detalles de los errores de validación"
-     *                    - "idJugador no encontrado"
-     *                    - "el nombre de usuario ingresado ya ha sido registrado previamente"
-     *       500:
-     *         description: Error interno del servidor o de base de datos
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 error:
-     *                   type: boolean
-     *                   example: true
-     *                 estado:
-     *                   type: integer
-     *                   example: 500
-     *                 mensaje:
-     *                   type: string
-     *                   example: 
-     *                     - "Ha ocurrido un error al querer actualizar los datos del jugador."
-     *                     - "Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso"
-     */
-    JugadorEnrutador.put('/:idJugador',ValidarJwt,ControladorJugadorEnrutador.ActualizarJugador);
-
-    /**
-     * @swagger
-     * /jugador/{idJugador}:
-     *   delete:
-     *     summary: Eliminar un jugador por su ID
-     *     tags: [Jugador]
-     *     description: Elimina un jugador del sistema según su ID. Solo usuarios autenticados pueden realizar esta acción.
-     *     security:
-     *       - bearerAuth: []
-     *     parameters:
-     *       - in: path
-     *         name: idJugador
-     *         required: true
-     *         schema:
-     *           type: integer
-     *         description: ID del jugador a eliminar
-     *     responses:
-     *       200:
-     *         description: Jugador eliminado correctamente
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 error:
-     *                   type: boolean
-     *                   example: false
-     *                 estado:
-     *                   type: integer
-     *                   example: 200
-     *                 mensaje:
-     *                   type: string
-     *                   example: El jugador fue eliminado exitosamente.
-     *       400:
-     *         description: Datos inválidos o mal formateados
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 error:
-     *                   type: boolean
-     *                   example: true
-     *                 estado:
-     *                   type: integer
-     *                   example: 400
-     *                 mensaje:
-     *                   type: object
-     *                   description: Detalles de los errores de validación
+     *                   example: El código ingresado ha expirado.
      *       404:
-     *         description: Jugador no encontrado
+     *         description: Código incorrecto o no solicitado
      *         content:
      *           application/json:
      *             schema:
@@ -292,9 +307,9 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 404
      *                 mensaje:
      *                   type: string
-     *                   example: No se ha encontrado el jugador a eliminar.
+     *                   example: El código ingresado no es correcto.
      *       500:
-     *         description: Error interno del servidor o error en base de datos
+     *         description: Error interno del servidor
      *         content:
      *           application/json:
      *             schema:
@@ -308,9 +323,9 @@ export const CrearRutaJugador = ({ModeloJugador}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al querer borrar el jugador.
+     *                   example: Ha ocurrido un error al verificar un código de verificación.
      */
-    JugadorEnrutador.delete('/:idJugador',ValidarJwt,ControladorJugadorEnrutador.EliminarJugador);
+    LoginEnrutador.post('/recuperacionDeCuenta/validacion',ControladorLoginEnrutador.ValidarCodigoDeVerificacion)
 
-    return JugadorEnrutador;
+    return LoginEnrutador;
 }

@@ -1,12 +1,12 @@
 import express, { json } from 'express';
-import { CrearRutaAcceso } from './api_rest/routes/Acceso.js';
-import { CrearRutaLogin } from './api_rest/routes/Login.js';
-import { CrearRutaJugador } from './api_rest/routes/Jugador.js';
-import { CrearRutaJuego } from './api_rest/routes/Juego.js';
-import { CrearRutaSeguidor } from './api_rest/routes/Seguidor.js';
-import { CrearRutaReseña } from './api_rest/routes/Reseña.js';
-import { CrearRutaLike } from './api_rest/routes/Like.js';
-import { CrearRutaReportesEstadisticos } from './api_rest/routes/Reportes.js';
+import { CrearRutaAcceso } from './api_rest/routes/AccesoRuta.js';
+import { CrearRutaLogin } from './api_rest/routes/LoginRuta.js';
+import { CrearRutaJugador } from './api_rest/routes/JugadorRuta.js';
+import { CrearRutaJuego } from './api_rest/routes/JuegoRuta.js';
+import { CrearRutaSeguidor } from './api_rest/routes/SeguidorRuta.js';
+import { CrearRutaReseña } from './api_rest/routes/ReseñaRuta.js';
+import { CrearRutaLike } from './api_rest/routes/LikeRuta.js';
+import { CrearRutaReportesEstadisticos } from './api_rest/routes/ReportesRuta.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 

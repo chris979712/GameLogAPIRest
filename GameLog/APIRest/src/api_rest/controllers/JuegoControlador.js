@@ -1,4 +1,4 @@
-import { ValidarJuego, ValidarJuegoJugador, ValidarJuegoJugadorParcial, ValidarJuegoParcial } from "../schemas/Juego.js";
+import { ValidarJuego, ValidarJuegoJugador, ValidarJuegoJugadorParcial, ValidarJuegoParcial } from "../schemas/JuegoValidador.js";
 import { logger } from "../utilidades/logger.js";
 
 export class JuegoControlador

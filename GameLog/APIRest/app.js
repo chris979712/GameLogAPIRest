@@ -1,12 +1,12 @@
 import { CrearServidor } from "./src/server.js";
-import { ModeloAcceso } from "./src/api_rest/model/sql/Acceso.js";
-import {ModeloLogin} from "./src/api_rest/model/sql/Login.js";
-import {ModeloJugador} from "./src/api_rest/model/sql/Jugador.js";
-import {ModeloJuego} from './src/api_rest/model/sql/Juego.js';
-import {ModeloReseña} from "./src/api_rest/model/sql/Reseña.js";
-import {ModeloSeguidor} from "./src/api_rest/model/sql/Seguidor.js";
-import { ModeloLike } from "./src/api_rest/model/sql/Like.js";
-import { ModeloReportesEstadisticos } from "./src/api_rest/model/sql/Reportes.js";
+import { ModeloAcceso } from "./src/api_rest/model/sql/AccesoModelo.js";
+import {ModeloLogin} from "./src/api_rest/model/sql/LoginModelo.js";
+import {ModeloJugador} from "./src/api_rest/model/sql/JugadorModelo.js";
+import {ModeloJuego} from './src/api_rest/model/sql/JuegoModelo.js';
+import {ModeloReseña} from "./src/api_rest/model/sql/ReseñaModelo.js";
+import {ModeloSeguidor} from "./src/api_rest/model/sql/SeguidorModelo.js";
+import { ModeloLike } from "./src/api_rest/model/sql/LikeModelo.js";
+import { ModeloReportesEstadisticos } from "./src/api_rest/model/sql/ReportesModelo.js";
 
 CrearServidor({ModeloAcceso : ModeloAcceso, 
     ModeloLogin: ModeloLogin, 
