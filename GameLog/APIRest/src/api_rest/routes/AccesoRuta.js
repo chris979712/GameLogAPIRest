@@ -196,7 +196,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                     - Ha ocurrido un error al obtener los datos del usuario.
      *                     - Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso
      */
-    AccesoEnrutador.get('/:correo',ValidarJwt,ControladorAccesoEnrutador.ObtenerIDDeCuentaDeAcceso);
+    AccesoEnrutador.get('/:correo',ControladorAccesoEnrutador.ObtenerIDDeCuentaDeAcceso);
 
     /**
      * @swagger
@@ -279,7 +279,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   type: string
      *                   example: "Ha ocurrido un error al editar el acceso del usuario."
      */
-    AccesoEnrutador.put('/:idAcceso',ValidarJwt,ControladorAccesoEnrutador.EditarAcceso);
+    AccesoEnrutador.put('/:idAcceso',ControladorAccesoEnrutador.EditarAcceso);
 
     /**
      * @swagger
