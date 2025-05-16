@@ -83,6 +83,18 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         expect(resLogin.statusCode).toBe(400);
     })
 
+    test('POST /login - Se intenta acceder a la API con datos inválidos', async() => {
+        const DatosUsuario = 
+        {
+            correo: "'p´llpfa",
+            contrasenia: " ",
+            tipoDeUsuario: "Administrador"
+        }
+        const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
+        console.log(resLogin.body)
+        expect(resLogin.statusCode).toBe(400);
+    })
+
     test('POST /login/recuperacionDeCuenta - Se intenta obtener un código de verificación para cambiar las credenciales de acceso', async() => {
         const DatosUsuario = 
         {

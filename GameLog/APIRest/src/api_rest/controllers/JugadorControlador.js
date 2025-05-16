@@ -46,7 +46,7 @@ export class JugadorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: ResultadoValidacion.error.formErrors
+                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
                 });
             }
         }
@@ -88,7 +88,7 @@ export class JugadorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: ResultadoValidacion.error.formErrors
+                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
                 });
             }
         }
@@ -141,7 +141,7 @@ export class JugadorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: ResultadoValidacion.error.formErrors
+                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
                 });
             }
         }
