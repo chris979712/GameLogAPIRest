@@ -1300,7 +1300,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spd_Likes TO jugadorGameLog;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.spi_JuegosTO jugadorGameLog;
+GRANT EXECUTE ON OBJECT::dbo.spi_Juegos TO jugadorGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spd_Seguidor TO jugadorGameLog;
