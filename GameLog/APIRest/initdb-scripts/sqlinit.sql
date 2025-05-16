@@ -1285,6 +1285,12 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spi_Seguidor TO jugadorGameLog;
 GO
 
+GRANT EXECUTE ON OBJECT::dbo.spi_Pendientes TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Pendientes TO jugadorGameLog;
+GO
+
 GRANT EXECUTE ON OBJECT::dbo.spa_Acceso TO jugadorGameLog;
 GO
 
