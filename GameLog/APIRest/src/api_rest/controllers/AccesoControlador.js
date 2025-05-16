@@ -63,7 +63,7 @@ export class AccesoControlador
         try
         {
             const correo = req.params.correo;
-            const {tipoDeUsuario} = req;
+            const {tipoDeUsuario} = req.query;
             const Datos = {correo};
             const ResultadoValidacion = ValidarCredencialesAcceso(Datos);
             if(ResultadoValidacion.success)
@@ -108,8 +108,7 @@ export class AccesoControlador
         try
         {
             const idAcceso = parseInt(req.params.idAcceso);
-            const {correo,contrasenia} = req.body;
-            const {tipoDeUsuario} = req;
+            const {correo,contrasenia,tipoDeUsuario} = req.body;
             const Datos = {idAcceso, correo, contrasenia, tipoDeUsuario};
             const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
@@ -141,7 +140,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }
@@ -197,7 +196,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: ResultadoValidacion.error.formErrors
                 });
             }
         }

@@ -3,6 +3,7 @@ import { logger } from "../utilidades/logger.js";
 import { GenerarJWT } from "../utilidades/generadorjwt.js";
 import { EnviarCorreoDeVerificacion } from "../utilidades/Correo.js";
 import path from 'path';
+import { ObtenerDirectorioActual } from "../utilidades/Directorio.js";
 
 export class LoginControlador
 {
@@ -75,6 +76,7 @@ export class LoginControlador
             const ResultadoValidacion = ValidarRecuperacionCuenta(Datos);
             if(ResultadoValidacion.success)
             {
+                const __dirname = ObtenerDirectorioActual(import.meta.url);
                 const ResultadoConsulta = await this.modeloAcceso.ObtenerIdDeAccesoPorCorreo({datos: ResultadoValidacion.data, tipoDeUsuario:tipoDeUsuario})
                 let resultadoConsulta = parseInt(ResultadoConsulta.estado);
                 if(resultadoConsulta===200)

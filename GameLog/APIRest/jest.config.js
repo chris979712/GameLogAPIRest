@@ -16,5 +16,4 @@ export default {
     "!app.js"
   ],
   coverageReporters: ["text", "lcov"]
-  };
-  
+};

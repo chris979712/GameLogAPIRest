@@ -130,8 +130,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('GET /acceso/:correo - Se intenta obtener el id de una cuenta inexistente', async() => 
         {
             const correo = "chrisvasquez404@gmail.com";
+            const tipoDeUsuario = "Administrador";
             const resIdUsuario = await request(servidor)
-            .get(`/gamelog/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -151,8 +152,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('PUT /acceso/:id - Se editan las credenciales de acceso de una cuenta existente', async () => 
     {
         const correo = "oscarcito666@gmail.com";
+        const tipoDeUsuario = "Administrador";
         const resIdUsuario = await request(servidor)
-            .get(`/gamelog/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -206,8 +208,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
     test('PATCH /acceso/:id - Se edita el estado de la cuenta de acceso a Baneado o Desbaneado', async() => 
     {
         const correo = "chrisvasquez777@gmail.com";
+        const tipoDeUsuario = "Administrador"
         const resIdUsuario = await request(servidor)
-            .get(`/gamelog/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -260,8 +263,9 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
 
     test("DELETE /acceso/:id - Elimina de la base de datos una cuenta", async () => {
         const correo = "chrisvasquez777@gmail.com";
+        const tipoDeUsuario = "Administrador"
         const resIdUsuario = await request(servidor)
-            .get(`/gamelog/acceso/${correo}`)
+            .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
             .set({
                 "access_token": `Bearer ${token}`
             });

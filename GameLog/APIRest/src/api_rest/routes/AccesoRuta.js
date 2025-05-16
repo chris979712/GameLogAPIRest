@@ -127,6 +127,12 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *         schema:
      *           type: string
      *         description: Correo electrónico del usuario
+     *       - in: query
+     *         name: tipoDeUsuario
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: tipo de usuario a ingresar al sistema
      *     responses:
      *       200:
      *         description: ID de acceso encontrado
@@ -204,9 +210,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *   put:
      *     summary: Editar datos de acceso (correo y/o contraseña)
      *     tags: [Acceso]
-     *     description: Permite editar el correo y/o contraseña de una cuenta de acceso existente. Requiere autenticación mediante token JWT.
-     *     security:
-     *       - bearerAuth: []
+     *     description: Permite editar el correo y/o contraseña de una cuenta de acceso existente.
      *     parameters:
      *       - in: path
      *         name: idAcceso
@@ -227,6 +231,9 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *               contrasenia:
      *                 type: string
      *                 example: nueva_contrasenia_encriptada
+     *               tipoDeUsuario
+     *                 type: string
+     *                 example: jugador
      *     responses:
      *       200:
      *         description: Edición exitosa
