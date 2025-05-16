@@ -5,7 +5,7 @@ const ReseñaEsquemaInsercion = zod.object(
     {
         idJugador: zod.number({ invalid_type_error: 'El idJugador ingresado no es válido',required_error: 'El idJugador es un campo requerido' }).int().positive(),
         idJuego: zod.number({ invalid_type_error: 'El idJuego ingresado no es válido',required_error: 'El idJuego es un campo requerido' }).int().positive(),
-        opinion: zod.string({ invalid_type_error: 'La opinión ingresada no es válido',required_error: 'El opinión es un campo requerido'}).min(1).max(200).regex(SoloLetrasNumerosCaracteres),
+        opinion: zod.string({ invalid_type_error: 'La opinión ingresada no es válido'}).min(1).max(200).regex(SoloLetrasNumerosCaracteres).nullable(),
         calificacion: zod.number({ invalid_type_error: 'La calificacion ingresada no es válido',required_error: 'La calificacion es un campo requerido' }).min(0).max(5)
     }
 )
