@@ -140,7 +140,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: ResultadoValidacion.error.formErrors
+                    mensaje: "Datos a ingresar inválidos, por favor verifique que los datos a mandar sean correctos"
                 });
             }
         }
@@ -196,7 +196,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: ResultadoValidacion.error.formErrors
+                    mensaje: "Datos a ingresar inválidos, por favor verifique que los datos a mandar sean correctos"
                 });
             }
         }

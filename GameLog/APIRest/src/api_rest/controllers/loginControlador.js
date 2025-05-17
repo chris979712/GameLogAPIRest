@@ -149,6 +149,7 @@ export class LoginControlador
                         error: false,
                         estado: 200,
                         mensaje: 'El correo con el código de verificación ha sido enviado de manera exitosa',
+                        idAcceso: ResultadoConsulta.idAcceso,
                         codigo: Codigo //El código se puso en la respuesta para fines de pruebas, en producción o despliegue, será eliminadod  el código
                     })
                     

@@ -180,6 +180,9 @@ export const CrearRutaLogin = ({ModeloLogin,ModeloAcceso}) =>
      *                 mensaje:
      *                   type: string
      *                   example: El correo con el código de verificación ha sido enviado de manera exitosa
+     *                 idAcceso:
+     *                   type: int
+     *                   example: 1
      *       400:
      *         description: Error de validación en los datos enviados
      *         content:
