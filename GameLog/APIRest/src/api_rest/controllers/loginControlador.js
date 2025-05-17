@@ -38,15 +38,26 @@ export class LoginControlador
                     let resultadoConsulta = parseInt(ResultadoConsulta.estado);
                     if(resultadoConsulta === 200)
                     {
-                        const DatosUsuario = {correo, tipoDeUsuario};
-                        const token = await GenerarJWT(DatosUsuario);
-                        UsuariosActivos[correo] = { tipoDeUsuario, token };
-                        res.header('access_token',token);
-                        res.status(200).json({
-                            error: false,
-                            estado: resultadoConsulta,
-                            cuenta: ResultadoConsulta.cuenta
-                        })
+                        if(ResultadoConsulta.cuenta[0].estado==="Baneado")
+                        {
+                            res.status(401).json({
+                                error: false,
+                                estado: 401,
+                                cuenta: "Usuario baneado, su cuenta se encuentra baneada, no es posible acceder a la aplicación."
+                            })
+                        }
+                        else{
+                            const DatosUsuario = {correo, tipoDeUsuario};
+                            const token = await GenerarJWT(DatosUsuario);
+                            UsuariosActivos[correo] = { tipoDeUsuario, token };
+                            res.header('access_token',token);
+                            res.status(200).json({
+                                error: false,
+                                estado: resultadoConsulta,
+                                cuenta: ResultadoConsulta.cuenta
+                            })
+                        }
+                        
                     }
                     else
                     {

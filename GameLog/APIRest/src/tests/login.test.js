@@ -25,6 +25,20 @@ beforeAll(async () =>
         tipoDeUsuario: "Administrador"
     };
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datos);
+    const datosUsuario = 
+    {
+        correo: "chrisvasquez986@gmail.com",
+        contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        estado: "Baneado",
+        nombre: "pruebaLogin",
+        primerApellido: "prueba",
+        segundoApellido: "prueba",
+        nombreDeUsuario: "pruebaBaneado",
+        descripcion: "login",
+        foto: "login.jpg",
+        tipoDeUsuario: "Administrador"
+    };
+    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosUsuario);
 })
 
 afterAll(async() => 
@@ -47,6 +61,23 @@ afterAll(async() =>
             "access_token": `Bearer ${token}`
         })
         .send(datosEliminacion);
+    const correoSegundoJugador = "chrisvasquez986@gmail.com";
+    const resIdSegundoUsuario = await request(servidor)
+        .get(`/gamelog/acceso/${correoSegundoJugador}?tipoDeUsuario=${tipoDeUsuario}`)
+        .set({
+            "access_token": `Bearer ${token}`
+        })
+    const idSegundoAcceso = resIdSegundoUsuario.body.idAcceso;
+    const datosSegundaEliminacion = {
+            tipoDeUsuario: "Administrador",
+            correo: "chrisvasquez986@gmail.com"
+        }
+    await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
+        .set({
+            "Content-Type": "application/json",
+            "access_token": `Bearer ${token}`
+        })
+        .send(datosSegundaEliminacion);
     servidor.close();
 })
 
@@ -66,6 +97,17 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         token = resLogin.headers['access_token'];
     })
 
+    test('POST /login - Se intenta acceder a la API con una contraseña baneada', async() => {
+        const DatosUsuario = 
+        {
+            correo: "chrisvasquez986@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            tipoDeUsuario: "Administrador"
+        }
+        const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
+        expect(resLogin.statusCode).toBe(401);
+    })
+
     test('POST /login - Se intenta volver a acceder a la API Rest desde una cuenta que ya tiene una sesión activa', async() => {
         const DatosUsuario = 
         {
@@ -81,12 +123,12 @@ describe('Test para probar el login de cuentas a la API REST', () =>
     test('POST /login - Se intenta acceder a la API desde una cuenta que no está registrada en la base de datos', async() => {
         const DatosUsuario = 
         {
-            correo: "vasquezchris986@gmail.com",
+            correo: "vasquezchris987@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
         const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
-        expect(resLogin.body.mensaje).toBe("No se ha encontrado la cuenta a buscar dentro del sistema");
+        expect(resLogin.body.mensaje).toBe("Credenciales incorrectas, no se ha encontrado encontrado la cuenta a ingresar.");
         expect(resLogin.statusCode).toBe(404);
     })
 
@@ -121,7 +163,7 @@ describe('Test para probar el login de cuentas a la API REST', () =>
     test('POST /login/recuperacionDeCuenta - Se intenta obtener un código de verificación para cambiar las credenciales de acceso de un correo no registrado', async() => {
         const DatosUsuario = 
         {
-            correo: "vasquezchris986@gmail.com",
+            correo: "vasquezchris987@gmail.com",
             tipoDeUsuario: "Administrador"
         }
         const resRecuperacionDeCuenta = await request(servidor).post('/gamelog/login/recuperacionDeCuenta').set("Content-Type","application/json").send(DatosUsuario);
@@ -155,7 +197,7 @@ describe('Test para probar el login de cuentas a la API REST', () =>
     {
         const DatosUsuario = 
         {
-            correo: "vasquezchris986@gmail.com",
+            correo: "vasquezchris987@gmail.com",
             tipoDeUsuario: "Administrador",
             codigo: 123456
         }

@@ -26,7 +26,7 @@ export class ModeloLogin
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado la cuenta a buscar dentro del sistema'};
+                resultadoConsulta = {estado: 404, mensaje: 'Credenciales incorrectas, no se ha encontrado encontrado la cuenta a ingresar.'};
             }
         }
         catch(error)

@@ -292,7 +292,7 @@ BEGIN
 	BEGIN TRY
 		IF EXISTS (SELECT * FROM Accesos WHERE idCuenta = @idAcceso)
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM Accesos WHERE correo = @correo)
+			IF NOT EXISTS (SELECT * FROM Accesos WHERE correo = @correo AND idCuenta <> @idAcceso)
 			BEGIN
 				BEGIN TRANSACTION
 					UPDATE Accesos
@@ -1348,4 +1348,59 @@ GO
 
 GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO jugadorGameLog;
 GO
+
+DECLARE	@resultado int,
+		@mensaje nvarchar(max);
+
+EXEC	[dbo].[spi_Acceso]
+		@correo = N'chrisvasquez985@gmail.com',
+		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
+		@estado = N'Desbaneado',
+		@nombre = N'Christopher',
+		@primerApellido = N'Vasquez',
+		@segundoApellido = N'Zapata',
+		@nombreDeUsuario = N'christolin',
+		@descripcion = N'Primer usuario',
+		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
+		@tipoDeAcceso = N'Jugador',
+		@resultado = @resultado OUTPUT,
+		@mensaje = @mensaje OUTPUT
+GO
+
+DECLARE	@resultado int,
+		@mensaje nvarchar(max);
+
+EXEC	[dbo].[spi_Acceso]
+		@correo = N'mario@gmail.com',
+		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
+		@estado = N'Desbaneado',
+		@nombre = N'Mario',
+		@primerApellido = N'Limon',
+		@segundoApellido = N'Cabrera',
+		@nombreDeUsuario = N'mariofei',
+		@descripcion = N'Segundo usuario gamelog',
+		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
+		@tipoDeAcceso = N'Administrador',
+		@resultado = @resultado OUTPUT,
+		@mensaje = @mensaje OUTPUT
+GO
+
+DECLARE	@resultado int,
+		@mensaje nvarchar(max);
+
+EXEC	[dbo].[spi_Acceso]
+		@correo = N'oscar@gmail.com',
+		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
+		@estado = N'Desbaneado',
+		@nombre = N'Oscar Hizay',
+		@primerApellido = N'Apodaca',
+		@segundoApellido = N'Garcia',
+		@nombreDeUsuario = N'oscarin',
+		@descripcion = N'Tercer usuario gamelog',
+		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
+		@tipoDeAcceso = N'Jugador',
+		@resultado = @resultado OUTPUT,
+		@mensaje = @mensaje OUTPUT
+GO
+
 
