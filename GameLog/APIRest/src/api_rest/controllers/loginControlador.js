@@ -43,7 +43,7 @@ export class LoginControlador
                             res.status(401).json({
                                 error: false,
                                 estado: 401,
-                                cuenta: "Usuario baneado, su cuenta se encuentra baneada, no es posible acceder a la aplicación."
+                                mensaje: "Usuario baneado, su cuenta se encuentra baneada, no es posible acceder a la aplicación."
                             })
                         }
                         else{

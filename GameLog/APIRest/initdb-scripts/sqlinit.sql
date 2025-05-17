@@ -1391,7 +1391,7 @@ DECLARE	@resultado int,
 EXEC	[dbo].[spi_Acceso]
 		@correo = N'oscar@gmail.com',
 		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
-		@estado = N'Desbaneado',
+		@estado = N'Baneado',
 		@nombre = N'Oscar Hizay',
 		@primerApellido = N'Apodaca',
 		@segundoApellido = N'Garcia',
