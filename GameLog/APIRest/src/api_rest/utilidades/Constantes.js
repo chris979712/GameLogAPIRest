@@ -20,3 +20,5 @@ export function MensajeDeRetornoBaseDeDatosAcceso({datos})
     return {resultado, mensaje};
 }
 
+export const UsuariosActivos = {};
+

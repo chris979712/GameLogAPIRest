@@ -22,7 +22,7 @@ beforeAll( async() =>
     servidor = servidorCreado;
     const datosPrimerJugador =
     {
-        correo: "chris@gmail.com",
+        correo: "chrislike@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "chris",
@@ -35,7 +35,7 @@ beforeAll( async() =>
     };
     const datosSegundoJugador =
     {
-        correo: "oscar@gmail.com",
+        correo: "oscarlike@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "oscar",
@@ -48,7 +48,7 @@ beforeAll( async() =>
     };
     const datosTercerJugador =
     {
-        correo: "mario@gmail.com",
+        correo: "mariolike@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "Mario Miguel",
@@ -64,19 +64,19 @@ beforeAll( async() =>
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosTercerJugador);
     const datosPrimerJugadorLogin =
     {
-        correo: "chris@gmail.com",
+        correo: "chrislike@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
     const datosSegundoJugadorLogin =
     {
-        correo: "oscar@gmail.com",
+        correo: "oscarlike@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
     const datosTercerJugadorLogin =
     {
-        correo: "mario@gmail.com",
+        correo: "mariolike@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
@@ -155,36 +155,6 @@ beforeAll( async() =>
 
 afterAll( async() =>
 {
-    const datosEliminacionPrimerJugador = {
-        tipoDeUsuario: "Administrador",
-        correo: "chris@gmail.com"
-    }
-    const datosEliminacionSegundoJugador = {
-        tipoDeUsuario: "Administrador",
-        correo: "oscar@gmail.com"
-    }
-    const datosEliminacionTercerJugador = {
-        tipoDeUsuario: "Administrador",
-        correo: "mario@gmail.com"
-    }
-    await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
-            .set({
-                "Content-Type": "application/json",
-                "access_token": `Bearer ${token}`
-            })
-            .send(datosEliminacionPrimerJugador);
-    await request(servidor).delete(`/gamelog/acceso/${idSegundoJugador}`)
-            .set({
-                "Content-Type": "application/json",
-                "access_token": `Bearer ${token}`
-            })
-            .send(datosEliminacionSegundoJugador);
-    await request(servidor).delete(`/gamelog/acceso/${idTercerJugador}`)
-            .set({
-                "Content-Type": "application/json",
-                "access_token": `Bearer ${token}`
-            })
-            .send(datosEliminacionTercerJugador); 
     await request(servidor).delete(`/gamelog/seguidor/${idPrimerJugador}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
@@ -207,6 +177,36 @@ afterAll( async() =>
         .set({
             "access_token": `Bearer ${token}`
         }) 
+    const datosEliminacionPrimerJugador = {
+        tipoDeUsuario: "Administrador",
+        correo: "chrislike@gmail.com"
+    }
+    const datosEliminacionSegundoJugador = {
+        tipoDeUsuario: "Administrador",
+        correo: "oscarlike@gmail.com"
+    }
+    const datosEliminacionTercerJugador = {
+        tipoDeUsuario: "Administrador",
+        correo: "mariolike@gmail.com"
+    }
+    await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
+            .send(datosEliminacionPrimerJugador);
+    await request(servidor).delete(`/gamelog/acceso/${idSegundoJugador}`)
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
+            .send(datosEliminacionSegundoJugador);
+    await request(servidor).delete(`/gamelog/acceso/${idTercerJugador}`)
+            .set({
+                "Content-Type": "application/json",
+                "access_token": `Bearer ${token}`
+            })
+            .send(datosEliminacionTercerJugador); 
     servidor.close();
 })
 

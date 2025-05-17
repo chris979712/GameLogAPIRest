@@ -66,6 +66,18 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         token = resLogin.headers['access_token'];
     })
 
+    test('POST /login - Se intenta volver a acceder a la API Rest desde una cuenta que ya tiene una sesión activa', async() => {
+        const DatosUsuario = 
+        {
+            correo: "chrisvasquez985@gmail.com",
+            contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            tipoDeUsuario: "Administrador"
+        }
+        const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
+        console.log(resLogin.body);
+        expect(resLogin.statusCode).toBe(401);
+    })
+
     test('POST /login - Se intenta acceder a la API desde una cuenta que no está registrada en la base de datos', async() => {
         const DatosUsuario = 
         {
@@ -175,6 +187,26 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         }
         const resValidacion = await request(servidor).post('/gamelog/login/recuperacionDeCuenta/validacion').set("Content-Type","application/json").send(DatosUsuario);
         expect(resValidacion.statusCode).toBe(400);
+    })
+
+    test('DELETE /login/logout/:correo - Se cierra la sesión de una cuenta activa dentrol API',async() =>{
+        const correo = "chrisvasquez985@gmail.com";
+        const resEliminacion = await request(servidor).delete(`/gamelog/login/logout/${correo}`).set("Content-Type","application/json");
+        console.log(resEliminacion.body);
+        expect(resEliminacion.statusCode).toBe(200);
+    })
+
+    test('DELETE /login/logout/:correo - Se intenta cerrar la sesión de una cuenta sin sesión activa dentro de la API',async() =>{
+        const correo = "chrisvasquez985@gmail.com";
+        const resEliminacion = await request(servidor).delete(`/gamelog/login/logout/${correo}`).set("Content-Type","application/json");
+        console.log(resEliminacion.body);
+        expect(resEliminacion.statusCode).toBe(404);
+    })
+
+    test('DELETE /login/logout/:correo - Se intenta cerrar la sesión de una cuenta ingresando datos inválidos',async() =>{
+        const correo = '😊';
+        const resEliminacion = await request(servidor).delete(`/gamelog/login/logout/${correo}`).set("Content-Type","application/json");
+        expect(resEliminacion.statusCode).toBe(400);
     })
 
 })

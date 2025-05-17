@@ -327,5 +327,89 @@ export const CrearRutaLogin = ({ModeloLogin,ModeloAcceso}) =>
      */
     LoginEnrutador.post('/recuperacionDeCuenta/validacion',ControladorLoginEnrutador.ValidarCodigoDeVerificacion)
 
+    /**
+     * @swagger
+     * /login/logout/:correo:
+     *   delete:
+     *     summary: Cerrar sesión de un usuario
+     *     description: Elimina la sesión activa de un usuario utilizando su correo como identificador.
+     *     tags:
+     *       - [Login]
+     *     parameters:
+     *       - name: correo
+     *         in: path
+     *         required: true
+     *         description: Correo del usuario cuya sesión se desea cerrar
+     *         schema:
+     *           type: string
+     *           format: email
+     *     responses:
+     *       200:
+     *         description: Sesión cerrada correctamente
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: false
+     *                 estado:
+     *                   type: integer
+     *                   example: 200
+     *                 mensaje:
+     *                   type: string
+     *                   example: Sesión de usuario cerrada
+     *       400:
+     *         description: Datos inválidos en la solicitud
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 400
+     *                 mensaje:
+     *                   type: string
+     *                   example: Campos inválidos, por favor verifique que sean correctos.
+     *       404:
+     *         description: No hay sesión activa para el usuario
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 404
+     *                 mensaje:
+     *                   type: string
+     *                   example: El usuario no tenía una sesión activa la cual pueda cerrarse
+     *       500:
+     *         description: Error interno del servidor al cerrar sesión
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: boolean
+     *                   example: true
+     *                 estado:
+     *                   type: integer
+     *                   example: 500
+     *                 mensaje:
+     *                   type: string
+     *                   example: Ha ocurrido un error al querer cerrar la sesión del usuario
+     */
+    LoginEnrutador.delete('/logout/:correo',ControladorLoginEnrutador.LogOut);
+
     return LoginEnrutador;
 }

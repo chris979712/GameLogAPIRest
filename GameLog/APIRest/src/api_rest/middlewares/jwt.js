@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import {request,response} from 'express';
 import { logger } from '../utilidades/logger.js';
+import { UsuariosActivos } from '../utilidades/Constantes.js';
 
 export const ValidarJwt = (request,response, next) =>
 {
@@ -29,11 +29,16 @@ export const ValidarJwt = (request,response, next) =>
     }
     catch(error)
     {
+        const Token = request.header('access_token')?.split(' ')[1];
+        const payload = jwt.decode(Token);
+        if (UsuariosActivos[payload?.correo]) {
+            delete UsuariosActivos[payload?.correo];
+        }
         logger(error);
         response.status(401).json({
             error: true,
             estado: 401,
-            mensaje: 'Token inválido'
+            mensaje: 'Token inválido, será redirigido al menú principal. Por favor vuelva a iniciar sesión en la aplicación.'
         })
     }
 }

@@ -12,7 +12,7 @@ beforeAll(async () => {
     servidor = servidorCreado;
     const datos = 
         {
-            correo: "usuarioprueba@gmail.com",
+            correo: "usuariopruebaacceso@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             estado: "Desbaneado",
             nombre: "pruebaAcceso",
@@ -26,7 +26,7 @@ beforeAll(async () => {
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datos);
     const DatosUsuario = 
         {
-            correo: "usuarioprueba@gmail.com",
+            correo: "usuariopruebaacceso@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
@@ -35,7 +35,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    const correo = "usuarioprueba@gmail.com";
+    const correo = "usuariopruebaacceso@gmail.com";
     const tipoDeUsuario = "Administrador";
     const resIdUsuario = await request(servidor)
         .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
@@ -45,7 +45,7 @@ afterAll(async () => {
     const idAcceso = resIdUsuario.body.idAcceso;
     const datosEliminacion = {
             tipoDeUsuario: "Administrador",
-            correo: "usuarioprueba@gmail.com"
+            correo: "usuariopruebaacceso@gmail.com"
         }
     await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
         .set({
@@ -259,6 +259,24 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
                 "access_token": `Bearer ${token}`
             });
         expect(resEdicion.statusCode).toBe(500);
+    });
+
+    test("PATCH /acceso/:id - Se intenta editar el estado de una cuenta sin un token de verificacion", async () => {
+        const resEdicion = await request(servidor)
+            .patch(`/gamelog/acceso/${null}`);
+        console.log(resEdicion.body);
+        expect(resEdicion.statusCode).toBe(401);
+    });
+
+    test("PATCH /acceso/:id - Se intenta editar el estado de una cuenta con un token de verificacion inválido", async () => {
+        const tokeninvalido = process.env.TOKEN_INVALIDO;
+        const resEdicion = await request(servidor)
+            .patch(`/gamelog/acceso/${null}`)
+            .set({
+                "access_token": `Bearer ${tokeninvalido}`
+            });
+        console.log(resEdicion.body);
+        expect(resEdicion.statusCode).toBe(401);
     });
 
     test("DELETE /acceso/:id - Elimina de la base de datos una cuenta", async () => {

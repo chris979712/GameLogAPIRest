@@ -21,7 +21,7 @@ beforeAll( async() =>
     servidor = servidorCreado;
     const datosPrimerJugador =
     {
-        correo: "chris@gmail.com",
+        correo: "chrisresena@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "chris",
@@ -34,7 +34,7 @@ beforeAll( async() =>
     };
     const datosSegundoJugador =
     {
-        correo: "oscar@gmail.com",
+        correo: "oscarresena@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "oscar",
@@ -47,7 +47,7 @@ beforeAll( async() =>
     };
     const datosTercerJugador =
     {
-        correo: "mario@gmail.com",
+        correo: "marioresena@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "Mario Miguel",
@@ -58,24 +58,25 @@ beforeAll( async() =>
         foto: "login.jpg",
         tipoDeUsuario: "Administrador"
     };
-    await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosPrimerJugador);
+    const resInsercion = await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosPrimerJugador);
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosSegundoJugador);
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosTercerJugador);
+    console.log(resInsercion.body)
     const datosPrimerJugadorLogin =
     {
-        correo: "chris@gmail.com",
+        correo: "chrisresena@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
     const datosSegundoJugadorLogin =
     {
-        correo: "oscar@gmail.com",
+        correo: "oscarresena@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
     const datosTercerJugadorLogin =
     {
-        correo: "mario@gmail.com",
+        correo: "marioresena@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
@@ -113,15 +114,15 @@ afterAll( async() =>
 {
     const datosEliminacionPrimerJugador = {
         tipoDeUsuario: "Administrador",
-        correo: "chris@gmail.com"
+        correo: "chrisresena@gmail.com"
     }
     const datosEliminacionSegundoJugador = {
         tipoDeUsuario: "Administrador",
-        correo: "oscar@gmail.com"
+        correo: "oscarresena@gmail.com"
     }
     const datosEliminacionTercerJugador = {
         tipoDeUsuario: "Administrador",
-        correo: "mario@gmail.com"
+        correo: "marioresena@gmail.com"
     }
     await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
             .set({

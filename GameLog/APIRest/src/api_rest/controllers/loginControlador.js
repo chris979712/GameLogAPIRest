@@ -1,9 +1,10 @@
-import { ValidarDatosLoginIngresados,ValidarRecuperacionCuenta } from "../schemas/LoginValidador.js";
+import { ValidarDatosLoginIngresados,ValidarRecuperacionCuenta,ValidarDatosLoginParcialIngresados } from "../schemas/LoginValidador.js";
 import { logger } from "../utilidades/logger.js";
 import { GenerarJWT } from "../utilidades/generadorjwt.js";
 import { EnviarCorreoDeVerificacion } from "../utilidades/Correo.js";
 import path from 'path';
 import { ObtenerDirectorioActual } from "../utilidades/Directorio.js";
+import { UsuariosActivos } from "../utilidades/Constantes.js";
 
 export class LoginControlador
 {
@@ -23,26 +24,38 @@ export class LoginControlador
             const ResultadoValidacion = ValidarDatosLoginIngresados(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoConsulta = await this.modeloLogin.Login({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
-                let resultadoConsulta = parseInt(ResultadoConsulta.estado);
-                if(resultadoConsulta === 200)
+                if (UsuariosActivos[correo]) 
                 {
-                    const DatosUsuario = {correo, tipoDeUsuario};
-                    const token = await GenerarJWT(DatosUsuario);
-                    res.header('access_token',token);
-                    res.json({
-                        error: false,
-                        estado: resultadoConsulta,
-                        cuenta: ResultadoConsulta.cuenta
+                    res.status(401).json({
+                        error: true,
+                        estado: 401,
+                        mensaje: 'El usuario ya tiene una sesión activa, cierre sesión desde el otro dispositivo para iniciar sesión aquí.'
                     })
                 }
                 else
                 {
-                    res.status(resultadoConsulta).json({
-                        error: true,
-                        estado: resultadoConsulta,
-                        mensaje: ResultadoConsulta.mensaje
-                    })
+                    const ResultadoConsulta = await this.modeloLogin.Login({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
+                    let resultadoConsulta = parseInt(ResultadoConsulta.estado);
+                    if(resultadoConsulta === 200)
+                    {
+                        const DatosUsuario = {correo, tipoDeUsuario};
+                        const token = await GenerarJWT(DatosUsuario);
+                        UsuariosActivos[correo] = { tipoDeUsuario, token };
+                        res.header('access_token',token);
+                        res.status(200).json({
+                            error: false,
+                            estado: resultadoConsulta,
+                            cuenta: ResultadoConsulta.cuenta
+                        })
+                    }
+                    else
+                    {
+                        res.status(resultadoConsulta).json({
+                            error: true,
+                            estado: resultadoConsulta,
+                            mensaje: ResultadoConsulta.mensaje
+                        })
+                    }
                 }
             }
             else
@@ -64,6 +77,50 @@ export class LoginControlador
                 mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
             }
             )
+        }
+    }
+
+    LogOut = (req, res) =>
+    {
+        try
+        {
+            const correo = req.params.correo;
+            const Datos = {correo};
+            const ResultadoValidacion = ValidarDatosLoginParcialIngresados(Datos);
+            if(ResultadoValidacion.success)
+            {
+                if (UsuariosActivos[correo]) {
+                    delete UsuariosActivos[correo];
+                    res.status(200).json({
+                        error: false,
+                        estado: 200,
+                        mensaje: "Sesión de usuario cerrada"
+                    });
+                } else {
+                    res.status(404).json({
+                        error: true,
+                        estado: 404,
+                        mensaje: "El usuario no tenía una sesión activa la cual pueda cerrarse"
+                    });
+                }
+            }
+            else
+            {
+                res.status(400).json({
+                    error: true,
+                    estado: 400,
+                    mensaje: ResultadoValidacion.error.formErrors.fieldErrors
+                });
+            }
+        }
+        catch(error)
+        {
+            logger({mensaje: error});
+            res.status(500).json({
+                error: true,
+                estado: 500,
+                mensaje: 'Ha ocurrido un error al querer cerrar la sesión del usuario'
+            })
         }
     }
 

@@ -11,7 +11,7 @@ class FotosDePerfilControlador(Fotos_De_Perfil_pb2_grpc.FotosDePerfilServicer):
         rutaFinalArchivo = os.path.join(carpetaDeFotos,f"{nombreDeUsuario}.jpg")
 
         try:
-            if os.path.exists(rutaFinalArchivo):
+            if os.path.exists(rutaFinalArchivo) and os.path.abspath(rutaFinalArchivo)!=os.path.abspath(os.getenv("RUTAFOTOPORDEFECTO")):
                 os.remove(rutaFinalArchivo)
             with open(rutaFinalArchivo,"wb") as archivo:
                 archivo.write(datosImagen)
@@ -49,8 +49,9 @@ class FotosDePerfilControlador(Fotos_De_Perfil_pb2_grpc.FotosDePerfilServicer):
         rutaFinalArchivo = os.path.join(carpetaDeFotos,f"{nombreDeUsuario}.jpg")
 
         try:
-            if os.path.exists(rutaImagenAntigua) or os.path.abspath(rutaImagenAntigua) != os.path.abspath(rutaFinalArchivo):
-                os.remove(rutaImagenAntigua)
+            if os.path.abspath(rutaImagenAntigua) != os.path.abspath(os.getenv("RUTAFOTOPORDEFECTO")):
+                if os.path.exists(rutaImagenAntigua) or os.path.abspath(rutaImagenAntigua) != os.path.abspath(rutaFinalArchivo):
+                    os.remove(rutaImagenAntigua)
             with open(rutaFinalArchivo,"wb") as archivo:
                 archivo.write(datosNuevaImagen)
         except Exception as e:

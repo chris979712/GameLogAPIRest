@@ -22,6 +22,11 @@ export function ValidarDatosLoginIngresados(entrada)
     return LoginEsquema.safeParse(entrada);
 }
 
+export function ValidarDatosLoginParcialIngresados(entrada)
+{
+    return LoginEsquema.partial().safeParse(entrada);
+}
+
 export function ValidarRecuperacionCuenta(entrada)
 {
     return RecuperacionCuentaEsquema.partial().safeParse(entrada);

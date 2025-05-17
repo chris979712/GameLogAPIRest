@@ -14,7 +14,7 @@ beforeAll(async () =>
     servidor = servidorCreado;
     const datos = 
         {
-            correo: "usuarioprueba@gmail.com",
+            correo: "usuariopruebajugador@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             estado: "Desbaneado",
             nombre: "pruebaJugador",
@@ -28,7 +28,7 @@ beforeAll(async () =>
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datos);
     const DatosUsuario = 
         {
-            correo: "usuarioprueba@gmail.com",
+            correo: "usuariopruebajugador@gmail.com",
             contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
             tipoDeUsuario: "Administrador"
         }
@@ -40,7 +40,7 @@ beforeAll(async () =>
 
 afterAll(async() => 
 {
-    const correo = "usuarioprueba@gmail.com";
+    const correo = "usuariopruebajugador@gmail.com";
     const tipoDeUsuario = "Administrador";
     const resIdUsuario = await request(servidor)
         .get(`/gamelog/acceso/${correo}?tipoDeUsuario=${tipoDeUsuario}`)
@@ -50,7 +50,7 @@ afterAll(async() =>
     const idAcceso = resIdUsuario.body.idAcceso;
     const datosEliminacion = {
             tipoDeUsuario: "Administrador",
-            correo: "usuarioprueba@gmail.com"
+            correo: "usuariopruebajugador@gmail.com"
         }
     await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
         .set({
