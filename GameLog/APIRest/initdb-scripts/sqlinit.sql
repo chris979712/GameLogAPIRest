@@ -1349,8 +1349,8 @@ GO
 GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO jugadorGameLog;
 GO
 
-DECLARE	@resultado int,
-		@mensaje nvarchar(max);
+DECLARE	@resultadoTercerInsercion int,
+		@mensajeTecerInsercion nvarchar(max);
 
 EXEC	[dbo].[spi_Acceso]
 		@correo = N'chrisvasquez985@gmail.com',
@@ -1363,12 +1363,12 @@ EXEC	[dbo].[spi_Acceso]
 		@descripcion = N'Primer usuario',
 		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
 		@tipoDeAcceso = N'Jugador',
-		@resultado = @resultado OUTPUT,
-		@mensaje = @mensaje OUTPUT
+		@resultado = @resultadoTercerInsercion OUTPUT,
+		@mensaje = @mensajeTecerInsercion OUTPUT
 GO
 
-DECLARE	@resultado int,
-		@mensaje nvarchar(max);
+DECLARE	@resultadoSegundaInsercion int,
+		@mensajeSegundaInsercion nvarchar(max);
 
 EXEC	[dbo].[spi_Acceso]
 		@correo = N'mario@gmail.com',
@@ -1381,12 +1381,12 @@ EXEC	[dbo].[spi_Acceso]
 		@descripcion = N'Segundo usuario gamelog',
 		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
 		@tipoDeAcceso = N'Administrador',
-		@resultado = @resultado OUTPUT,
-		@mensaje = @mensaje OUTPUT
+		@resultado = @resultadoSegundaInsercion OUTPUT,
+		@mensaje = @mensajeSegundaInsercion OUTPUT
 GO
 
-DECLARE	@resultado int,
-		@mensaje nvarchar(max);
+DECLARE	@resultadoPrimerInserscion int,
+		@mensajePrimerInsercion nvarchar(max);
 
 EXEC	[dbo].[spi_Acceso]
 		@correo = N'oscar@gmail.com',
@@ -1399,8 +1399,8 @@ EXEC	[dbo].[spi_Acceso]
 		@descripcion = N'Tercer usuario gamelog',
 		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
 		@tipoDeAcceso = N'Jugador',
-		@resultado = @resultado OUTPUT,
-		@mensaje = @mensaje OUTPUT
+		@resultado = @mensajePrimerInsercion OUTPUT,
+		@mensaje = @mensajePrimerInsercion OUTPUT
 GO
 
 
