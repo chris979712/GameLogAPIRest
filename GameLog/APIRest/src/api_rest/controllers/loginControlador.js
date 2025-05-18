@@ -206,7 +206,6 @@ export class LoginControlador
             if(ResultadoValidacion.success)
             {
                 const SolicitudValidacion = this.CodigosDeVerificacion[correo];
-                console.log(SolicitudValidacion)
                 if(SolicitudValidacion)
                 {
                     if(SolicitudValidacion.expiracion < Date.now())

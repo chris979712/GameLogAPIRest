@@ -121,7 +121,7 @@ export class AccesoControlador
                     res.status(resultadoEdicion).json(
                         {
                             error: true,
-                            estado: ResultadoEdicion.resultado,
+                            estado: ResultadoEdicion.estado,
                             mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
                         });
                 }
