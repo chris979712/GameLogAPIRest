@@ -275,7 +275,8 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
 
     test('GET /Juego/:idJuego?idJugadorBuscador - Obtener reseñas generales de un juego en especifico por ID', async() =>
     {
-        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${41437}?idJugadorBuscador=${idPrimerJugador}`)
+        console.log("Buscar reseñas de un juego")
+        const resConsulta = await request(servidor).get(`/gamelog/resena/juego/${41437}?idJugadorBuscador=${idTercerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             })

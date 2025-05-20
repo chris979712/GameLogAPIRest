@@ -30,7 +30,7 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *           schema:
      *             type: object
      *             properties:
-     *               idResenia:
+     *               idResena:
      *                 type: integer
      *                 description: ID de la reseña a la que se desea dar like
      *                 example: 12
