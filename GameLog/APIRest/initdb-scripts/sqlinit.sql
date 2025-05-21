@@ -1017,7 +1017,10 @@ BEGIN
 		END
 	END TRY
 	BEGIN CATCH
-		ROLLBACK TRANSACTION
+		IF XACT_STATE() <> 0
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
 		SET @resultado = 500;
 		SET @mensaje = 'Error: '+ERROR_MESSAGE();
 	END CATCH
@@ -1283,6 +1286,12 @@ GRANT EXECUTE ON OBJECT::dbo.spi_Reseña TO jugadorGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Seguidor TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spb_JuegosRevivalRetro TO jugadorGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spb_JuegosEnTendencia TO jugadorGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Pendientes TO jugadorGameLog;
