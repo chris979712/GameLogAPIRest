@@ -7,7 +7,7 @@ export const ValidarJwt = (request,response, next) =>
     try
     {
         const HeaderAutenticacion = request.header('authorization') || request.header('access_token');
-        const Token = HeaderAutenticacion && HeaderAutenticacion.startsWith('Bearer ')
+        const Token = HeaderAutenticacion.startsWith('Bearer ')
             ? HeaderAutenticacion.split(' ')[1]
             : null;
         if(Token)

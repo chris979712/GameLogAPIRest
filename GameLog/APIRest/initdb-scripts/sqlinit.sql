@@ -1170,18 +1170,26 @@ CREATE PROCEDURE [dbo].[spi_Pendientes]
 AS
 BEGIN
 	BEGIN TRY
-		IF NOT EXISTS (SELECT * FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador)
+		IF NOT EXISTS (SELECT * FROM Reseñas WHERE idJugador = @idJugador AND idJuego = @idJuego)
 		BEGIN
-			BEGIN TRANSACTION
-				INSERT INTO Pendientes (idJuego,idJugador) VALUES (@idJuego,@idJugador);
-			COMMIT TRANSACTION
-			SET @estado = 200;
-			SET @mensaje = 'El juego ha sido guardado como pendiente, de manera éxitosa';
+			IF NOT EXISTS (SELECT * FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador)
+			BEGIN
+				BEGIN TRANSACTION
+					INSERT INTO Pendientes (idJuego,idJugador) VALUES (@idJuego,@idJugador);
+				COMMIT TRANSACTION
+				SET @estado = 200;
+				SET @mensaje = 'El juego ha sido guardado como pendiente, de manera éxitosa';
+			END
+			ELSE
+			BEGIN
+				SET @estado = 400;
+				SET @mensaje = 'El juego a guardar como pendiente ya ha sido guardado previamente como pendiente';
+			END
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'El juego a guardar como pendiente ya ha sido guardado previamente como pendiente';
+			SET @mensaje = 'Juego ya reseñado. No se puede realizar más de una reseña a un juego ya reseñado.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -1211,6 +1219,7 @@ BEGIN
 		BEGIN
 			BEGIN TRANSACTION
 				INSERT INTO Reseñas (idJugador,idJuego,fecha,opinion,calificacion) VALUES (@idJugador,@idJuego,CAST(GETDATE() AS DATE),@opinion,@calificacion);
+				DELETE FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador;
 			COMMIT TRANSACTION
 			SET @estado = 200;
 			SET @mensaje = 'Se ha registrado la reseña de manera correcta';
