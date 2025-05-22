@@ -1364,7 +1364,98 @@ GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO jugadorGameLog;
 GO
 
-GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO jugadorGameLog;
+GRANT EXECUTE ON OBJECT::dbo.spi_Acceso TO adminGameLog
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Favoritos TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Likes TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Reseña TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Seguidor TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spb_JuegosRevivalRetro TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spb_JuegosEnTendencia TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Pendientes TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Pendientes TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spa_Acceso TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spa_Jugadores TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Likes TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spi_Juegos TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Seguidor TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO adminGameLog;
+GO
+
+GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO adminGameLog;
+GO
+
+GRANT DELETE ON dbo.Likes TO adminGameLog;
+GO
+
+GRANT DELETE ON dbo.Pendientes TO adminGameLog;
+GO
+
+GRANT DELETE ON dbo.Favoritos TO adminGameLog;
+GO
+
+GRANT DELETE ON dbo.Seguidor TO adminGameLog;
+GO
+
+GRANT DELETE ON dbo.Reseñas TO adminGameLog;
+GO
+
+GRANT EXECUTE ON dbo.spd_Reseñas TO adminGameLog;
+GO
+
+GRANT EXECUTE ON dbo.spb_BuscarJuegoPorId TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_BuscarJuegoPorNombre TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_BuscarJugador TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_BuscarLogin TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ConsultarJugadoresSeguidores TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ConsultarJugadoresSeguidos TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerIdDeAccesoPorCorreo TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerJuegosFavoritos TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerJuegosPendientes TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeJugador TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO adminGameLog;
+GO
+
+GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO adminGameLog;
 GO
 
 DECLARE	@resultadoTercerInsercion int,

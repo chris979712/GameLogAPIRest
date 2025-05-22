@@ -87,7 +87,7 @@ export class LikeControlador
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
                         estado: resultadoEliminacion,
-                        mensaje: resultadoEliminacion.mensaje
+                        mensaje: ResultadoEliminacion.mensaje
                     });
                 }
             }
