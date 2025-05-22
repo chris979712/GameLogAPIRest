@@ -1363,6 +1363,8 @@ GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO jugadorGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO jugadorGameLog;
 GO
+GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO jugadorGameLog;
+GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Acceso TO adminGameLog
 GO
@@ -1409,9 +1411,6 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO adminGameLog;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO adminGameLog;
-GO
-
 GRANT DELETE ON dbo.Likes TO adminGameLog;
 GO
 
@@ -1425,9 +1424,6 @@ GRANT DELETE ON dbo.Seguidor TO adminGameLog;
 GO
 
 GRANT DELETE ON dbo.Reseñas TO adminGameLog;
-GO
-
-GRANT EXECUTE ON dbo.spd_Reseñas TO adminGameLog;
 GO
 
 GRANT EXECUTE ON dbo.spb_BuscarJuegoPorId TO adminGameLog;
@@ -1454,7 +1450,6 @@ GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO adminGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO adminGameLog;
 GO
-
 GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO adminGameLog;
 GO
 
