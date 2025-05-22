@@ -231,7 +231,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *               contrasenia:
      *                 type: string
      *                 example: nueva_contrasenia_encriptada
-     *               tipoDeUsuario
+     *               tipoDeUsuario:
      *                 type: string
      *                 example: jugador
      *     responses:
@@ -294,7 +294,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *   patch:
      *     summary: Edita el estado de un usuario a Baneado o Desbaneado, requiere autenticación JWT.
      *     tags: [Acceso]
-     *     description: Permite cambiar las credenciales de acceso de una cuenta de un jugador
+     *     description: Permite cambiar el estad de acceso de una cuenta de un jugador a Baneado o Desbaneado
      *     security:
      *       - bearerAuth: []
      *     parameters:
@@ -311,15 +311,12 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *           schema:
      *             type: object
      *             properties:
-     *               correo:
+     *               estadoAcceso:
      *                 type: string
-     *                 example: usuario@gmail.com
-     *               contrasenia:
-     *                 type: string
-     *                 example: contraseña encriptada
+     *                 example: Desbaneado
      *     responses:
      *       200:
-     *         description: Credenciales actualizadas de manera correcta
+     *         description: Estado de la cuenta actualizado correctamente
      *         content:
      *           application/json:
      *             schema:
@@ -367,7 +364,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al editar las credenciales de acceso
+     *                   example: Ha ocurrido un error al editar el estado de acceso
      */
     AccesoEnrutador.patch('/:idAcceso',ValidarJwt,ControladorAccesoEnrutador.EditarEstadoAcceso);
 
