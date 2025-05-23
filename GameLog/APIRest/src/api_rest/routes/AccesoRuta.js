@@ -301,7 +301,7 @@ export const CrearRutaAcceso = ({ModeloAcceso}) =>
      *       - in: path
      *         name: idAcceso
      *         required: true
-     *         description: ID de la cuenta de acceso cuyas credenciales se desea modificar
+     *         description: ID de la cuenta de acceso cuyo acceso se desea modificar
      *         schema:
      *           type: integer
      *     requestBody:
