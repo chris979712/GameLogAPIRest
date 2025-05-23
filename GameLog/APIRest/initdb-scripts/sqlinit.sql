@@ -378,7 +378,7 @@ BEGIN
 	BEGIN TRY
 		IF EXISTS (SELECT * FROM Jugadores WHERE idJugador = @idJugador)
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM Jugadores WHERE nombreDeUsuario = @nombreDeUsuario )
+			IF NOT EXISTS (SELECT * FROM Jugadores WHERE nombreDeUsuario = @nombreDeUsuario  AND idJugador <> @idJugador)
 			BEGIN
 				BEGIN TRANSACTION
 					UPDATE Jugadores 

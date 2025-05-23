@@ -27,7 +27,7 @@ export class JugadorControlador
                     res.status(resultadoEdicion).json(
                     {
                         error: true,
-                        estado: ResultadoEdicion.resultado,
+                        estado: ResultadoEdicion.estado,
                         mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
                     });
                 }
@@ -36,7 +36,7 @@ export class JugadorControlador
                     res.status(resultadoEdicion).json(
                     {
                         error: resultadoEdicion !== 200,
-                        estado: ResultadoEdicion.resultado,
+                        estado: ResultadoEdicion.estado,
                         mensaje: ResultadoEdicion.mensaje
                     });
                 }
@@ -131,7 +131,7 @@ export class JugadorControlador
                     res.status(resultadoEliminacion).json(
                     {
                         error: resultadoEliminacion !== 200,
-                        estado: ResultadoEliminacion.resultado,
+                        estado: ResultadoEliminacion.estado,
                         mensaje: ResultadoEliminacion.mensaje
                     });
                 }
