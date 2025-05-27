@@ -16,6 +16,7 @@ export class SeguidorControlador
             const {tipoDeUsuario} = req;
             if(ResultadoValidacion.success)
             {
+                console.log(ResultadoValidacion.data)
                 const ResultadoInsercion = await this.modeloSeguidor.RegistrarJugadorASeguir({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario})
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
                 if(resultadoInsercion === 500)

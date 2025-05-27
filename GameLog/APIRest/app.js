@@ -7,6 +7,7 @@ import {ModeloReseña} from "./src/api_rest/model/sql/ReseñaModelo.js";
 import {ModeloSeguidor} from "./src/api_rest/model/sql/SeguidorModelo.js";
 import { ModeloLike } from "./src/api_rest/model/sql/LikeModelo.js";
 import { ModeloReportesEstadisticos } from "./src/api_rest/model/sql/ReportesModelo.js";
+import { ModeloNotificacion } from "./src/api_rest/model/sql/NotificacionModelo.js";
 
 CrearServidor({ModeloAcceso : ModeloAcceso, 
     ModeloLogin: ModeloLogin, 
@@ -15,4 +16,6 @@ CrearServidor({ModeloAcceso : ModeloAcceso,
     ModeloReseña:ModeloReseña,
     ModeloSeguidor:ModeloSeguidor,
     ModeloLike:ModeloLike,
-    ModeloReportesEstadisticos:ModeloReportesEstadisticos});
+    ModeloReportesEstadisticos:ModeloReportesEstadisticos,
+    ModeloNotificacion:ModeloNotificacion
+});

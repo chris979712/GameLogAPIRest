@@ -6,11 +6,12 @@ import { CrearRutaJuego } from './api_rest/routes/JuegoRuta.js';
 import { CrearRutaSeguidor } from './api_rest/routes/SeguidorRuta.js';
 import { CrearRutaReseña } from './api_rest/routes/ReseñaRuta.js';
 import { CrearRutaLike } from './api_rest/routes/LikeRuta.js';
+import { CrearRutaNotificacion } from './api_rest/routes/NotificacionRuta.js';
 import { CrearRutaReportesEstadisticos } from './api_rest/routes/ReportesRuta.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike,ModeloReportesEstadisticos}) => {
+export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike,ModeloReportesEstadisticos,ModeloNotificacion}) => {
     const app = express();
     dotenv.config();
     app.use(json());
@@ -27,6 +28,7 @@ export const CrearServidorTest = ({ModeloAcceso, ModeloLogin, ModeloJugador,Mode
     app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}))
     app.use('/gamelog/like',CrearRutaLike({ModeloLike}));
     app.use('/gamelog/reporte',CrearRutaReportesEstadisticos({ModeloReportesEstadisticos}));
+    app.use('/gamelog/notificacion',CrearRutaNotificacion({ModeloNotificacion}));
     app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}))
 
     const PUERTO = process.env.PUERTO_PRUEBAS;

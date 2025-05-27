@@ -64,7 +64,7 @@ CREATE TABLE [dbo].[Likes](
 	[idJugador] [int] NOT NULL,
 	[idResenia] [int] NOT NULL,
 	[idLike] [int] IDENTITY(1,1) NOT NULL,
- CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
 (
 	[idLike] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -119,6 +119,19 @@ CREATE TABLE [dbo].[Favoritos](
 (
 	[idFavorito] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Notificaciones]    Script Date: 26/05/2025 06:12:20 p. m. ******/
+SET ANSI_NULLS ON
+GO 
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Notificaciones](
+	[idNotificacion] [int] IDENTITY(1,1) NOT NULL,
+	[idJugadorNotificado] [int] NOT NULL,
+	[idJugadorNotificante] [int] NOT NULL,
+	[mensajeNotificacion] [varchar](255) NOT NULL,
+	[fechaNotificacion] [date] NOT NULL
 ) ON [PRIMARY]
 GO
 /****** Object:  Table [dbo].[Juegos]    Script Date: 14/05/2025 06:12:20 p. m. ******/
@@ -449,8 +462,9 @@ CREATE PROCEDURE [dbo].[spb_BuscarJugador]
 	@nombreDeUsuario VARCHAR(20)
 AS
 BEGIN
-	SELECT a.idCuenta,a.correo,a.estado,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto
+	SELECT a.idCuenta,a.correo,a.estado,ta.tipoDeAcceso,j.idJugador,j.nombre,j.primerApellido,j.segundoApellido,j.nombreDeUsuario,j.descripcion,j.foto
     FROM Jugadores j JOIN Accesos a ON a.idCuenta = j.idAcceso 
+	JOIN TiposDeAccesos ta ON a.tipoDeAcceso = ta.idTipoDeAcceso 
     WHERE j.nombreDeUsuario = @nombreDeUsuario;
 END
 GO
@@ -608,6 +622,58 @@ BEGIN
     JOIN Juegos AS J ON J.idJuego = R.idJuego
     OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L
     WHERE R.idJugador = @idJugador;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spb_ObtenerNotificaciones]    Script Date: 26/05/2025 06:12:20 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spb_ObtenerNotificaciones]
+	@idJugador INT
+AS
+BEGIN
+	SELECT DISTINCT 
+		N.idNotificacion,
+		N.idJugadorNotificado,
+		N.idJugadorNotificante,
+		N.mensajeNotificacion,
+		N.fechaNotificacion
+    FROM Notificaciones N
+    WHERE N.idJugadorNotificado = @idJugador
+END
+GO
+/****** Object:  StoredProcedure [dbo].[spd_Notificaciones]    Script Date: 26/05/2025 06:12:20 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spd_Notificaciones]
+	@idNotificacion INT,
+	@estado INT OUTPUT,
+	@mensaje VARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Notificaciones WHERE idNotificacion = @idNotificacion)
+		BEGIN
+			BEGIN TRANSACTION
+				DELETE FROM Notificaciones WHERE idNotificacion = @idNotificacion;
+			COMMIT TRANSACTION
+			SET @estado = 200;
+			SET @mensaje = 'La notificacion ha sido eliminada con éxito.';
+		END
+		ELSE
+		BEGIN
+			SET @estado = 400;
+			SET @mensaje = 'No se ha encontrado la notificacion a eliminar.';
+		END
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION;
+		SET @estado = 500;
+		SET @mensaje = 'Error: '+ERROR_MESSAGE();
+	END CATCH
 END
 GO
 /****** Object:  StoredProcedure [dbo].[spb_ObtenerReseñasDeUnJuego]    Script Date: 14/05/2025 06:12:20 p. m. ******/
@@ -836,6 +902,16 @@ BEGIN
 			BEGIN
 				BEGIN TRANSACTION
 					DELETE FROM Likes WHERE idJugador = @idJugador AND idResenia = @idResenia;
+					DECLARE @idJugadorNotificado INT;
+					SET @idJugadorNotificado = (SELECT TOP 1 idJugador FROM Reseñas WHERE idResenia = @idResenia);
+					IF @idJugadorNotificado != @idJugador
+					BEGIN
+						DECLARE @nombreDeUsuario VARCHAR(20);
+						DECLARE @idNotificacion INT;
+						SET @nombreDeUsuario = (SELECT TOP 1 nombreDeUsuario FROM Jugadores WHERE idJugador = @idJugador);
+						SET @idNotificacion = (SELECT TOP 1 idNotificacion FROM Notificaciones WHERE mensajeNotificacion = CONCAT('Le ha gustado tu reseña a ',@nombreDeUsuario) AND idJugadorNotificado = @idJugadorNotificado);
+						DELETE FROM Notificaciones WHERE idNotificacion = @idNotificacion;
+					END
 				COMMIT TRANSACTION
 				SET @estado = 200;
 				SET @mensaje = 'El me gusta ha sido eliminado correctamente.';
@@ -943,6 +1019,11 @@ BEGIN
 		BEGIN
 			BEGIN TRANSACTION
 				DELETE FROM Seguidor WHERE idJugadorSeguidor = @idJugadorSeguidor AND idJugadorSeguido = @idJugadorSeguido;
+				DECLARE @nombreDeUsuario VARCHAR(20);
+				DECLARE @mensajeNotificacion VARCHAR(255);
+				SET @nombreDeUsuario = (SELECT TOP 1 nombreDeUsuario FROM Jugadores WHERE idJugador = @idJugadorSeguidor);
+				SET @mensajeNotificacion = CONCAT(@nombreDeUsuario,' ha comenzado a seguirte.');
+				DELETE FROM Notificaciones WHERE mensajeNotificacion = @mensajeNotificacion AND idJugadorNotificado = @idJugadorSeguido;
 			COMMIT TRANSACTION
 			SET @estado = 200;
 			SET @mensaje = 'El jugador seguido ha sido eliminado con éxito';
@@ -986,7 +1067,7 @@ BEGIN
 			IF NOT EXISTS (SELECT * FROM Jugadores WHERE nombreDeUsuario = @nombreDeUsuario)
 			BEGIN
 				DECLARE @idTipoDeAcceso INT;
-				SET @idTipoDeAcceso = (SELECT idTipoDeAcceso FROM TiposDeAccesos WHERE tipoDeAcceso = @tipoDeAcceso);
+				SET @idTipoDeAcceso = (SELECT TOP 1 idTipoDeAcceso FROM TiposDeAccesos WHERE tipoDeAcceso = @tipoDeAcceso);
 				IF @idTipoDeAcceso IS NOT NULL
 				BEGIN
 					BEGIN TRANSACTION
@@ -1128,6 +1209,16 @@ BEGIN
 				BEGIN
 					BEGIN TRANSACTION
 						INSERT INTO Likes (idJugador,idResenia) VALUES (@idJugador,@idResenia);
+						DECLARE @idJugadorNotificado INT;
+						SET @idJugadorNotificado = (SELECT TOP 1 idJugador FROM Reseñas WHERE idResenia = @idResenia);
+						IF @idJugadorNotificado != @idJugador
+						BEGIN
+							DECLARE @nombreDeUsuario VARCHAR(20);
+							DECLARE @mensajeNotificacion VARCHAR(255);
+							SET @nombreDeUsuario = (SELECT TOP 1 nombreDeUsuario FROM Jugadores WHERE idJugador = @idJugador);
+							SET @mensajeNotificacion = CONCAT('Le ha gustado tu reseña a ',@nombreDeUsuario);
+							INSERT INTO Notificaciones (idJugadorNotificado,idJugadorNotificante,fechaNotificacion,mensajeNotificacion) VALUES (@idJugadorNotificado,@idJugador,CAST(GETDATE() AS DATE),@mensajeNotificacion);
+						END
 					COMMIT TRANSACTION
 					SET @estado = 200;
 					SET @mensaje = 'Se ha registrado un me gusta de manera exitosa';
@@ -1254,6 +1345,11 @@ BEGIN
 		BEGIN
 			BEGIN TRANSACTION
 				INSERT INTO Seguidor (idJugadorSeguidor,idJugadorSeguido) VALUES (@idJugadorSeguidor,@idJugadorSeguido);
+				DECLARE @nombreDeUsuario VARCHAR(20);
+				DECLARE @mensajeNotificacion VARCHAR(255);
+				SET @nombreDeUsuario = (SELECT TOP 1 nombreDeUsuario FROM Jugadores WHERE idJugador = @idJugadorSeguidor);
+				SET @mensajeNotificacion = CONCAT(@nombreDeUsuario,' ha comenzado a seguirte.');
+				INSERT INTO Notificaciones (idJugadorNotificado,idJugadorNotificante,fechaNotificacion,mensajeNotificacion) VALUES (@idJugadorSeguido,@idJugadorSeguidor,CAST(GETDATE() AS DATE),@mensajeNotificacion);
 			COMMIT TRANSACTION
 			SET @estado = 200;
 			SET @mensaje = 'Se ha comenzado a seguir al jugador seleccionado';
