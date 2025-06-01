@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import API.ficheros.fotosDePerfil.Fotos_De_Perfil_pb2 as Fotos__De__Perfil__pb2
+from . import Fotos_De_Perfil_pb2 as Fotos__De__Perfil__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
