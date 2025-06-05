@@ -1,6 +1,6 @@
 import { logger } from "../utilidades/logger.js";
 import { ValidarMeGusta } from "../schemas/MeGustaValidador.js";
-import { PublicarAccionReseña } from "../utilidades/Redis.js";
+import { PublicarAccionReseña, PublicarAccionSocial } from "../utilidades/Redis.js";
 
 export class MeGustaControlador
 {
@@ -34,7 +34,8 @@ export class MeGustaControlador
                     if(resultadoInsercion === 200)
                     {
                         const {idJugadorAutor,idJuego} = ResultadoValidacion.data;
-                        await PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje:`${nombreDeUsuario} le ha dado me gusta a tu reseña`,idJugadorRemitente: idJugadorAutor})
+                        await PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje: 'Se ha agregado un me gusta'});
+                        await PublicarAccionSocial(idJuego,'Interactuar_resena',{mensaje:`${nombreDeUsuario} le ha dado me gusta a tu reseña`,idJugadorRemitente: idJugadorAutor});
                     }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
@@ -92,7 +93,7 @@ export class MeGustaControlador
                 {
                     if(resultadoEliminacion === 200)
                     {
-                        await PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: 'Se ha eliminado un me gusta',idJugadorRemitente: idJugadorAutor})
+                        await PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: 'Se ha eliminado un me gusta',idJugadorRemitente: idJugadorAutor});
                     }
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
