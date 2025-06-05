@@ -83,7 +83,7 @@ beforeAll( async() =>
     const resLoginTercerJugador = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(datosTercerJugadorLogin);
     idTercerJugador = resLoginTercerJugador.body.cuenta[0].idJugador;
     tokenAdministrador = resLoginTercerJugador.headers['access_token'];
-})
+},20000)
 
 afterAll( async() =>
 {
@@ -118,7 +118,7 @@ afterAll( async() =>
             })
             .send(datosEliminacionTercerJugador);  
     servidor.close();
-})
+},20000)
 
 describe('Test para el servicio de seguidores donde se encuentran los métodos de inserción, consulta y eliminación.',() =>
 {

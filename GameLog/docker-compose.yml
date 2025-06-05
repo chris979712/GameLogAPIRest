@@ -12,6 +12,13 @@ services:
     environment:
       - SA_PASSWORD=.JUg4d0rL0000g.
       - ACCEPT_EULA=Y
+  
+  gamelog_redis:
+    image: redis:7-alpine
+    container_name: gamelog_redis
+    command: ["redis-server", "--port", "1237"]
+    ports:
+      - 1237:1237
 
   gamelog_apigrpc:
     build:

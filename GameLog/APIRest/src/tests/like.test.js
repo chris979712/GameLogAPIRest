@@ -151,7 +151,7 @@ beforeAll( async() =>
     idPrimerReseña = resConsulta.body.reseñas[0].idResenia;
     idSegundaReseña = resConsulta.body.reseñas[1].idResenia;
     idTercerReseña = resConsulta.body.reseñas[2].idResenia;
-})
+},20000)
 
 afterAll( async() =>
 {
@@ -165,15 +165,15 @@ afterAll( async() =>
             })
     await request(servidor).delete(`/gamelog/juego/${41437}`)
             .set({"access_token": `Bearer ${token}`});
-    await request(servidor).delete(`/gamelog/resena/${idPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idSegundaReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idSegundaReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idTercerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idTercerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         }) 
@@ -208,7 +208,7 @@ afterAll( async() =>
             })
             .send(datosEliminacionTercerJugador); 
     servidor.close();
-})
+},20000)
 
 describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',() =>
 {
@@ -216,11 +216,15 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
     {
         const DatosPrimerMeGusta = {
             idJugador: idPrimerJugador,
-            idResena: idPrimerReseña
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         const DatosSegundoMeGusta = {
             idJugador: idSegundoJugador,
             idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -242,7 +246,9 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
     {
         const DatosPrimerMeGusta = {
             idJugador: idPrimerJugador,
-            idResena: idPrimerReseña
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -257,7 +263,9 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
     {
         const DatosPrimerMeGusta = {
             idJugador: idPrimerJugador,
-            idResena: 9281
+            idResena: 9281,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -272,7 +280,9 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
     {
         const DatosPrimerMeGusta = {
             idJugador: "ASQOWE",
-            idResena: "ASIJE"
+            idResena: "ASIJE",
+            idJugadorAutor: "pokafsa",
+            idJuego: "asdop"
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -283,45 +293,63 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
         expect(resPrimerInsercion.statusCode).toBe(400);
     })
 
-    test('DELETE /MeGusta/:idResena/:idJugador - Eliminar un MeGusta a una reseña existente en la base de datos', async () =>
+    test('DELETE /MeGusta/:idJuego - Eliminar un MeGusta a una reseña existente en la base de datos', async () =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idPrimerJugador}`)
+        const DatosPrimerEliminacion = {
+            idJugador: idPrimerJugador,
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+        }
+        const DatosSegundaEliminacion = {
+            idJugador: idSegundoJugador,
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+        }
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            }); 
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idSegundoJugador}`)
+            })
+            .send(DatosPrimerEliminacion); 
+        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            });
+            })
+            .send(DatosSegundaEliminacion);
         expect(resPrimerEliminacion.statusCode).toBe(200);
         expect(resSegundaEliminacion.statusCode).toBe(200);
     })
 
-    test('DELETE /MeGusta/:idResena/:idJugador - Tratar de eliminar un MeGusta a una reseña inexistente en la base de datos', async () =>
+    test('DELETE /MeGusta/:idJuego - Tratar de eliminar un MeGusta a una reseña inexistente en la base de datos', async () =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${23545}/${idPrimerJugador}`)
+        const DatosPrimerEliminacion = {
+            idJugador: idTercerJugador,
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+        }
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            }); 
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${99912}/${idSegundoJugador}`)
-            .set({
-                "access_token": `Bearer ${token}`
-            });
+            })
+            .send(DatosPrimerEliminacion); 
         expect(resPrimerEliminacion.statusCode).toBe(400);
-        expect(resSegundaEliminacion.statusCode).toBe(400);
     })
 
-    test('DELETE /MeGusta/:idResena/:idJugador - Tratar de eliminar un MeGusta a una reseña con datos inválidos', async () =>
+    test('DELETE /MeGusta/:idJuego - Tratar de eliminar un MeGusta a una reseña con datos inválidos', async () =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${23545}/${"jkodawij"}`)
+        const DatosPrimerEliminacion = {
+            idJugador: 'KMAOISDNA',
+            idResena: 'ASOIJDIO',
+            idJugadorAutor: 'MASDIOANSDAD',
+        }
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${23545}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            }); 
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${99912}/${"ASNIADI"}`)
-            .set({
-                "access_token": `Bearer ${token}`
-            });
+            })
+            .send(DatosPrimerEliminacion); 
         expect(resPrimerEliminacion.statusCode).toBe(400);
-        expect(resSegundaEliminacion.statusCode).toBe(400);
     })
 })

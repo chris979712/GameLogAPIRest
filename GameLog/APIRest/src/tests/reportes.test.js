@@ -276,7 +276,7 @@ beforeAll( async() =>
             "access_token": `Bearer ${token}`
         })
         .send(DatosSextaReseñaPrimerJugador);
-})
+},20000)
 
 afterAll( async() => 
 {
@@ -316,51 +316,51 @@ afterAll( async() =>
             "access_token": `Bearer ${token}`
         })
     let idSextoJuegoPrimerReseña = resConsultaSextoJuego.body.reseñas[0].idResenia;
-    await request(servidor).delete(`/gamelog/resena/${idPrimerJuegoPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerJuegoPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idPrimerJuegoSegundaReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerJuegoSegundaReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idPrimerJuegoTercerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerJuegoTercerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idSegundoJuegoPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${10101}/${idSegundoJuegoPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idSegundoJuegoSegundaReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${10101}/${idSegundoJuegoSegundaReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idTercerJuegoPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${20202}/${idTercerJuegoPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idCuartoJuegoPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${30303}/${idCuartoJuegoPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idCuartoJuegoSegundaReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${30303}/${idCuartoJuegoSegundaReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idCuartoJuegoTercerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${30303}/${idCuartoJuegoTercerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idQuintoJuegoPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${40404}/${idQuintoJuegoPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idQuintoJuegoSegundaReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${40404}/${idQuintoJuegoSegundaReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
-    await request(servidor).delete(`/gamelog/resena/${idSextoJuegoPrimerReseña}`)
+    await request(servidor).delete(`/gamelog/resena/${50505}/${idSextoJuegoPrimerReseña}`)
         .set({
             "access_token": `Bearer ${token}`
         })
@@ -407,7 +407,7 @@ afterAll( async() =>
     await request(servidor).delete(`/gamelog/juego/${50505}`)
         .set({"access_token": `Bearer ${token}`}); 
     servidor.close();
-})
+},20000)
 
 describe('TEST para el servicio de obtención de información para la generación de reportes',()=>
 {

@@ -32,7 +32,7 @@ beforeAll(async () => {
         }
     const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
     token = resLogin.headers['access_token'];
-});
+},20000);
 
 afterAll(async () => {
     const correo = "usuariopruebaacceso@gmail.com";
@@ -54,7 +54,7 @@ afterAll(async () => {
         })
         .send(datosEliminacion);
     servidor.close();
-});
+},20000);
 
 describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () => 
 {

@@ -34,6 +34,14 @@ export const CrearRutaMeGusta = ({ModeloMeGusta}) =>
      *                 type: integer
      *                 description: ID de la reseña a la que se desea dar MeGusta
      *                 example: 12
+     *               idJuego:
+     *                 type: integer
+     *                 description: ID del juego de la reseña
+     *                 example: 1
+     *               idJugadorAutor:
+     *                 type: integer
+     *                 description: ID del jugador autor que realizó la reseña
+     *                 example: 1
      *               idJugador:
      *                 type: integer
      *                 description: ID del jugador que realiza el MeGusta
@@ -101,19 +109,31 @@ export const CrearRutaMeGusta = ({ModeloMeGusta}) =>
      *       - bearerAuth: []  # Requiere token JWT
      *     parameters:
      *       - in: path
-     *         name: idJugador
+     *         name: idJuego
      *         required: true
      *         schema:
      *           type: integer
-     *         description: ID del jugador que dio el MeGusta
+     *         description: ID del juego que de la reseña a eliminar
      *         example: 5
-     *       - in: path
-     *         name: idResena
-     *         required: true
-     *         schema:
-     *           type: integer
-     *         description: ID de la reseña que recibió el MeGusta
-     *         example: 12
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               idResena:
+     *                 type: integer
+     *                 description: ID de la reseña a la que se desea dar MeGusta
+     *                 example: 12
+     *               idJugadorAutor:
+     *                 type: integer
+     *                 description: ID del jugador autor que realizó la reseña
+     *                 example: 1
+     *               idJugador:
+     *                 type: integer
+     *                 description: ID del jugador que realiza el MeGusta
+     *                 example: 5
      *     responses:
      *       200:
      *         description: MeGusta eliminado exitosamente
@@ -164,7 +184,7 @@ export const CrearRutaMeGusta = ({ModeloMeGusta}) =>
      *                   type: string
      *                   example: Ha ocurrido un error al querer eliminar el MeGusta a la reseña
      */
-    MeGustaEnrutador.delete('/:idResena/:idJugador',ValidarJwt,ControladorMeGustaEnrutador.EliminarMeGustaDeReseña);
+    MeGustaEnrutador.delete('/:idJuego',ValidarJwt,ControladorMeGustaEnrutador.EliminarMeGustaDeReseña);
 
     return MeGustaEnrutador;
 }

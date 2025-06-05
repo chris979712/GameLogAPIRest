@@ -499,6 +499,13 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *       - bearerAuth: []
      *     parameters:
      *       - in: path
+     *         name: idJuego
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: ID del juego asociado a la reseña a eliminar
+     *         example: 14137
+     *       - in: path
      *         name: idResena
      *         required: true
      *         schema:
@@ -557,7 +564,7 @@ export const CrearRutaReseña =  ({ModeloReseña}) =>
      *                   type: string
      *                   example: Ha ocurrido un error al querer eliminar la reseña
      */
-    ReseñaEnrutador.delete('/:idResena',ValidarJwt,ControladorReseñaEnrutador.EliminarReseña);
+    ReseñaEnrutador.delete('/:idJuego/:idResena',ValidarJwt,ControladorReseñaEnrutador.EliminarReseña);
     
     return ReseñaEnrutador;
 }

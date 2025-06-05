@@ -108,7 +108,7 @@ beforeAll( async() =>
             "access_token": `Bearer ${token}`
         })
         .send(Datos);
-})
+},20000)
 
 afterAll( async() =>
 {
@@ -153,7 +153,7 @@ afterAll( async() =>
     await request(servidor).delete(`/gamelog/juego/${41437}`)
             .set({"access_token": `Bearer ${token}`}); 
     servidor.close();
-})
+},20000)
 
 describe('TEST para el servicio de reseñas donde se encuentran los métodos de busca, inserción y eliminación', ()=>
 {
@@ -340,17 +340,17 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         expect(resConsulta.statusCode).toBe(400);
     })
 
-    test('DELETE /reseña/:idReseña - Eliminar una reseña a través de su ID', async() =>
+    test('DELETE /reseña/:idJuego/:idResena - Eliminar una reseña a través de su ID', async() =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/resena/${idPrimerReseña}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerReseña}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/resena/${idSegundaReseña}`)
+        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/resena/${41437}/${idSegundaReseña}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
-        const resTercerEliminacion = await request(servidor).delete(`/gamelog/resena/${idTercerReseña}`)
+        const resTercerEliminacion = await request(servidor).delete(`/gamelog/resena/${41437}/${idTercerReseña}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
@@ -359,19 +359,19 @@ describe('TEST para el servicio de reseñas donde se encuentran los métodos de 
         expect(resTercerEliminacion.statusCode).toBe(200);
     })
 
-    test('DELETE /reseña/:idReseña - Eliminar una reseña inexistente a través de su ID', async() =>
+    test('DELETE /reseña/:idJuego/:idResena  - Eliminar una reseña inexistente a través de su ID', async() =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/resena/${789}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/resena/${41437}/${789}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
         expect(resPrimerEliminacion.statusCode).toBe(400);
     })
 
-    test('DELETE /reseña/:idReseña - Tratar de eliminar una reseña a través de datos inválidos', async() =>
+    test('DELETE /reseña/:idJuego/:idResena  - Tratar de eliminar una reseña a través de datos inválidos', async() =>
     {
         const IdReseña = "AMDOM"
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/resena/${IdReseña}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/resena/${12902}/${IdReseña}`)
             .set({
                 "access_token": `Bearer ${token}`
             })

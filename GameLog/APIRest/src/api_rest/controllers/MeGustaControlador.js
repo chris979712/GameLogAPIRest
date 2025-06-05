@@ -1,5 +1,6 @@
 import { logger } from "../utilidades/logger.js";
 import { ValidarMeGusta } from "../schemas/MeGustaValidador.js";
+import { PublicarAccionReseña } from "../utilidades/Redis.js";
 
 export class MeGustaControlador
 {
@@ -12,7 +13,7 @@ export class MeGustaControlador
     {
         try
         {
-            const {tipoDeUsuario} = req;
+            const {tipoDeUsuario,nombreDeUsuario} = req;
             const ResultadoValidacion = ValidarMeGusta(req.body);
             if(ResultadoValidacion.success)
             {
@@ -30,6 +31,11 @@ export class MeGustaControlador
                 }
                 else
                 {
+                    if(resultadoInsercion === 200)
+                    {
+                        const {idJugadorAutor,idJuego} = ResultadoValidacion.data;
+                        await PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje:`${nombreDeUsuario} le ha dado me gusta a tu reseña`,idJugadorRemitente: idJugadorAutor})
+                    }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
                         estado: resultadoInsercion,
@@ -64,9 +70,9 @@ export class MeGustaControlador
         try
         {
             const {tipoDeUsuario} = req;
-            const idJugador = parseInt(req.params.idJugador);
-            const idResena = parseInt(req.params.idResena);
-            const Datos = {idJugador,idResena};
+            const idJuego = parseInt(req.params.idJuego);
+            const {idResena,idJugadorAutor,idJugador} = req.body;
+            const Datos = {idJugador,idResena,idJugadorAutor,idJuego};
             const ResultadoValidacion = ValidarMeGusta(Datos);
             if(ResultadoValidacion.success)
             {
@@ -84,6 +90,10 @@ export class MeGustaControlador
                 }
                 else
                 {
+                    if(resultadoEliminacion === 200)
+                    {
+                        await PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: 'Se ha eliminado un me gusta',idJugadorRemitente: idJugadorAutor})
+                    }
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
                         estado: resultadoEliminacion,

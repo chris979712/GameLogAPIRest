@@ -131,15 +131,21 @@ beforeAll(async() =>
         idPrimerReseña = resConsulta.body.reseñas[0].idResenia;
         const DatosPrimerMeGusta = {
             idJugador: idSegundoJugador,
-            idResena: idPrimerReseña
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         const DatosSegundoMeGusta = {
             idJugador: idTercerJugador,
             idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         const DatosTercerMeGusta = {
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+            idJuego: 41437
         }
         await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -153,17 +159,24 @@ beforeAll(async() =>
                 "access_token": `Bearer ${token}`
             })
             .send(DatosSegundoMeGusta);
-        await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idSegundoJugador}`)
+        const DatosEliminacionReseña = {
+            idJugador: idSegundoJugador,
+            idResena: idPrimerReseña,
+            idJugadorAutor: idPrimerJugador,
+        }
+        await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            });
+            })
+            .send(DatosEliminacionReseña);
         await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
             .send(DatosTercerMeGusta);
-})
+},20000)
 
 afterAll(async() =>
 {
@@ -189,18 +202,32 @@ afterAll(async() =>
             })
     await request(servidor).delete(`/gamelog/juego/${41437}`)
             .set({"access_token": `Bearer ${token}`}); 
-    await request(servidor).delete(`/gamelog/resena/${idPrimerReseña}`)
+    const DatosEliminacionPrimerMegustaReseña = {
+        idJugador: idSegundoJugador,
+        idResena: idPrimerReseña,
+        idJugadorAutor: idPrimerJugador,
+    }
+    const DatosEliminacionSegundoMeGustaReseña = {
+        idJugador: idSegundoJugador,
+        idResena: idPrimerReseña,
+        idJugadorAutor: idPrimerJugador,
+    }
+    await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerReseña}`)
             .set({
                 "access_token": `Bearer ${token}`
             })
-    await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idPrimerJugador}`)
+    await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            }); 
-    await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idSegundoJugador}`)
+            })
+            .send(DatosEliminacionPrimerMegustaReseña); 
+    await request(servidor).delete(`/gamelog/MeGusta/${41438}`)
             .set({
+                "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
-            });
+            })
+            .send(DatosEliminacionSegundoMeGustaReseña);
             await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
             .set({
                 "Content-Type": "application/json",
@@ -220,7 +247,7 @@ afterAll(async() =>
             })
             .send(datosEliminacionTercerJugador); 
     servidor.close();
-})
+},20000)
 
 describe('TEST para el servicio de notificaciones, donde se encuentran los métodos de consulta y eliminación', () =>
 {

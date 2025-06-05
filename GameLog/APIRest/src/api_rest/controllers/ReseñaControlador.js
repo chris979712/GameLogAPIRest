@@ -1,5 +1,6 @@
 import { logger } from "../utilidades/logger.js";
 import {ValidarDatosReseña,ValidarDatosBusquedaReseña} from '../schemas/ReseñaValidador.js';
+import {PublicarAccionReseña} from '../utilidades/Redis.js';
 
 export class ReseñaControlador
 {
@@ -30,6 +31,8 @@ export class ReseñaControlador
                 }
                 else
                 {
+                    const {idJuego} = ResultadoValidacion.data;
+                    await PublicarAccionReseña(idJuego,'Registrar',{mensaje: 'Hay nuevas reseñas por ver'})
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
                         estado: resultadoInsercion,
@@ -197,6 +200,7 @@ export class ReseñaControlador
         {
             const {tipoDeUsuario} = req;
             const idReseña = parseInt(req.params.idResena);
+            const idJuego = parseInt(req.params.idJuego);
             const Datos = {idReseña};
             const ResultadoValidacion = ValidarDatosBusquedaReseña(Datos);
             if(ResultadoValidacion.success)
@@ -215,6 +219,7 @@ export class ReseñaControlador
                 }
                 else
                 {
+                    await PublicarAccionReseña(idJuego,'Eliminar',{mensaje: 'Hay nuevas reseñas por ver'})
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
                         estado: resultadoEliminacion,

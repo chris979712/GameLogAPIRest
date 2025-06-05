@@ -1,5 +1,6 @@
 import { ValidarSeguidor, ValidarSeguidorParcial } from "../schemas/SeguidorValidador.js";
 import { logger } from "../utilidades/logger.js";
+import { PublicarAccionSocialSeguimiento } from "../utilidades/Redis.js";
 
 export class SeguidorControlador
 {
@@ -13,7 +14,7 @@ export class SeguidorControlador
         try
         {
             const ResultadoValidacion = ValidarSeguidor(req.body);
-            const {tipoDeUsuario} = req;
+            const {tipoDeUsuario,nombreDeUsuario} = req;
             if(ResultadoValidacion.success)
             {
                 console.log(ResultadoValidacion.data)
@@ -30,6 +31,11 @@ export class SeguidorControlador
                 }
                 else
                 {
+                    if(resultadoInsercion === 200)
+                    {
+                        const {idJugadorSeguido} = ResultadoValidacion.data;
+                        await PublicarAccionSocialSeguimiento(idJugadorSeguido,'Agregar',{mensaje:`${nombreDeUsuario} te ha empezado a seguir.`});
+                    }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
                         estado: resultadoInsercion,
@@ -171,6 +177,11 @@ export class SeguidorControlador
                 }
                 else
                 {
+                    if(resultadoEliminacion === 200)
+                    {
+                        const {idJugadorSeguido} = ResultadoValidacion.data;
+                        await PublicarAccionSocialSeguimiento(idJugadorSeguido,'Eliminar',{mensaje:`Se ha eliminado de seguidos`});
+                    }
                     res.status(resultadoEliminacion).json(
                         {
                             error: resultadoEliminacion !== 200,

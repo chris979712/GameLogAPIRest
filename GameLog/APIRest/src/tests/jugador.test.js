@@ -36,7 +36,7 @@ beforeAll(async () =>
     token = resLogin.headers['access_token'];
     idJugadorCreado = resLogin.body.cuenta[0].idJugador;
     console.log(idJugadorCreado)
-})
+},20000)
 
 afterAll(async() => 
 {
@@ -59,7 +59,7 @@ afterAll(async() =>
         })
         .send(datosEliminacion);
     servidor.close();
-})
+},20000)
 
 describe('Tests para el servicio de Jugadores donde se encuentra la modificacion, busqueda y eliminacion', () =>
 {

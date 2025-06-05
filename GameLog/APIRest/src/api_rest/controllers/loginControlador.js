@@ -48,7 +48,8 @@ export class LoginControlador
                         }
                         else{
                             const tipoDeUsuario = ResultadoConsulta.cuenta[0].tipoDeAcceso;
-                            const DatosUsuario = {correo,tipoDeUsuario};
+                            const nombreDeUsuario = ResultadoConsulta.cuenta[0].nombreDeUsuario;
+                            const DatosUsuario = {correo,tipoDeUsuario,nombreDeUsuario};
                             const token = await GenerarJWT(DatosUsuario);
                             UsuariosActivos[correo] = { tipoDeUsuario, token };
                             res.header('access_token',token);

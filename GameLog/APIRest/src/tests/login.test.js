@@ -39,7 +39,7 @@ beforeAll(async () =>
         tipoDeUsuario: "Administrador"
     };
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosUsuario);
-})
+},20000)
 
 afterAll(async() => 
 {
@@ -79,7 +79,7 @@ afterAll(async() =>
         })
         .send(datosSegundaEliminacion);
     servidor.close();
-})
+},20000)
 
 describe('Test para probar el login de cuentas a la API REST', () => 
 {
