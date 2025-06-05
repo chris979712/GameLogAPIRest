@@ -5,7 +5,7 @@ import { ModeloLogin } from "../api_rest/model/sql/LoginModelo.js";
 import {ModeloSeguidor} from "../api_rest/model/sql/SeguidorModelo.js";
 import {ModeloJuego} from "../api_rest/model/sql/JuegoModelo.js";
 import {ModeloReseña} from "../api_rest/model/sql/ReseñaModelo.js"
-import { ModeloLike } from "../api_rest/model/sql/LikeModelo.js";
+import { ModeloMeGusta } from "../api_rest/model/sql/MeGustaModelo.js";
 
 let servidor;
 let token;
@@ -18,11 +18,11 @@ let idTercerReseña;
 
 beforeAll( async() =>
 {
-    const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloSeguidor:ModeloSeguidor,ModeloJuego:ModeloJuego,ModeloReseña:ModeloReseña,ModeloLike:ModeloLike});
+    const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloSeguidor:ModeloSeguidor,ModeloJuego:ModeloJuego,ModeloReseña:ModeloReseña,ModeloMeGusta:ModeloMeGusta});
     servidor = servidorCreado;
     const datosPrimerJugador =
     {
-        correo: "chrislike@gmail.com",
+        correo: "chrisMeGusta@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "chris",
@@ -35,7 +35,7 @@ beforeAll( async() =>
     };
     const datosSegundoJugador =
     {
-        correo: "oscarlike@gmail.com",
+        correo: "oscarMeGusta@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "oscar",
@@ -48,7 +48,7 @@ beforeAll( async() =>
     };
     const datosTercerJugador =
     {
-        correo: "mariolike@gmail.com",
+        correo: "marioMeGusta@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         estado: "Desbaneado",
         nombre: "Mario Miguel",
@@ -64,19 +64,19 @@ beforeAll( async() =>
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosTercerJugador);
     const datosPrimerJugadorLogin =
     {
-        correo: "chrislike@gmail.com",
+        correo: "chrisMeGusta@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
     const datosSegundoJugadorLogin =
     {
-        correo: "oscarlike@gmail.com",
+        correo: "oscarMeGusta@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
     const datosTercerJugadorLogin =
     {
-        correo: "mariolike@gmail.com",
+        correo: "marioMeGusta@gmail.com",
         contrasenia: "0x636C617665313233000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         tipoDeUsuario: "Administrador"
     };
@@ -179,15 +179,15 @@ afterAll( async() =>
         }) 
     const datosEliminacionPrimerJugador = {
         tipoDeUsuario: "Administrador",
-        correo: "chrislike@gmail.com"
+        correo: "chrisMeGusta@gmail.com"
     }
     const datosEliminacionSegundoJugador = {
         tipoDeUsuario: "Administrador",
-        correo: "oscarlike@gmail.com"
+        correo: "oscarMeGusta@gmail.com"
     }
     const datosEliminacionTercerJugador = {
         tipoDeUsuario: "Administrador",
-        correo: "mariolike@gmail.com"
+        correo: "marioMeGusta@gmail.com"
     }
     await request(servidor).delete(`/gamelog/acceso/${idPrimerJugador}`)
             .set({
@@ -210,86 +210,86 @@ afterAll( async() =>
     servidor.close();
 })
 
-describe('TEST para el servicio de Likes a reseñas, por parte de jugadores',() =>
+describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',() =>
 {
-    test('POST /like - Registrar un like a una reseña existente en la base de datos', async () =>
+    test('POST /MeGusta - Registrar un MeGusta a una reseña existente en la base de datos', async () =>
     {
-        const DatosPrimerLike = {
+        const DatosPrimerMeGusta = {
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña
         }
-        const DatosSegundoLike = {
+        const DatosSegundoMeGusta = {
             idJugador: idSegundoJugador,
             idResena: idPrimerReseña,
         }
-        const resPrimerInsercion = await request(servidor).post('/gamelog/like')
+        const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosPrimerLike); 
-        const resSegundaInsercion = await request(servidor).post('/gamelog/like')
+            .send(DatosPrimerMeGusta); 
+        const resSegundaInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosSegundoLike);
+            .send(DatosSegundoMeGusta);
         expect(resPrimerInsercion.statusCode).toBe(200);
         expect(resSegundaInsercion.statusCode).toBe(200);
     })
 
-    test('POST /like - Registrar un like a una reseña que ya se le ha dado like', async () =>
+    test('POST /MeGusta - Registrar un MeGusta a una reseña que ya se le ha dado MeGusta', async () =>
     {
-        const DatosPrimerLike = {
+        const DatosPrimerMeGusta = {
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña
         }
-        const resPrimerInsercion = await request(servidor).post('/gamelog/like')
+        const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosPrimerLike); 
+            .send(DatosPrimerMeGusta); 
         expect(resPrimerInsercion.statusCode).toBe(400);
     })
 
-    test('POST /like - Registrar un like a una reseña inexistente', async () =>
+    test('POST /MeGusta - Registrar un MeGusta a una reseña inexistente', async () =>
     {
-        const DatosPrimerLike = {
+        const DatosPrimerMeGusta = {
             idJugador: idPrimerJugador,
             idResena: 9281
         }
-        const resPrimerInsercion = await request(servidor).post('/gamelog/like')
+        const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosPrimerLike); 
+            .send(DatosPrimerMeGusta); 
         expect(resPrimerInsercion.statusCode).toBe(400);
     })
 
-    test('POST /like - Registrar un like a una reseña con datos de parámetros inválidos', async () =>
+    test('POST /MeGusta - Registrar un MeGusta a una reseña con datos de parámetros inválidos', async () =>
     {
-        const DatosPrimerLike = {
+        const DatosPrimerMeGusta = {
             idJugador: "ASQOWE",
             idResena: "ASIJE"
         }
-        const resPrimerInsercion = await request(servidor).post('/gamelog/like')
+        const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosPrimerLike); 
+            .send(DatosPrimerMeGusta); 
         expect(resPrimerInsercion.statusCode).toBe(400);
     })
 
-    test('DELETE /like/:idResena/:idJugador - Eliminar un like a una reseña existente en la base de datos', async () =>
+    test('DELETE /MeGusta/:idResena/:idJugador - Eliminar un MeGusta a una reseña existente en la base de datos', async () =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/like/${idPrimerReseña}/${idPrimerJugador}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             }); 
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/like/${idPrimerReseña}/${idSegundoJugador}`)
+        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             });
@@ -297,13 +297,13 @@ describe('TEST para el servicio de Likes a reseñas, por parte de jugadores',() 
         expect(resSegundaEliminacion.statusCode).toBe(200);
     })
 
-    test('DELETE /like/:idResena/:idJugador - Tratar de eliminar un like a una reseña inexistente en la base de datos', async () =>
+    test('DELETE /MeGusta/:idResena/:idJugador - Tratar de eliminar un MeGusta a una reseña inexistente en la base de datos', async () =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/like/${23545}/${idPrimerJugador}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${23545}/${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             }); 
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/like/${99912}/${idSegundoJugador}`)
+        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${99912}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             });
@@ -311,13 +311,13 @@ describe('TEST para el servicio de Likes a reseñas, por parte de jugadores',() 
         expect(resSegundaEliminacion.statusCode).toBe(400);
     })
 
-    test('DELETE /like/:idResena/:idJugador - Tratar de eliminar un like a una reseña con datos inválidos', async () =>
+    test('DELETE /MeGusta/:idResena/:idJugador - Tratar de eliminar un MeGusta a una reseña con datos inválidos', async () =>
     {
-        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/like/${23545}/${"jkodawij"}`)
+        const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${23545}/${"jkodawij"}`)
             .set({
                 "access_token": `Bearer ${token}`
             }); 
-        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/like/${99912}/${"ASNIADI"}`)
+        const resSegundaEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${99912}/${"ASNIADI"}`)
             .set({
                 "access_token": `Bearer ${token}`
             });

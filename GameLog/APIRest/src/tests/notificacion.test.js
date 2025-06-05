@@ -6,7 +6,7 @@ import {ModeloSeguidor} from "../api_rest/model/sql/SeguidorModelo.js";
 import {ModeloJuego} from "../api_rest/model/sql/JuegoModelo.js";
 import {ModeloReseña} from "../api_rest/model/sql/ReseñaModelo.js"
 import {ModeloNotificacion} from "../api_rest/model/sql/NotificacionModelo.js";
-import {ModeloLike} from "../api_rest/model/sql/LikeModelo.js"
+import {ModeloMeGusta} from "../api_rest/model/sql/MeGustaModelo.js"
 
 let servidor;
 let token;
@@ -22,7 +22,7 @@ beforeAll(async() =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,
                                     ModeloSeguidor:ModeloSeguidor,ModeloJuego:ModeloJuego,ModeloReseña:ModeloReseña,
-                                    ModeloNotificacion:ModeloNotificacion,ModeloLike:ModeloLike});
+                                    ModeloNotificacion:ModeloNotificacion,ModeloMeGusta:ModeloMeGusta});
         servidor = servidorCreado;
         const datosPrimerJugador =
         {
@@ -129,40 +129,40 @@ beforeAll(async() =>
                 "access_token": `Bearer ${token}`
             })
         idPrimerReseña = resConsulta.body.reseñas[0].idResenia;
-        const DatosPrimerLike = {
+        const DatosPrimerMeGusta = {
             idJugador: idSegundoJugador,
             idResena: idPrimerReseña
         }
-        const DatosSegundoLike = {
+        const DatosSegundoMeGusta = {
             idJugador: idTercerJugador,
             idResena: idPrimerReseña,
         }
-        const DatosTercerLike = {
+        const DatosTercerMeGusta = {
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña,
         }
-        await request(servidor).post('/gamelog/like')
+        await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosPrimerLike); 
-        await request(servidor).post('/gamelog/like')
+            .send(DatosPrimerMeGusta); 
+        await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosSegundoLike);
-        await request(servidor).delete(`/gamelog/like/${idPrimerReseña}/${idSegundoJugador}`)
+            .send(DatosSegundoMeGusta);
+        await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             });
-        await request(servidor).post('/gamelog/like')
+        await request(servidor).post('/gamelog/MeGusta')
             .set({
                 "Content-Type": "application/json",
                 "access_token": `Bearer ${token}`
             })
-            .send(DatosTercerLike);
+            .send(DatosTercerMeGusta);
 })
 
 afterAll(async() =>
@@ -193,11 +193,11 @@ afterAll(async() =>
             .set({
                 "access_token": `Bearer ${token}`
             })
-    await request(servidor).delete(`/gamelog/like/${idPrimerReseña}/${idPrimerJugador}`)
+    await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idPrimerJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             }); 
-    await request(servidor).delete(`/gamelog/like/${idPrimerReseña}/${idSegundoJugador}`)
+    await request(servidor).delete(`/gamelog/MeGusta/${idPrimerReseña}/${idSegundoJugador}`)
             .set({
                 "access_token": `Bearer ${token}`
             });

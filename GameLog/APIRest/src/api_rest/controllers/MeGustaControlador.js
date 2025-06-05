@@ -1,22 +1,22 @@
 import { logger } from "../utilidades/logger.js";
-import { ValidarLike } from "../schemas/LikeValidador.js";
+import { ValidarMeGusta } from "../schemas/MeGustaValidador.js";
 
-export class LikeControlador
+export class MeGustaControlador
 {
-    constructor({ModeloLike})
+    constructor({ModeloMeGusta})
     {
-        this.modeloLike = ModeloLike;
+        this.modeloMeGusta = ModeloMeGusta;
     }
 
-    RegistrarLikeAReseña = async (req, res) =>
+    RegistrarMeGustaAReseña = async (req, res) =>
     {
         try
         {
             const {tipoDeUsuario} = req;
-            const ResultadoValidacion = ValidarLike(req.body);
+            const ResultadoValidacion = ValidarMeGusta(req.body);
             if(ResultadoValidacion.success)
             {
-                const ResultadoInsercion = await this.modeloLike.RegistrarLikeAReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
+                const ResultadoInsercion = await this.modeloMeGusta.RegistrarMeGustaAReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
                 if(resultadoInsercion === 500)
                 {
@@ -25,7 +25,7 @@ export class LikeControlador
                     {
                         error: true,
                         estado: resultadoInsercion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer darle like a una reseña'
+                        mensaje: 'Ha ocurrido un error en la base de datos al querer darle me gusta a una reseña'
                     });
                 }
                 else
@@ -53,13 +53,13 @@ export class LikeControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un error al querer registar el like a la reseña"
+                    mensaje: "Ha ocurrido un error al querer registar el me gusta a la reseña"
                 }
             )
         }
     }
 
-    EliminarLikeDeReseña = async (req, res) =>
+    EliminarMeGustaDeReseña = async (req, res) =>
     {
         try
         {
@@ -67,10 +67,10 @@ export class LikeControlador
             const idJugador = parseInt(req.params.idJugador);
             const idResena = parseInt(req.params.idResena);
             const Datos = {idJugador,idResena};
-            const ResultadoValidacion = ValidarLike(Datos);
+            const ResultadoValidacion = ValidarMeGusta(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoEliminacion = await this.modeloLike.EliminarLikeDeReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
+                const ResultadoEliminacion = await this.modeloMeGusta.EliminarMeGustaDeReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado);
                 if(resultadoEliminacion === 500)
                 {
@@ -79,7 +79,7 @@ export class LikeControlador
                     {
                         error: true,
                         estado: resultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar el like de una reseña'
+                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar el me gusta de una reseña'
                     });
                 }
                 else
@@ -107,7 +107,7 @@ export class LikeControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un error al querer eliminar el like a la reseña"
+                    mensaje: "Ha ocurrido un error al querer eliminar el me gusta a la reseña"
                 }
             )
         }

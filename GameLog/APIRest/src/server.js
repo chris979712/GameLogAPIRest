@@ -5,7 +5,7 @@ import { CrearRutaJugador } from './api_rest/routes/JugadorRuta.js';
 import { CrearRutaJuego } from './api_rest/routes/JuegoRuta.js';
 import { CrearRutaSeguidor } from './api_rest/routes/SeguidorRuta.js';
 import { CrearRutaReseña } from './api_rest/routes/ReseñaRuta.js';
-import { CrearRutaLike } from './api_rest/routes/LikeRuta.js';
+import { CrearRutaMeGusta } from './api_rest/routes/MeGustaRuta.js';
 import { CrearRutaReportesEstadisticos } from './api_rest/routes/ReportesRuta.js';
 import { CrearRutaNotificacion } from './api_rest/routes/NotificacionRuta.js';
 import { DocumentoSwagger } from './api_rest/utilidades/swagger.js';
@@ -14,7 +14,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 
-export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloLike,ModeloReportesEstadisticos,ModeloNotificacion}) => 
+export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJuego,ModeloSeguidor,ModeloReseña,ModeloMeGusta,ModeloReportesEstadisticos,ModeloNotificacion}) => 
 {
     const app = express();
     dotenv.config();
@@ -38,7 +38,7 @@ export const CrearServidor = ({ModeloAcceso, ModeloLogin,ModeloJugador,ModeloJue
     app.use('/gamelog/juego',CrearRutaJuego({ModeloJuego}));
     app.use('/gamelog/seguidor',CrearRutaSeguidor({ModeloSeguidor}));
     app.use('/gamelog/resena',CrearRutaReseña({ModeloReseña}));
-    app.use('/gamelog/like',CrearRutaLike({ModeloLike}));
+    app.use('/gamelog/MeGusta',CrearRutaMeGusta({ModeloMeGusta}));
     app.use('/gamelog/reporte',CrearRutaReportesEstadisticos({ModeloReportesEstadisticos}));
     app.use('/gamelog/notificacion',CrearRutaNotificacion({ModeloNotificacion}));
     app.use('/gamelog/doc',swaggerUI.serve, swaggerUI.setup(DocumentoSwagger));

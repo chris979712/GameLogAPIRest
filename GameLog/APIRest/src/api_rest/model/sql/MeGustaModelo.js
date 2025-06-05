@@ -2,10 +2,10 @@ import sql from 'mssql';
 import { RetornarTipoDeConexion } from './connection/ConfiguracionConexion.js';
 import {MensajeDeRetornoBaseDeDatos} from '../../utilidades/Constantes.js';
 
-export class ModeloLike
+export class ModeloMeGusta
 {
 
-    static async RegistrarLikeAReseña({datos, tipoDeUsuario})
+    static async RegistrarMeGustaAReseña({datos, tipoDeUsuario})
     {
         let resultadoInsercion;
         let conexion;
@@ -19,7 +19,7 @@ export class ModeloLike
                 .input('idResenia',sql.Int,idResena)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
-                .execute('spi_Likes');
+                .execute('spi_MeGusta');
             resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output})
         }
         catch(error)
@@ -36,7 +36,7 @@ export class ModeloLike
         return resultadoInsercion;
     }
 
-    static async EliminarLikeDeReseña({datos,tipoDeUsuario})
+    static async EliminarMeGustaDeReseña({datos,tipoDeUsuario})
     {
         let resultadoEliminacion;
         let conexion;
@@ -50,7 +50,7 @@ export class ModeloLike
                 .input('idJugador',sql.Int,idJugador)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
-                .execute('spd_Likes');
+                .execute('spd_MeGusta');
             resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output})
         }
         catch(error)

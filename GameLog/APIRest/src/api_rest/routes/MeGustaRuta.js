@@ -1,26 +1,26 @@
 import { Router } from "express";
-import { LikeControlador } from "../controllers/LikeControlador.js";
+import { MeGustaControlador } from "../controllers/MeGustaControlador.js";
 import { ValidarJwt } from '../middlewares/jwt.js';
 
-export const CrearRutaLike = ({ModeloLike}) =>
+export const CrearRutaMeGusta = ({ModeloMeGusta}) =>
 {
     /**
      * @swagger
      * tags:
-     *  name: Likes
-     *  description: Rutas para el registro y eliminación de likes a una reseña
+     *  name: MeGusta
+     *  description: Rutas para el registro y eliminación de MeGusta a una reseña
      */
 
-    const LikeEnrutador = Router();
-    const ControladorLikeEnrutador = new LikeControlador({ModeloLike});
+    const MeGustaEnrutador = Router();
+    const ControladorMeGustaEnrutador = new MeGustaControlador({ModeloMeGusta});
 
     /**
      * @swagger
-     * /like:
+     * /MeGusta:
      *   post:
-     *     summary: Registrar un like a una reseña
-     *     tags: [Likes]
-     *     description: Permite que un jugador registrado le dé "like" a una reseña específica. Requiere autenticación.
+     *     summary: Registrar un MeGusta a una reseña
+     *     tags: [MeGusta]
+     *     description: Permite que un jugador registrado le dé "MeGusta" a una reseña específica. Requiere autenticación.
      *     security:
      *       - bearerAuth: [] 
      *     requestBody:
@@ -32,15 +32,15 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *             properties:
      *               idResena:
      *                 type: integer
-     *                 description: ID de la reseña a la que se desea dar like
+     *                 description: ID de la reseña a la que se desea dar MeGusta
      *                 example: 12
      *               idJugador:
      *                 type: integer
-     *                 description: ID del jugador que realiza el like
+     *                 description: ID del jugador que realiza el MeGusta
      *                 example: 5
      *     responses:
      *       200:
-     *         description: Like registrado exitosamente
+     *         description: MeGusta registrado exitosamente
      *         content:
      *           application/json:
      *             schema:
@@ -54,9 +54,9 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *                   example: 200
      *                 mensaje:
      *                   type: string
-     *                   example: Like registrado correctamente
+     *                   example: MeGusta registrado correctamente
      *       400:
-     *         description: Datos inválidos proporcionados para el like
+     *         description: Datos inválidos proporcionados para el MeGusta
      *         content:
      *           application/json:
      *             schema:
@@ -86,17 +86,17 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al querer registar el like a la reseña
+     *                   example: Ha ocurrido un error al querer registar el MeGusta a la reseña
      */
-    LikeEnrutador.post('/',ValidarJwt,ControladorLikeEnrutador.RegistrarLikeAReseña);
+    MeGustaEnrutador.post('/',ValidarJwt,ControladorMeGustaEnrutador.RegistrarMeGustaAReseña);
 
     /**
      * @swagger
-     * /like/{idResena}/{idJugador}:
+     * /MeGusta/{idResena}/{idJugador}:
      *   delete:
-     *     summary: Eliminar un like de una reseña
-     *     tags: [Likes]
-     *     description: Permite que un jugador elimine un like que ha dado previamente a una reseña. Requiere autenticación.
+     *     summary: Eliminar un MeGusta de una reseña
+     *     tags: [MeGusta]
+     *     description: Permite que un jugador elimine un MeGusta que ha dado previamente a una reseña. Requiere autenticación.
      *     security:
      *       - bearerAuth: []  # Requiere token JWT
      *     parameters:
@@ -105,18 +105,18 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *         required: true
      *         schema:
      *           type: integer
-     *         description: ID del jugador que dio el like
+     *         description: ID del jugador que dio el MeGusta
      *         example: 5
      *       - in: path
      *         name: idResena
      *         required: true
      *         schema:
      *           type: integer
-     *         description: ID de la reseña que recibió el like
+     *         description: ID de la reseña que recibió el MeGusta
      *         example: 12
      *     responses:
      *       200:
-     *         description: Like eliminado exitosamente
+     *         description: MeGusta eliminado exitosamente
      *         content:
      *           application/json:
      *             schema:
@@ -130,9 +130,9 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *                   example: 200
      *                 mensaje:
      *                   type: string
-     *                   example: Like eliminado correctamente
+     *                   example: MeGusta eliminado correctamente
      *       400:
-     *         description: Parámetros inválidos para eliminar el like
+     *         description: Parámetros inválidos para eliminar el MeGusta
      *         content:
      *           application/json:
      *             schema:
@@ -162,9 +162,9 @@ export const CrearRutaLike = ({ModeloLike}) =>
      *                   example: 500
      *                 mensaje:
      *                   type: string
-     *                   example: Ha ocurrido un error al querer eliminar el like a la reseña
+     *                   example: Ha ocurrido un error al querer eliminar el MeGusta a la reseña
      */
-    LikeEnrutador.delete('/:idResena/:idJugador',ValidarJwt,ControladorLikeEnrutador.EliminarLikeDeReseña);
+    MeGustaEnrutador.delete('/:idResena/:idJugador',ValidarJwt,ControladorMeGustaEnrutador.EliminarMeGustaDeReseña);
 
-    return LikeEnrutador;
+    return MeGustaEnrutador;
 }

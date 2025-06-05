@@ -38,7 +38,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE FUNCTION [dbo].[fn_VerificarLikeAResenia]
+CREATE FUNCTION [dbo].[fn_VerificarMeGustaAResenia]
 (
 	@idJugadorBuscador INT,
 	@idResenia INT
@@ -49,33 +49,33 @@ BEGIN
 	RETURN (
 		SELECT CASE 
 			WHEN EXISTS (
-				SELECT 1 FROM Likes WHERE idResenia = @idResenia AND idJugador = @idJugadorBuscador
+				SELECT 1 FROM MeGusta WHERE idResenia = @idResenia AND idJugador = @idJugadorBuscador
 			) THEN 1 ELSE 0
 		END
 	)
 END
 GO
-/****** Object:  Table [dbo].[Likes]    Script Date: 14/05/2025 06:12:20 p. m. ******/
+/****** Object:  Table [dbo].[MeGusta]    Script Date: 14/05/2025 06:12:20 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Likes](
+CREATE TABLE [dbo].[MeGusta](
 	[idJugador] [int] NOT NULL,
 	[idResenia] [int] NOT NULL,
-	[idLike] [int] IDENTITY(1,1) NOT NULL,
-CONSTRAINT [PK_Likes] PRIMARY KEY CLUSTERED 
+	[idMeGusta] [int] IDENTITY(1,1) NOT NULL,
+CONSTRAINT [PK_MeGusta] PRIMARY KEY CLUSTERED 
 (
-	[idLike] ASC
+	[idMeGusta] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  UserDefinedFunction [dbo].[fn_ObtenerLikesDeReseña]    Script Date: 14/05/2025 06:12:20 p. m. ******/
+/****** Object:  UserDefinedFunction [dbo].[fn_ObtenerMeGustaDeReseña]    Script Date: 14/05/2025 06:12:20 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE FUNCTION [dbo].[fn_ObtenerLikesDeReseña]
+CREATE FUNCTION [dbo].[fn_ObtenerMeGustaDeReseña]
 (	
 	@idResenia INT
 )
@@ -83,8 +83,8 @@ RETURNS TABLE
 AS
 RETURN 
 (
-	SELECT COUNT(*) AS totalDeLikes
-    FROM Likes
+	SELECT COUNT(*) AS totalDeMeGusta
+    FROM MeGusta
     WHERE idResenia = @idResenia
 	GROUP BY idResenia
 )
@@ -250,17 +250,17 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[Jugadores] NOCHECK CONSTRAINT [Acceso-Jugador]
 GO
-ALTER TABLE [dbo].[Likes]  WITH NOCHECK ADD  CONSTRAINT [Jugador-Like] FOREIGN KEY([idJugador])
+ALTER TABLE [dbo].[MeGusta]  WITH NOCHECK ADD  CONSTRAINT [Jugador-MeGusta] FOREIGN KEY([idJugador])
 REFERENCES [dbo].[Jugadores] ([idJugador])
 ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[Likes] NOCHECK CONSTRAINT [Jugador-Like]
+ALTER TABLE [dbo].[MeGusta] NOCHECK CONSTRAINT [Jugador-MeGusta]
 GO
-ALTER TABLE [dbo].[Likes]  WITH NOCHECK ADD  CONSTRAINT [Reseña-Like] FOREIGN KEY([idResenia])
+ALTER TABLE [dbo].[MeGusta]  WITH NOCHECK ADD  CONSTRAINT [Reseña-MeGusta] FOREIGN KEY([idResenia])
 REFERENCES [dbo].[Reseñas] ([idResenia])
 ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[Likes] NOCHECK CONSTRAINT [Reseña-Like]
+ALTER TABLE [dbo].[MeGusta] NOCHECK CONSTRAINT [Reseña-MeGusta]
 GO
 ALTER TABLE [dbo].[Pendientes]  WITH CHECK ADD  CONSTRAINT [Juego-Pendiente] FOREIGN KEY([idJuego])
 REFERENCES [dbo].[Juegos] ([idJuego])
@@ -616,11 +616,11 @@ BEGIN
 	R.fecha,
 	R.opinion,
 	R.calificacion,
-	ISNULL(L.totalDeLikes,0) AS totalDeLikes,
-	dbo.fn_VerificarLikeAResenia(@idJugadorBuscador,R.idResenia) AS existeLike
+	ISNULL(L.totalDeMeGusta,0) AS totalDeMeGusta,
+	dbo.fn_VerificarMeGustaAResenia(@idJugadorBuscador,R.idResenia) AS existeLike
     FROM Reseñas AS R
     JOIN Juegos AS J ON J.idJuego = R.idJuego
-    OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L
+    OUTER APPLY dbo.fn_ObtenerMeGustaDeReseña(R.idResenia) AS L
     WHERE R.idJugador = @idJugador;
 END
 GO
@@ -696,12 +696,12 @@ BEGIN
 	R.fecha,
 	R.opinion,
 	R.calificacion,
-	ISNULL(L.totalDeLikes,0) AS totalDeLikes,
-	dbo.fn_VerificarLikeAResenia(@idJugadorBuscador,R.idResenia) AS existeLike
+	ISNULL(L.totalDeMeGusta,0) AS totalDeMeGusta,
+	dbo.fn_VerificarMeGustaAResenia(@idJugadorBuscador,R.idResenia) AS existeMeGusta
     FROM Reseñas AS R 
     JOIN Juegos AS JG ON JG.idJuego = R.idJuego 
     JOIN Jugadores AS J ON R.idJugador = J.idJugador
-    OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L 
+    OUTER APPLY dbo.fn_ObtenerMeGustaDeReseña(R.idResenia) AS L 
     WHERE R.idJuego = @idJuego;
 END
 GO
@@ -725,13 +725,13 @@ BEGIN
 	R.fecha,
 	R.opinion,
 	R.calificacion,
-	ISNULL(L.totalDeLikes,0) AS totalDeLikes,
-	dbo.fn_VerificarLikeAResenia(@idJugador,R.idResenia) AS existeLike
+	ISNULL(L.totalDeMeGusta,0) AS totalDeMeGusta,
+	dbo.fn_VerificarMeGustaAResenia(@idJugador,R.idResenia) AS existeMeGusta
     FROM Reseñas AS R
     JOIN Juegos AS JG ON JG.idJuego = R.idJuego
     JOIN Jugadores AS J ON R.idJugador = J.idJugador 
     JOIN Seguidor AS S ON S.idJugadorSeguido = R.idJugador
-	OUTER APPLY dbo.fn_ObtenerLikesDeReseña(R.idResenia) AS L
+	OUTER APPLY dbo.fn_ObtenerMeGustaDeReseña(R.idResenia) AS L
     WHERE R.idJuego = @idJuego AND S.idJugadorSeguidor = @idJugador;
 END
 GO
@@ -859,7 +859,7 @@ BEGIN
 				DECLARE @idAcceso INT;
 				SET @idAcceso = (SELECT idAcceso FROM Jugadores WHERE idJugador = @idJugador);
 				DELETE FROM Accesos WHERE idCuenta = @idAcceso;
-				DELETE FROM Likes WHERE idJugador = @idJugador;
+				DELETE FROM MeGusta WHERE idJugador = @idJugador;
 				DELETE FROM Seguidor WHERE idJugadorSeguidor = @idJugador;
 				DELETE FROM Favoritos WHERE idJugador = @idJugador;
 				DELETE FROM Reseñas WHERE idJugador = @idJugador;
@@ -883,12 +883,12 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spd_Likes]    Script Date: 14/05/2025 06:12:20 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spd_MeGusta]    Script Date: 14/05/2025 06:12:20 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spd_Likes]
+CREATE PROCEDURE [dbo].[spd_MeGusta]
 	@idResenia INT,
 	@idJugador INT,
 	@estado INT OUTPUT,
@@ -896,12 +896,12 @@ CREATE PROCEDURE [dbo].[spd_Likes]
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS (SELECT * FROM Likes WHERE idResenia = @idResenia)
+		IF EXISTS (SELECT * FROM MeGusta WHERE idResenia = @idResenia)
 		BEGIN
-			IF EXISTS (SELECT * FROM Likes WHERE idJugador = @idJugador)
+			IF EXISTS (SELECT * FROM MeGusta WHERE idJugador = @idJugador)
 			BEGIN
 				BEGIN TRANSACTION
-					DELETE FROM Likes WHERE idJugador = @idJugador AND idResenia = @idResenia;
+					DELETE FROM MeGusta WHERE idJugador = @idJugador AND idResenia = @idResenia;
 					DECLARE @idJugadorNotificado INT;
 					SET @idJugadorNotificado = (SELECT TOP 1 idJugador FROM Reseñas WHERE idResenia = @idResenia);
 					IF @idJugadorNotificado != @idJugador
@@ -1188,12 +1188,12 @@ BEGIN
 	END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[spi_Likes]    Script Date: 14/05/2025 06:12:20 p. m. ******/
+/****** Object:  StoredProcedure [dbo].[spi_MeGusta]    Script Date: 14/05/2025 06:12:20 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[spi_Likes]
+CREATE PROCEDURE [dbo].[spi_MeGusta]
 	@idJugador INT,
 	@idResenia INT,
 	@estado INT OUTPUT,
@@ -1205,10 +1205,10 @@ BEGIN
 		BEGIN
 			IF EXISTS (SELECT * FROM Reseñas WHERE idResenia = @idResenia)
 			BEGIN
-				IF NOT EXISTS (SELECT * FROM Likes WHERE idJugador = @idJugador AND idResenia = @idResenia)
+				IF NOT EXISTS (SELECT * FROM MeGusta WHERE idJugador = @idJugador AND idResenia = @idResenia)
 				BEGIN
 					BEGIN TRANSACTION
-						INSERT INTO Likes (idJugador,idResenia) VALUES (@idJugador,@idResenia);
+						INSERT INTO MeGusta (idJugador,idResenia) VALUES (@idJugador,@idResenia);
 						DECLARE @idJugadorNotificado INT;
 						SET @idJugadorNotificado = (SELECT TOP 1 idJugador FROM Reseñas WHERE idResenia = @idResenia);
 						IF @idJugadorNotificado != @idJugador
@@ -1384,7 +1384,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spi_Favoritos TO jugadorGameLog;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.spi_Likes TO jugadorGameLog;
+GRANT EXECUTE ON OBJECT::dbo.spi_MeGusta TO jugadorGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Reseña TO jugadorGameLog;
@@ -1411,7 +1411,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spa_Jugadores TO jugadorGameLog;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.spd_Likes TO jugadorGameLog;
+GRANT EXECUTE ON OBJECT::dbo.spd_MeGusta TO jugadorGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Juegos TO jugadorGameLog;
@@ -1423,7 +1423,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO jugadorGameLog;
 GO
 
-GRANT DELETE ON dbo.Likes TO jugadorGameLog;
+GRANT DELETE ON dbo.MeGusta TO jugadorGameLog;
 GO
 
 GRANT DELETE ON dbo.Pendientes TO jugadorGameLog;
@@ -1459,7 +1459,7 @@ GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO jugadorGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO jugadorGameLog;
 GO
-GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO jugadorGameLog;
+GRANT SELECT ON dbo.fn_ObtenerMeGustaDeReseña TO jugadorGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Acceso TO adminGameLog
@@ -1468,7 +1468,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spi_Favoritos TO adminGameLog;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.spi_Likes TO adminGameLog;
+GRANT EXECUTE ON OBJECT::dbo.spi_MeGusta TO adminGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Reseña TO adminGameLog;
@@ -1495,7 +1495,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spa_Jugadores TO adminGameLog;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.spd_Likes TO adminGameLog;
+GRANT EXECUTE ON OBJECT::dbo.spd_MeGusta TO adminGameLog;
 GO
 
 GRANT EXECUTE ON OBJECT::dbo.spi_Juegos TO adminGameLog;
@@ -1507,7 +1507,7 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.spd_Favorito TO adminGameLog;
 GO
 
-GRANT DELETE ON dbo.Likes TO adminGameLog;
+GRANT DELETE ON dbo.MeGusta TO adminGameLog;
 GO
 
 GRANT DELETE ON dbo.Pendientes TO adminGameLog;
@@ -1546,7 +1546,7 @@ GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO adminGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO adminGameLog;
 GO
-GRANT SELECT ON dbo.fn_ObtenerLikesDeReseña TO adminGameLog;
+GRANT SELECT ON dbo.fn_ObtenerMeGustaDeReseña TO adminGameLog;
 GO
 
 DECLARE	@resultadoTercerInsercion int,
