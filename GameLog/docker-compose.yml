@@ -19,6 +19,14 @@ services:
     command: ["redis-server", "--port", "1237"]
     ports:
       - 1237:1237
+  
+  gamelog_servidornotificacion:
+    build:
+      context: ./Servidornotificacion
+    container_name: gamelog_servidornotificacion
+    restart: always
+    ports:
+      - 1236:1236
 
   gamelog_apigrpc:
     build:
@@ -52,4 +60,5 @@ services:
     depends_on:
       - gamelog_apirest
       - gamelog_apigrpc
+      - gamelog_servidornotificacion
 

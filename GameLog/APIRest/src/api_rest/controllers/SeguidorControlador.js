@@ -1,6 +1,6 @@
 import { ValidarSeguidor, ValidarSeguidorParcial } from "../schemas/SeguidorValidador.js";
 import { logger } from "../utilidades/logger.js";
-import { PublicarAccionSocialSeguimiento } from "../utilidades/Redis.js";
+import { PublicarAccionSocial } from "../utilidades/Redis.js";
 
 export class SeguidorControlador
 {
@@ -34,7 +34,7 @@ export class SeguidorControlador
                     if(resultadoInsercion === 200)
                     {
                         const {idJugadorSeguido} = ResultadoValidacion.data;
-                        await PublicarAccionSocialSeguimiento(idJugadorSeguido,'Agregar',{mensaje:`${nombreDeUsuario} te ha empezado a seguir.`});
+                        await PublicarAccionSocial(idJugadorSeguido,'Agregar',{mensaje:`${nombreDeUsuario} te ha empezado a seguir.`});
                     }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
@@ -180,7 +180,7 @@ export class SeguidorControlador
                     if(resultadoEliminacion === 200)
                     {
                         const {idJugadorSeguido} = ResultadoValidacion.data;
-                        await PublicarAccionSocialSeguimiento(idJugadorSeguido,'Eliminar',{mensaje:`Se ha eliminado de seguidos`});
+                        await PublicarAccionSocial(idJugadorSeguido,'Eliminar',{mensaje:`Se ha eliminado de seguidos`});
                     }
                     res.status(resultadoEliminacion).json(
                         {
