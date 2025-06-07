@@ -11,7 +11,7 @@ export async function CrearSuscriptorRedis(io)
         url: process.env.REDIS_URL
     });
     Suscriptor.on('error',(error) =>{
-        logger({mensaje: `Error en el suscriptor redis: ${error}`});
+        logger({mensaje: `Error en el suscriptor redis: ${error.message}`});
     })
     Suscriptor.on('connect',()=>{
         console.log('Conectado a redis como suscriptor');

@@ -4,7 +4,7 @@ export function AutenticarUsuarioSockets(socket,next)
 {
     try
     {
-        const {usuario,contrasenia} = socket.handshake.auth;
+        const {usuario,contrasenia} = socket.handshake.query;
 
         if(usuario && contrasenia)
         {
