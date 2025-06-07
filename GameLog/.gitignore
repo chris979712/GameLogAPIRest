@@ -1,7 +1,6 @@
 /src/node_modules
 node_modules
 api.http
-.env
 logs
 coverage
 /APIgRPC/env

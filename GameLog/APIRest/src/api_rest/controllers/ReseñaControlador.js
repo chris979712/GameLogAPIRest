@@ -32,7 +32,7 @@ export class ReseñaControlador
                 else
                 {
                     const {idJuego} = ResultadoValidacion.data;
-                    await PublicarAccionReseña(idJuego,'Registrar',{mensaje: 'Hay nuevas reseñas por ver'})
+                    await PublicarAccionReseña(idJuego,'Registrar_resena',{mensaje: 'Hay nuevas reseñas por ver'})
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
                         estado: resultadoInsercion,
@@ -219,7 +219,7 @@ export class ReseñaControlador
                 }
                 else
                 {
-                    await PublicarAccionReseña(idJuego,'Eliminar',{mensaje: 'Hay nuevas reseñas por ver'})
+                    await PublicarAccionReseña(idJuego,'Eliminar_resena',{mensaje: 'Hay nuevas reseñas por ver'})
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
                         estado: resultadoEliminacion,

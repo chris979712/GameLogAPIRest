@@ -35,7 +35,7 @@ export class MeGustaControlador
                     if(resultadoInsercion === 200)
                     {
                         const {idJugadorAutor,idJuego} = ResultadoValidacion.data;
-                        await PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje: 'Se ha agregado un me gusta'});
+                        await PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje: 'Se ha agregado un me gusta', idResena: ResultadoValidacion.data.idResena});
                         await PublicarAccionSocial(idJugadorAutor,'Interactuar_resena',{mensaje:`${NombreDeUsuario} le ha dado me gusta a tu reseña`});
                     }
                     res.status(resultadoInsercion).json({
@@ -94,7 +94,7 @@ export class MeGustaControlador
                 {
                     if(resultadoEliminacion === 200)
                     {
-                        await PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: 'Se ha eliminado un me gusta'});
+                        await PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: 'Se ha eliminado un me gusta',idResena: ResultadoValidacion.data.idResena});
                     }
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
