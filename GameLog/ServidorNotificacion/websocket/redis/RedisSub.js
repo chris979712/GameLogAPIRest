@@ -47,12 +47,12 @@ function ManejarMensajeRedis(io,channel,message)
         const CanalJugadorCoincide = channel.match(/^jugador_(\d+)$/);
         if(CanalResenasCoincide)
         {
-            const IdJuego = CanalResenasCoincide[1];
+            const IdJuego = CanalResenasCoincide[2];
             io.to(`resenas_juego_${IdJuego}`).emit('actualizacion_resenas',data);
         }
         else if(CanalJugadorCoincide)
         {
-            const IdJugador = CanalJugadorCoincide[2];
+            const IdJugador = CanalJugadorCoincide[1];
             io.to(`jugador_${IdJugador}`).emit('notificacion_jugador',data)
         }
     }

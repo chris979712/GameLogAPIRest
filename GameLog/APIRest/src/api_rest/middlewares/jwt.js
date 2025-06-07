@@ -12,9 +12,10 @@ export const ValidarJwt = (request,response, next) =>
             : null;
         if(Token)
         {
-                const {correo, tipoDeUsuario} = jwt.verify(Token,process.env.SECRETO_JWT);
+                const {correo, tipoDeUsuario,nombreDeUsuario} = jwt.verify(Token,process.env.SECRETO_JWT);
                 request.correo = correo;
                 request.tipoDeUsuario = tipoDeUsuario;
+                request.nombreDeUsuario = nombreDeUsuario;
                 next();
         }
         else
