@@ -192,7 +192,7 @@ export class AccesoControlador
                     res.status(resultadoEdicion).json(
                     {
                         error: resultadoEdicion !== 200,
-                        estado: ResultadoEdicion.resultado,
+                        estado: ResultadoEdicion.estado,
                         mensaje: ResultadoEdicion.mensaje
                     });
                 }
