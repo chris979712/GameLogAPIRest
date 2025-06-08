@@ -17,6 +17,7 @@ services:
     image: redis:7-alpine
     container_name: gamelog_redis
     command: ["redis-server", "--port", "1237"]
+    restart: always
     ports:
       - 1237:1237
   

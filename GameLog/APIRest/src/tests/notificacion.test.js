@@ -133,19 +133,22 @@ beforeAll(async() =>
             idJugador: idSegundoJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const DatosSegundoMeGusta = {
             idJugador: idTercerJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const DatosTercerMeGusta = {
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         await request(servidor).post('/gamelog/MeGusta')
             .set({

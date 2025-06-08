@@ -218,13 +218,15 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const DatosSegundoMeGusta = {
             idJugador: idSegundoJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -248,7 +250,8 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -265,7 +268,8 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: idPrimerJugador,
             idResena: 9281,
             idJugadorAutor: idPrimerJugador,
-            idJuego: 41437
+            idJuego: 41437,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -282,7 +286,8 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: "ASQOWE",
             idResena: "ASIJE",
             idJugadorAutor: "pokafsa",
-            idJuego: "asdop"
+            idJuego: "asdop",
+            nombreJuego: 12134242
         }
         const resPrimerInsercion = await request(servidor).post('/gamelog/MeGusta')
             .set({
@@ -299,11 +304,13 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: idPrimerJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const DatosSegundaEliminacion = {
             idJugador: idSegundoJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
@@ -327,6 +334,7 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: idTercerJugador,
             idResena: idPrimerReseña,
             idJugadorAutor: idPrimerJugador,
+            nombreJuego: 'Fortnite-battle-royale'
         }
         const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${41437}`)
             .set({
@@ -343,6 +351,7 @@ describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',
             idJugador: 'KMAOISDNA',
             idResena: 'ASOIJDIO',
             idJugadorAutor: 'MASDIOANSDAD',
+            nombreJuego: 12345
         }
         const resPrimerEliminacion = await request(servidor).delete(`/gamelog/MeGusta/${23545}`)
             .set({

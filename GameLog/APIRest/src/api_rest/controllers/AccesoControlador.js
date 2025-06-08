@@ -1,4 +1,5 @@
 import { ValidarEdicionParcialAcceso, ValidarEliminacionAcceso, ValidarInsercionAcceso, ValidarCredencialesAcceso } from "../schemas/AccesoValidador.js";
+import { PublicarAccionSocial } from "../utilidades/Redis.js";
 import { logger } from "../utilidades/logger.js";
 
 export class AccesoControlador
@@ -175,20 +176,25 @@ export class AccesoControlador
                     logger({mensaje: ResultadoEdicion.mensaje});
                     console.log(resultadoEdicion);
                     res.status(resultadoEdicion).json(
-                        {
-                            error: true,
-                            estado: ResultadoEdicion.resultado,
-                            mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
-                        });
+                    {
+                        error: true,
+                        estado: ResultadoEdicion.resultado,
+                        mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
+                    });
                 }
                 else
                 {
+                    if(resultadoEdicion === 200 && ResultadoValidacion.data.estadoAcceso === 'Baneado')
+                    {
+                        const IdJugador = ResultadoValidacion.data.idAcceso;
+                        await PublicarAccionSocial(IdJugador,'Banear_usuario',{mensaje: 'Has sido puesto en lista negra. Tu cuenta no puede acceder más a gamelog'});
+                    }
                     res.status(resultadoEdicion).json(
-                        {
-                            error: resultadoEdicion !== 200,
-                            estado: ResultadoEdicion.resultado,
-                            mensaje: ResultadoEdicion.mensaje
-                        });
+                    {
+                        error: resultadoEdicion !== 200,
+                        estado: ResultadoEdicion.resultado,
+                        mensaje: ResultadoEdicion.mensaje
+                    });
                 }
             }
             else
