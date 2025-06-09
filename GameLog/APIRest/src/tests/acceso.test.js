@@ -54,7 +54,7 @@ afterAll(async () => {
         })
         .send(datosEliminacion);
     servidor.close();
-},20000);
+});
 
 describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () => 
 {

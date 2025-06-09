@@ -276,7 +276,7 @@ beforeAll( async() =>
             "access_token": `Bearer ${token}`
         })
         .send(DatosSextaReseñaPrimerJugador);
-},20000)
+})
 
 afterAll( async() => 
 {

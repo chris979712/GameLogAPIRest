@@ -25,7 +25,7 @@ export class JuegoControlador
                     {
                         error: true,
                         estado: resultadoInsercion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer insertar un nuevo juego'
+                        mensaje: 'Ha ocurrido un error al intentar registrar un nuevo juego'
                     });
                 }
                 else
@@ -42,7 +42,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -76,7 +76,7 @@ export class JuegoControlador
                     {
                         error: true,
                         estado: resultadoInsercion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer registrar el juego como favorito.'
+                        mensaje: 'Ha ocurrido un error al intentar registrar el juego como favorito.'
                     });
                 }
                 else
@@ -93,7 +93,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -127,7 +127,7 @@ export class JuegoControlador
                     {
                         error: true,
                         estado: resultadoInsercion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer registrar el juego como pendiente.'
+                        mensaje: 'Ha ocurrido un error al intentar registrar el juego a la lista de reseñar más tarde.'
                     });
                 }
                 else
@@ -144,7 +144,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -155,7 +155,7 @@ export class JuegoControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un error al querer registar el juego como pendiente"
+                    mensaje: "Ha ocurrido un error al querer registar el juego a la lista de reseñar más tarde."
                 }
             )
         }
@@ -187,7 +187,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -230,7 +230,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -273,7 +273,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -284,7 +284,7 @@ export class JuegoControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: "Ha ocurrido un error al querer buscar los juegos pendientes"
+                mensaje: "Ha ocurrido un error al querer buscar los juegos para reseñar más tarde"
             }
             )
         }
@@ -316,7 +316,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -352,7 +352,7 @@ export class JuegoControlador
                     {
                         error: true,
                         estado: resultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar un juego'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar un juego'
                     });
                 }
                 else
@@ -369,7 +369,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -406,7 +406,7 @@ export class JuegoControlador
                     {
                         error: true,
                         estado: resultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar un juego como pendiente'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar un juego de la lista de reseñar más tarde.'
                     });
                 }
                 else
@@ -423,7 +423,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -434,7 +434,7 @@ export class JuegoControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: "Ha ocurrido un error al querer eliminar el juego pendiente"
+                mensaje: "Ha ocurrido un error al querer eliminar el juego de la lista de reseñar más tarde"
             }
             )  
         }
@@ -460,7 +460,7 @@ export class JuegoControlador
                     {
                         error: true,
                         estado: resultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar un juego como favorito'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar un juego como favorito'
                     });
                 }
                 else
@@ -477,7 +477,7 @@ export class JuegoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -488,7 +488,7 @@ export class JuegoControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: "Ha ocurrido un error al querer eliminar el juego favorito"
+                mensaje: "Ha ocurrido un error al querer eliminar el juego como favorito"
             }
             )  
         }

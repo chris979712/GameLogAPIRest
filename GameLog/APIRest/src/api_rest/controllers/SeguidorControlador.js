@@ -1,6 +1,6 @@
 import { ValidarSeguidor, ValidarSeguidorParcial } from "../schemas/SeguidorValidador.js";
 import { logger } from "../utilidades/logger.js";
-import { PublicarAccionSocial } from "../utilidades/Redis.js";
+import { PublicarAccionSocial,EjecutarNotificacion } from "../utilidades/Redis.js";
 
 export class SeguidorControlador
 {
@@ -17,7 +17,6 @@ export class SeguidorControlador
             const {tipoDeUsuario,nombreDeUsuario} = req;
             if(ResultadoValidacion.success)
             {
-                console.log(ResultadoValidacion.data)
                 const ResultadoInsercion = await this.modeloSeguidor.RegistrarJugadorASeguir({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario})
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
                 if(resultadoInsercion === 500)
@@ -26,7 +25,7 @@ export class SeguidorControlador
                     res.status(resultadoInsercion).json({
                         error: true,
                         estado: resultadoInsercion,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer registrar el jugador a seguir.'
+                        mensaje: 'Ha ocurrido un error al querer seguir al jugador seleccionado.'
                     })
                 }
                 else
@@ -34,7 +33,7 @@ export class SeguidorControlador
                     if(resultadoInsercion === 200)
                     {
                         const {idJugadorSeguido} = ResultadoValidacion.data;
-                        await PublicarAccionSocial(idJugadorSeguido,'Agregar_seguidor',{mensaje:`${nombreDeUsuario} te ha empezado a seguir.`});
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorSeguido,'Agregar_seguidor',{mensaje:`${nombreDeUsuario} te ha empezado a seguir.`})); 
                     }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
@@ -48,7 +47,7 @@ export class SeguidorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -59,7 +58,7 @@ export class SeguidorControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un error al querer registrar el seguimiento al jugador."
+                    mensaje: "Ha ocurrido un error al querer seguir al jugador seleccionado."
                 });
         }
     }
@@ -90,7 +89,7 @@ export class SeguidorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -101,7 +100,7 @@ export class SeguidorControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un error al querer consultar los seguidores"
+                    mensaje: "Ha ocurrido un error al querer consultar los seguidores."
                 }
             )
         }
@@ -133,7 +132,7 @@ export class SeguidorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -144,7 +143,7 @@ export class SeguidorControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un error al querer consultar los jugadores seguidos"
+                    mensaje: "Ha ocurrido un error al querer consultar los jugadores seguidos."
                 }
             )
         }
@@ -172,7 +171,7 @@ export class SeguidorControlador
                         {
                             error: true,
                             estado: resultadoEliminacion,
-                            mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar el jugador seguido'
+                            mensaje: 'Ha ocurrido un error al intentar eliminar el jugador seguido jugador seguido de la lista de seguidos.'
                         });
                 }
                 else
@@ -180,7 +179,7 @@ export class SeguidorControlador
                     if(resultadoEliminacion === 200)
                     {
                         const {idJugadorSeguido} = ResultadoValidacion.data;
-                        await PublicarAccionSocial(idJugadorSeguido,'Eliminar_seguidor',{mensaje:`Se ha eliminado de seguidos`});
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorSeguido,'Eliminar_seguidor',{mensaje:`Se ha eliminado de seguidos`})); 
                     }
                     res.status(resultadoEliminacion).json(
                         {
@@ -196,7 +195,7 @@ export class SeguidorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -207,7 +206,7 @@ export class SeguidorControlador
                 {
                     error: true,
                     estado: 500,
-                    mensaje: "Ha ocurrido un erro al querer eliminar el jugador seguido de la lista de seguidos"
+                    mensaje: "Ha ocurrido un error al querer eliminar el jugador seguido de la lista de seguidos."
                 }
             )
         }

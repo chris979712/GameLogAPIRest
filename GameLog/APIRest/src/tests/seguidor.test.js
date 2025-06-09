@@ -83,7 +83,7 @@ beforeAll( async() =>
     const resLoginTercerJugador = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(datosTercerJugadorLogin);
     idTercerJugador = resLoginTercerJugador.body.cuenta[0].idJugador;
     tokenAdministrador = resLoginTercerJugador.headers['access_token'];
-},20000)
+})
 
 afterAll( async() =>
 {

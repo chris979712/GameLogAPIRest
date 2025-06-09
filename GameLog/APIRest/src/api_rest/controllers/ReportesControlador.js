@@ -19,7 +19,6 @@ export class ReportesEstadisticosControlador
             if(ResultadoValidacion.success)
             {
                 const ResultadoConsulta = await this.modeloReportesEstadisticos.JuegosEnTendencia({datos: ResultadoValidacion.data,tipoDeUsuario: tipoDeUsuario})
-                console.log(ResultadoConsulta);
                 let resultadoEstadoConsulta = parseInt(ResultadoConsulta.estado);
                 res.status(resultadoEstadoConsulta).json({
                     error: resultadoEstadoConsulta !== 200,
@@ -35,7 +34,7 @@ export class ReportesEstadisticosControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -78,7 +77,7 @@ export class ReportesEstadisticosControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }

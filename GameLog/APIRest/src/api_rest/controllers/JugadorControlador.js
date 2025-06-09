@@ -28,7 +28,7 @@ export class JugadorControlador
                     {
                         error: true,
                         estado: ResultadoEdicion.estado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
+                        mensaje: 'Ha ocurrido un error al intentar actualizar el perfil del jugador.'
                     });
                 }
                 else
@@ -46,7 +46,7 @@ export class JugadorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -57,7 +57,7 @@ export class JugadorControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: "Ha ocurrido un error al querer actualizar los datos del jugador."
+                mensaje: "Ha ocurrido un error al querer actualizar el perfil del jugador."
             });
         }
     }
@@ -88,7 +88,7 @@ export class JugadorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -123,7 +123,7 @@ export class JugadorControlador
                     {
                         error: true,
                         estado: ResultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar el jugador deseado'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar el jugador deseado.'
                     });
                 }
                 else
@@ -141,7 +141,7 @@ export class JugadorControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -152,7 +152,7 @@ export class JugadorControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: "Ha ocurrido un error al querer borrar el jugador."
+                mensaje: "Ha ocurrido un error al querer eliminar el jugador deseado."
             });
         }
     }

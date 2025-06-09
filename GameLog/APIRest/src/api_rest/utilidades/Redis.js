@@ -38,8 +38,8 @@ export const PublicarAccionReseña = async (idJuego,accion,datos = {}) =>
         accion,
         ...datos,
         timeStamp: new Date().toISOString()
-    })
-};
+    });
+}
 
 export const PublicarAccionSocial = async (idJugador,accion,datos = {}) =>
 {
@@ -47,8 +47,22 @@ export const PublicarAccionSocial = async (idJugador,accion,datos = {}) =>
         accion,
         ...datos,
         timeStamp: new Date().toISOString()
-    })
+    });
+}
+
+export const EjecutarNotificacion = (fn) => 
+{
+    try {
+        const promesa = fn();
+        if (promesa && typeof promesa.catch === 'function') {
+            promesa.catch(error =>
+                logger({ mensaje: `Error al notificar a redis: ${error.message}` })
+            );
+        }
+    } catch (error) {
+        logger({ mensaje: `Error al ejecutar función de notificación: ${error.message}` });
+    }
 }
 
 Publicador.on('connect', () => logger({mensaje: 'Conectado a Redis'}));
-Publicador.on('error', (err) => logger({mensaje: `Error en Redis: ${err.message}`}));
+Publicador.on('error', (error) => logger({mensaje: `Error al intentar comunicarse con Redis: ${error}`}));

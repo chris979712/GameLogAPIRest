@@ -59,7 +59,7 @@ afterAll(async() =>
         })
         .send(datosEliminacion);
     servidor.close();
-},20000)
+})
 
 describe('Tests para el servicio de Jugadores donde se encuentra la modificacion, busqueda y eliminacion', () =>
 {

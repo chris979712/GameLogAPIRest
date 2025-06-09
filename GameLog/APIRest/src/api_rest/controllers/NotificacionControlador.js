@@ -34,7 +34,7 @@ export class NotificacionControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Datos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -70,7 +70,7 @@ export class NotificacionControlador
                     {
                         error: true,
                         estado: estadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar la notificacion'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar la notificacion'
                     });
                 }
                 else
@@ -87,7 +87,7 @@ export class NotificacionControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Datos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }

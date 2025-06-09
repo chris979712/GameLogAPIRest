@@ -108,7 +108,7 @@ beforeAll( async() =>
             "access_token": `Bearer ${token}`
         })
         .send(Datos);
-},20000)
+})
 
 afterAll( async() =>
 {

@@ -1,6 +1,6 @@
 import { logger } from "../utilidades/logger.js";
 import { ValidarMeGusta } from "../schemas/MeGustaValidador.js";
-import { PublicarAccionReseña, PublicarAccionSocial } from "../utilidades/Redis.js";
+import { PublicarAccionReseña, PublicarAccionSocial, EjecutarNotificacion } from "../utilidades/Redis.js";
 
 export class MeGustaControlador
 {
@@ -27,7 +27,7 @@ export class MeGustaControlador
                     {
                         error: true,
                         estado: resultadoInsercion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer darle me gusta a una reseña'
+                        mensaje: 'Ha ocurrido un error al intentar darle me gusta a una reseña'
                     });
                 }
                 else
@@ -35,8 +35,8 @@ export class MeGustaControlador
                     if(resultadoInsercion === 200)
                     {
                         const {idJugadorAutor,idJuego,nombreJuego} = ResultadoValidacion.data;
-                        await PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje: `${NombreDeUsuario} ha dado un me gusta a una reseña`, idResena: ResultadoValidacion.data.idResena, jugadorEmitente: nombreDeUsuario});
-                        await PublicarAccionSocial(idJugadorAutor,'Interactuar_resena',{mensaje:`${NombreDeUsuario} le ha dado me gusta a tu reseña sobre ${nombreJuego}`});
+                        EjecutarNotificacion(()=>PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje: `${NombreDeUsuario} ha dado un me gusta a una reseña`, idResena: ResultadoValidacion.data.idResena, jugadorEmitente: nombreDeUsuario})); 
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorAutor,'Interactuar_resena',{mensaje:`${NombreDeUsuario} le ha dado me gusta a tu reseña sobre ${nombreJuego}`}));
                     }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
@@ -50,7 +50,7 @@ export class MeGustaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });    
             }
         }
@@ -87,14 +87,15 @@ export class MeGustaControlador
                     {
                         error: true,
                         estado: resultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar el me gusta de una reseña'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar el me gusta de una reseña'
                     });
                 }
                 else
                 {
                     if(resultadoEliminacion === 200)
                     {
-                        await PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: `${nombreDeUsuario} ha quitado un me gusta a una reseña`,idResena: ResultadoValidacion.data.idResena});
+                        EjecutarNotificacion(()=>PublicarAccionReseña(idJuego,'Quitar_MeGusta',{mensaje: `${nombreDeUsuario} ha quitado un me gusta a una reseña`,idResena: ResultadoValidacion.data.idResena}));
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorAutor,'Desvincular_rnteraccion_resena',{mensaje:`${nombreDeUsuario} ha eliminado un me gusta de una de tus reseñas`}));
                     }
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
@@ -108,7 +109,7 @@ export class MeGustaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }

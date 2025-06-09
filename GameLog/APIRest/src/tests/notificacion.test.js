@@ -179,7 +179,7 @@ beforeAll(async() =>
                 "access_token": `Bearer ${token}`
             })
             .send(DatosTercerMeGusta);
-},20000)
+})
 
 afterAll(async() =>
 {

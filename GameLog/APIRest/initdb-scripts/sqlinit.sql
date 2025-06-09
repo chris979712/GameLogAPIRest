@@ -314,7 +314,7 @@ BEGIN
 					WHERE idCuenta = @idAcceso;
 				COMMIT TRANSACTION
 				SET @estado = 200;
-				SET @mensaje = 'Los datos de acceso han sido modificados con éxito.';
+				SET @mensaje = 'Los datos de acceso al sistema han sido modificados con éxito.';
 			END
 			ELSE
 			BEGIN
@@ -404,18 +404,18 @@ BEGIN
 					WHERE idJugador = @idJugador;
 				COMMIT TRANSACTION
 				SET @estado = 200;
-				SET @mensaje = 'El perfil del jugador ha sido editado de manera exitosa'
+				SET @mensaje = 'El perfil del jugador ha sido editado de manera exitosa.'
 			END
 			ELSE
 			BEGIN
 				SET @estado = 400;
-				SET @mensaje = 'El nuevo nombre de usuario que desea ingresar ya se encuentra registrado'
+				SET @mensaje = 'El nuevo nombre de usuario que desea ingresar ya se encuentra registrado.'
 			END
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'La cuenta que desea editar, no se encuentra registrada'
+			SET @mensaje = 'La cuenta que desea editar, no se encuentra registrada.'
 		END
 	END TRY
 	BEGIN CATCH
@@ -661,7 +661,7 @@ BEGIN
 				DELETE FROM Notificaciones WHERE idNotificacion = @idNotificacion;
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'La notificacion ha sido eliminada con éxito.';
+			SET @mensaje = 'La notificación ha sido eliminada con éxito.';
 		END
 		ELSE
 		BEGIN
@@ -868,12 +868,12 @@ BEGIN
 				
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'El Jugador ha sido eliminado con éxito';
+			SET @mensaje = 'El Jugador ha sido eliminado con éxito.';
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'No se ha encontrado el Jugador a eliminar';
+			SET @mensaje = 'No se ha encontrado el Jugador a eliminar.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -954,12 +954,12 @@ BEGIN
 				DELETE FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador;
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'El juego ha sido eliminado de los pendientes de manera éxitosa';
+			SET @mensaje = 'El juego ha sido eliminado de la lista para reseñar más tarde de manera éxitosa.';
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'No se ha podido encontrar el pendiente a eliminar';
+			SET @mensaje = 'No se ha podido encontrar el juego a reseñar más tarde.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -987,12 +987,12 @@ BEGIN
 				DELETE FROM Reseñas WHERE idResenia = @idReseña;
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'La reseña ha sido eliminada con éxito';
+			SET @mensaje = 'La reseña ha sido eliminada con éxito.';
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'El ID de reseña ingresado no se encuentra registrado';
+			SET @mensaje = 'El ID de reseña ingresado no se encuentra registrado.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -1026,12 +1026,12 @@ BEGIN
 				DELETE FROM Notificaciones WHERE mensajeNotificacion = @mensajeNotificacion AND idJugadorNotificado = @idJugadorSeguido;
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'El jugador seguido ha sido eliminado con éxito';
+			SET @mensaje = 'El jugador seguido ha sido eliminado con éxito.';
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'No se ha encontrado el seguimiento a eliminar';
+			SET @mensaje = 'No se ha encontrado el seguimiento a eliminar.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -1077,24 +1077,24 @@ BEGIN
 						INSERT INTO Jugadores (nombre,primerApellido,segundoApellido,nombreDeUsuario,descripcion,foto,idAcceso) VALUES (@nombre,@primerApellido,@segundoApellido,@nombreDeUsuario,@descripcion,@foto,@idAcceso);
 					COMMIT TRANSACTION
 					SET @resultado = 200;
-					SET @mensaje = 'La nueva cuenta de acceso ha sido registrada correctamente';
+					SET @mensaje = 'La nueva cuenta de acceso ha sido registrada correctamente.';
 				END
 				ELSE
 				BEGIN
 					SET @resultado = 400;
-					SET @mensaje = 'No se ha encontrado el tipo de acceso que desea asignarle al usuario';
+					SET @mensaje = 'No se ha encontrado el tipo de acceso que desea asignarle al usuario.';
 				END
 			END
 			ELSE
 			BEGIN
 				SET @resultado = 400;
-				SET @mensaje = 'El nombre de usuario ingresado ya se encuentra registrado';
+				SET @mensaje = 'El nombre de usuario ingresado ya se encuentra registrado.';
 			END
 		END
 		ELSE
 		BEGIN
 			SET @resultado = 400;
-			SET @mensaje = 'El correo ingresado ya se encuentra registrado';
+			SET @mensaje = 'El correo ingresado ya se encuentra registrado.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -1221,24 +1221,24 @@ BEGIN
 						END
 					COMMIT TRANSACTION
 					SET @estado = 200;
-					SET @mensaje = 'Se ha registrado un me gusta de manera exitosa';
+					SET @mensaje = 'Se ha registrado un me gusta de manera exitosa.';
 				END
 				ELSE
 				BEGIN
 					SET @estado = 400;
-					SET @mensaje = 'No es posible darle me gusta, ya se ha dado me gusta a la reseña';
+					SET @mensaje = 'No es posible darle me gusta, ya se ha dado me gusta a la reseña.';
 				END
 			END
 			ELSE
 			BEGIN
 				SET @estado = 400;
-				SET @mensaje = 'El id de la reseña ingresada no existe en la base de datos';
+				SET @mensaje = 'El id de la reseña ingresada no existe en la base de datos.';
 			END
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'El id del jugador ingresado no existe en la base de datos';
+			SET @mensaje = 'El id del jugador ingresado no existe en la base de datos.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -1269,12 +1269,12 @@ BEGIN
 					INSERT INTO Pendientes (idJuego,idJugador) VALUES (@idJuego,@idJugador);
 				COMMIT TRANSACTION
 				SET @estado = 200;
-				SET @mensaje = 'El juego ha sido guardado como pendiente, de manera éxitosa';
+				SET @mensaje = 'El juego ha sido guardado a la lista de reseñar más tarde, de manera éxitosa.';
 			END
 			ELSE
 			BEGIN
 				SET @estado = 400;
-				SET @mensaje = 'El juego a guardar como pendiente ya ha sido guardado previamente como pendiente';
+				SET @mensaje = 'El juego ya se ha guardado para reseñar más tarde.';
 			END
 		END
 		ELSE
@@ -1313,12 +1313,12 @@ BEGIN
 				DELETE FROM Pendientes WHERE idJuego = @idJuego AND idJugador = @idJugador;
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'Se ha registrado la reseña de manera correcta';
+			SET @mensaje = 'Se ha registrado la reseña de manera correcta.';
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'Ya ha realizado una reseña para el juego seleccionado';
+			SET @mensaje = 'Ya ha realizado una reseña para el juego seleccionado.';
 		END
 	END TRY
 	BEGIN CATCH
@@ -1352,12 +1352,12 @@ BEGIN
 				INSERT INTO Notificaciones (idJugadorNotificado,idJugadorNotificante,fechaNotificacion,mensajeNotificacion) VALUES (@idJugadorSeguido,@idJugadorSeguidor,CAST(GETDATE() AS DATE),@mensajeNotificacion);
 			COMMIT TRANSACTION
 			SET @estado = 200;
-			SET @mensaje = 'Se ha comenzado a seguir al jugador seleccionado';
+			SET @mensaje = 'Se ha comenzado a seguir al jugador seleccionado.';
 		END
 		ELSE
 		BEGIN
 			SET @estado = 400;
-			SET @mensaje = 'El usuario que desea seguir ya lo está siguiendo';
+			SET @mensaje = 'El usuario que desea seguir ya lo está siguiendo.';
 		END
 	END TRY
 	BEGIN CATCH

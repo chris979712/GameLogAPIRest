@@ -33,10 +33,6 @@ export async function CrearServidorWebSocket(app)
     CrearSuscriptorRedis(io);
     io.on('connection',(socket) =>{
         console.log(`Cliente conectado ${socket.id}`);
-        socket.emit("handshake-completado", {
-            status: "connected",
-            serverTime: new Date()
-        });
     })
     io.on('connection_error',(error) =>{
         logger({mensaje: `Error de conexion en Socket.io: ${error.message}`});

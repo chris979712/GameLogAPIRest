@@ -72,14 +72,14 @@ afterAll(async() =>
             tipoDeUsuario: "Administrador",
             correo: "chrisvasquez986@gmail.com"
         }
-    await request(servidor).delete(`/gamelog/acceso/${idAcceso}`)
+    await request(servidor).delete(`/gamelog/acceso/${idSegundoAcceso}`)
         .set({
             "Content-Type": "application/json",
             "access_token": `Bearer ${token}`
         })
         .send(datosSegundaEliminacion);
     servidor.close();
-},20000)
+})
 
 describe('Test para probar el login de cuentas a la API REST', () => 
 {
@@ -203,7 +203,7 @@ describe('Test para probar el login de cuentas a la API REST', () =>
         }
         const resValidacion = await request(servidor).post('/gamelog/login/recuperacionDeCuenta/validacion').set("Content-Type","application/json").send(DatosUsuario);
         console.log(resValidacion.body)
-        expect(resValidacion.statusCode).toBe(400);
+        expect(resValidacion.statusCode).toBe(404);
     })
 
     test('POST /login/recuperacionDeCuenta/validacion - Se verifica un código de cambio de credenciales de manera exitosa', async() =>

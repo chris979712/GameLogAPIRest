@@ -1,5 +1,5 @@
 import { ValidarEdicionParcialAcceso, ValidarEliminacionAcceso, ValidarInsercionAcceso, ValidarCredencialesAcceso } from "../schemas/AccesoValidador.js";
-import { PublicarAccionSocial } from "../utilidades/Redis.js";
+import { PublicarAccionSocial, EjecutarNotificacion } from "../utilidades/Redis.js";
 import { logger } from "../utilidades/logger.js";
 
 export class AccesoControlador
@@ -25,7 +25,7 @@ export class AccesoControlador
                         {
                             error: true,
                             estado: ResultadoInsercion.resultado,
-                            mensaje: 'Ha ocurrido un error en la base de datos al querer insertar los datos una nueva cuenta de acceso'
+                            mensaje: 'Ha ocurrido un error al intentar realizar el registro de Acceso.'
                         });
                 }
                 else
@@ -43,7 +43,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -86,7 +86,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -123,7 +123,7 @@ export class AccesoControlador
                         {
                             error: true,
                             estado: ResultadoEdicion.estado,
-                            mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
+                            mensaje: 'Ha ocurrido un error al intentar editar los datos de acceso'
                         });
                 }
                 else
@@ -141,7 +141,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Datos a ingresar inválidos, por favor verifique que los datos a mandar sean correctos"
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -179,7 +179,7 @@ export class AccesoControlador
                     {
                         error: true,
                         estado: ResultadoEdicion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer editar los datos una cuenta de acceso'
+                        mensaje: 'Ha ocurrido un error al intentar cambiar el estado de la cuenta de acceso'
                     });
                 }
                 else
@@ -187,7 +187,7 @@ export class AccesoControlador
                     if(resultadoEdicion === 200 && ResultadoValidacion.data.estadoAcceso === 'Baneado')
                     {
                         const IdJugador = ResultadoValidacion.data.idAcceso;
-                        await PublicarAccionSocial(IdJugador,'Banear_usuario',{mensaje: 'Has sido puesto en lista negra. Tu cuenta no puede acceder más a gamelog'});
+                        EjecutarNotificacion(() => PublicarAccionSocial(IdJugador,'Banear_usuario',{mensaje: 'Has sido puesto en lista negra. Tu cuenta no puede acceder más a gamelog'}));
                     }
                     res.status(resultadoEdicion).json(
                     {
@@ -202,7 +202,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Datos a ingresar inválidos, por favor verifique que los datos a mandar sean correctos"
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -239,7 +239,7 @@ export class AccesoControlador
                         {
                             error: true,
                             estado: ResultadoEliminacion.resultado,
-                            mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar una cuenta de acceso'
+                            mensaje: 'Ha ocurrido un error al intentar eliminar una cuenta de acceso'
                         });
                 }
                 else
@@ -257,7 +257,7 @@ export class AccesoControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje:"Campos inválidos, por favor verifique que sean correctos."
+                    mensaje:'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }

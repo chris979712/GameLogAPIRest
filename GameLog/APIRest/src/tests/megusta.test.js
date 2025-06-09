@@ -208,7 +208,7 @@ afterAll( async() =>
             })
             .send(datosEliminacionTercerJugador); 
     servidor.close();
-},20000)
+})
 
 describe('TEST para el servicio de MeGustas a reseñas, por parte de jugadores',() =>
 {

@@ -12,9 +12,11 @@ export async function CrearSuscriptorRedis(io)
     });
     Suscriptor.on('error',(error) =>{
         logger({mensaje: `Error en el suscriptor redis: ${error.message}`});
+        io.to('broadcast_mensajes_servidor').emit('broadcast_mensajes_servidor',{mensaje: 'No se pueden obtener actualizaciones y notificaciones, es posible que algunas partes del sistema no sean actualizadas en tiempo real.'});
     })
     Suscriptor.on('connect',()=>{
         console.log('Conectado a redis como suscriptor');
+        io.to('broadcast_mensajes_servidor').emit('broadcast_mensajes_servidor',{mensaje: 'Las notificaciones y actualizaciones aparecerán en tiempo real'});
     })
     await inicializarSuscriptor(Suscriptor,io);
     return Suscriptor;

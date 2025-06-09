@@ -4,7 +4,12 @@ export function CrearEventosDeSocket(io)
 {
     io.on('connection',(socket) =>{
         console.log(`Cliente conectado ${socket.id}`);
+        socket.join('broadcast_mensajes_servidor');
         logger({ mensaje: `Cliente conectado: ${socket.id}` });
+
+        socket.on('broadcast_mensajes_servidor',() =>{
+            socket.join('broadcast_mensajes_servidor');
+        })
 
         socket.on('suscribir_notificacion_jugador',(idJugador) =>{
             socket.join(`jugador_${idJugador}`);

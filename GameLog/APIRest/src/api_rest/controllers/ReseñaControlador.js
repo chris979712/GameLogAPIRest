@@ -1,6 +1,6 @@
 import { logger } from "../utilidades/logger.js";
 import {ValidarDatosReseña,ValidarDatosBusquedaReseña} from '../schemas/ReseñaValidador.js';
-import {PublicarAccionReseña} from '../utilidades/Redis.js';
+import {PublicarAccionReseña,EjecutarNotificacion} from '../utilidades/Redis.js';
 
 export class ReseñaControlador
 {
@@ -26,7 +26,7 @@ export class ReseñaControlador
                     {
                         error: true,
                         estado: resultadoInsercion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer insertar un nueva reseña'
+                        mensaje: 'Ha ocurrido un error al intentar registrar una nueva reseña'
                     });
                 }
                 else
@@ -34,7 +34,7 @@ export class ReseñaControlador
                     if(resultadoInsercion === 200)
                     {
                         const {idJuego} = ResultadoValidacion.data;
-                        await PublicarAccionReseña(idJuego,'Registrar_resena',{mensaje: 'Hay nuevas reseñas por ver'})
+                        EjecutarNotificacion(()=> PublicarAccionReseña(idJuego,'Registrar_resena',{mensaje: 'Hay nuevas reseñas por ver'}));
                     }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,
@@ -48,7 +48,7 @@ export class ReseñaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -92,7 +92,7 @@ export class ReseñaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -136,7 +136,7 @@ export class ReseñaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -180,7 +180,7 @@ export class ReseñaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -217,14 +217,14 @@ export class ReseñaControlador
                     {
                         error: true,
                         estado: resultadoEliminacion.resultado,
-                        mensaje: 'Ha ocurrido un error en la base de datos al querer eliminar un juego como pendiente'
+                        mensaje: 'Ha ocurrido un error al intentar eliminar la reseña seleccionada.'
                     });
                 }
                 else
                 {
                     if(resultadoEliminacion === 200)
                     {
-                        await PublicarAccionReseña(idJuego,'Eliminar_resena',{mensaje: 'Hay nuevas reseñas por ver', idResena: idReseña});
+                        EjecutarNotificacion(()=>PublicarAccionReseña(idJuego,'Eliminar_resena',{mensaje: 'Hay nuevas reseñas por ver', idResena: idReseña})); 
                     }
                     res.status(resultadoEliminacion).json({
                         error: resultadoEliminacion !== 200,
@@ -238,7 +238,7 @@ export class ReseñaControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }

@@ -43,7 +43,7 @@ export class LoginControlador
                             res.status(401).json({
                                 error: false,
                                 estado: 401,
-                                mensaje: "Usuario baneado, su cuenta se encuentra baneada, no es posible acceder a la aplicación."
+                                mensaje: "Su cuenta se encuentra en lista negra, no es posible acceder a la aplicación."
                             })
                         }
                         else{
@@ -76,7 +76,7 @@ export class LoginControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -107,13 +107,13 @@ export class LoginControlador
                     res.status(200).json({
                         error: false,
                         estado: 200,
-                        mensaje: "Sesión de usuario cerrada"
+                        mensaje: "Sesión de usuario cerrada."
                     });
                 } else {
                     res.status(404).json({
                         error: true,
                         estado: 404,
-                        mensaje: "El usuario no tenía una sesión activa la cual pueda cerrarse"
+                        mensaje: "El usuario no tenía una sesión activa la cual pueda cerrarse."
                     });
                 }
             }
@@ -132,7 +132,7 @@ export class LoginControlador
             res.status(500).json({
                 error: true,
                 estado: 500,
-                mensaje: 'Ha ocurrido un error al querer cerrar la sesión del usuario'
+                mensaje: 'Ha ocurrido un error al querer cerrar la sesión del usuario.'
             })
         }
     }
@@ -161,9 +161,9 @@ export class LoginControlador
                     res.status(200).json({
                         error: false,
                         estado: 200,
-                        mensaje: 'El correo con el código de verificación ha sido enviado de manera exitosa',
+                        mensaje: 'Se ha enviado un código de verificación al correo ingresado.',
                         idAcceso: ResultadoConsulta.idAcceso,
-                        codigo: Codigo //El código se puso en la respuesta para fines de pruebas, en producción o despliegue, será eliminadod  el código
+                        codigo: Codigo //El código se puso en la respuesta para fines de pruebas, en producción o despliegue, será eliminado del código
                     })
                     
                 }
@@ -181,7 +181,7 @@ export class LoginControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -242,7 +242,7 @@ export class LoginControlador
                 }
                 else
                 {
-                    res.status(400).json({
+                    res.status(404).json({
                         error: true,
                         estado: 404,
                         mensaje: 'No se ha solicitado ningún código de verificación para el correo ingresado.'
@@ -254,7 +254,7 @@ export class LoginControlador
                 res.status(400).json({
                     error: true,
                     estado: 400,
-                    mensaje: "Campos inválidos, por favor verifique que sean correctos."
+                    mensaje: 'Datos con formato inválido, por favor verifique los datos enviados.'
                 });
             }
         }
@@ -265,7 +265,7 @@ export class LoginControlador
             {
                 error: true,
                 estado: 500,
-                mensaje: 'Ha ocurrido un error al verificar un código de verificación.'
+                mensaje: 'Ha ocurrido un error al verificar el código de verificación.'
             })
         }
     }
