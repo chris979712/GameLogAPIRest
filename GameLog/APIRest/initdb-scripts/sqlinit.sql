@@ -1196,6 +1196,7 @@ GO
 CREATE PROCEDURE [dbo].[spi_MeGusta]
 	@idJugador INT,
 	@idResenia INT,
+	@mensajeNotificacion VARCHAR(255),
 	@estado INT OUTPUT,
 	@mensaje VARCHAR(MAX) OUTPUT
 AS
@@ -1214,9 +1215,7 @@ BEGIN
 						IF @idJugadorNotificado != @idJugador
 						BEGIN
 							DECLARE @nombreDeUsuario VARCHAR(20);
-							DECLARE @mensajeNotificacion VARCHAR(255);
 							SET @nombreDeUsuario = (SELECT TOP 1 nombreDeUsuario FROM Jugadores WHERE idJugador = @idJugador);
-							SET @mensajeNotificacion = CONCAT('Le ha gustado tu reseña a ',@nombreDeUsuario);
 							INSERT INTO Notificaciones (idJugadorNotificado,idJugadorNotificante,fechaNotificacion,mensajeNotificacion) VALUES (@idJugadorNotificado,@idJugador,CAST(GETDATE() AS DATE),@mensajeNotificacion);
 						END
 					COMMIT TRANSACTION

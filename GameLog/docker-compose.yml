@@ -12,6 +12,7 @@ services:
     environment:
       - SA_PASSWORD=.JUg4d0rL0000g.
       - ACCEPT_EULA=Y
+      - TZ=America/Mexico_City
   
   gamelog_redis:
     image: redis:7-alpine

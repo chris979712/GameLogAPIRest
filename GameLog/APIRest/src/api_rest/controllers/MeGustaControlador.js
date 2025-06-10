@@ -18,7 +18,9 @@ export class MeGustaControlador
             const ResultadoValidacion = ValidarMeGusta(req.body);
             if(ResultadoValidacion.success)
             {
-                const ResultadoInsercion = await this.modeloMeGusta.RegistrarMeGustaAReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
+                const {idJugadorAutor,idJuego,nombreJuego} = ResultadoValidacion.data;
+                const MensajeNotificacion = `${NombreDeUsuario} le ha dado me gusta a tu reseña sobre ${nombreJuego}`;
+                const ResultadoInsercion = await this.modeloMeGusta.RegistrarMeGustaAReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario, mensaje: MensajeNotificacion});
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
                 if(resultadoInsercion === 500)
                 {
@@ -34,9 +36,8 @@ export class MeGustaControlador
                 {
                     if(resultadoInsercion === 200)
                     {
-                        const {idJugadorAutor,idJuego,nombreJuego} = ResultadoValidacion.data;
                         EjecutarNotificacion(()=>PublicarAccionReseña(idJuego,'Dar_MeGusta',{mensaje: `${NombreDeUsuario} ha dado un me gusta a una reseña`, idResena: ResultadoValidacion.data.idResena, jugadorEmitente: nombreDeUsuario})); 
-                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorAutor,'Interactuar_resena',{mensaje:`${NombreDeUsuario} le ha dado me gusta a tu reseña sobre ${nombreJuego}`}));
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorAutor,'Interactuar_resena',{mensaje: MensajeNotificacion}));
                     }
                     res.status(resultadoInsercion).json({
                         error: resultadoInsercion !== 200,

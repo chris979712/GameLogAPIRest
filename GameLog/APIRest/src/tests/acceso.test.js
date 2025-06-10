@@ -79,7 +79,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
             .send(datos);
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveProperty("mensaje");
-        expect(res.body.mensaje).toBe("La nueva cuenta de acceso ha sido registrada correctamente")
+        expect(res.body.mensaje).toBe("La nueva cuenta de acceso ha sido registrada correctamente.")
     })
 
     test('POST /acceso - Se crea una cuenta con datos duplicados', async () => 
@@ -103,7 +103,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
                 .send(datos);
             expect(res.statusCode).toBe(400);
             expect(res.body).toHaveProperty("mensaje");
-            expect(res.body.mensaje).toBe("El correo ingresado ya se encuentra registrado")
+            expect(res.body.mensaje).toBe("El correo ingresado ya se encuentra registrado.")
         })
     
     test('POST /acceso - Se intenta crear una cuenta sin pasar datos de entrada', async () => 
@@ -171,7 +171,7 @@ describe('Tests para el servicio CRUD de cuentas e inicio de sesion', () =>
                 "access_token": `Bearer ${token}`
             })
             .send(datosEdicion);
-        expect(resEdicion.body.mensaje).toBe("Los datos de acceso han sido modificados con éxito.");
+        expect(resEdicion.body.mensaje).toBe("Los datos de acceso al sistema han sido modificados con éxito.");
         expect(resEdicion.statusCode).toBe(200);
         expect(resEdicion.body).toHaveProperty("mensaje");
     })

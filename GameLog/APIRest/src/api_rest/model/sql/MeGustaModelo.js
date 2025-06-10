@@ -5,7 +5,7 @@ import {MensajeDeRetornoBaseDeDatos} from '../../utilidades/Constantes.js';
 export class ModeloMeGusta
 {
 
-    static async RegistrarMeGustaAReseña({datos, tipoDeUsuario})
+    static async RegistrarMeGustaAReseña({datos, tipoDeUsuario, mensaje})
     {
         let resultadoInsercion;
         let conexion;
@@ -14,9 +14,11 @@ export class ModeloMeGusta
             const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
             conexion = await sql.connect(ConfiguracionConexion);
             const {idJugador,idResena} = datos;
+            const MensajeNotificacion = mensaje;
             const Solicitud = conexion.request();
             const ResultadoSolicitud = await Solicitud.input('idJugador',sql.Int,idJugador)
                 .input('idResenia',sql.Int,idResena)
+                .input('mensajeNotificacion',sql.VarChar,MensajeNotificacion)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
                 .execute('spi_MeGusta');
