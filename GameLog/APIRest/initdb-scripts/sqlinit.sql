@@ -1459,9 +1459,16 @@ GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO jugadorGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO jugadorGameLog;
 GO
-GRANT SELECT ON dbo.fn_ObtenerMeGustaDeReseña TO jugadorGameLog;
+GRANT EXECUTE ON dbo.fn_ObtenerMeGustaDeReseña TO jugadorGameLog;
 GO
-
+GRANT EXECUTE ON dbo.spb_ObtenerNotificaciones TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spb_ObtenerNotificaciones TO adminGameLog;
+GO
+GRANT EXECUTE ON dbo.spd_Notificaciones TO jugadorGameLog;
+GO
+GRANT EXECUTE ON dbo.spd_NotificacionesO adminGameLog;
+GO
 GRANT EXECUTE ON OBJECT::dbo.spi_Acceso TO adminGameLog
 GO
 

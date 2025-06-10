@@ -104,7 +104,7 @@ export const CrearRutaMeGusta = ({ModeloMeGusta}) =>
 
     /**
      * @swagger
-     * /MeGusta/{idResena}/{idJugador}:
+     * /MeGusta/{idJuego}:
      *   delete:
      *     summary: Eliminar un MeGusta de una reseña
      *     tags: [MeGusta]
