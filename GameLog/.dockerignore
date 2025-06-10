@@ -7,3 +7,6 @@ api.http
 /src/serverTest.js
 /APIgRPC/env
 /APIgRPC/API/controllers/__pycache__
+.vagrant
+ubuntu-bionic-18.04-cloudimg-console.log
+
