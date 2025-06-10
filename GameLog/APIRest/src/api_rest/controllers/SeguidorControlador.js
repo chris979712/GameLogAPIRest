@@ -179,7 +179,8 @@ export class SeguidorControlador
                     if(resultadoEliminacion === 200)
                     {
                         const {idJugadorSeguido} = ResultadoValidacion.data;
-                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorSeguido,'Eliminar_seguidor',{mensaje:`Se ha eliminado de seguidos`})); 
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorSeguido,'Eliminar_seguidor',{mensaje:`Se ha eliminado de seguidos`,idJugadorSeguido: idJugadorSeguido, idJugadorSeguidor: idJugadorSeguidor})); 
+                        EjecutarNotificacion(()=>PublicarAccionSocial(idJugadorSeguidor,'Eliminar_seguidor',{mensaje:`Se ha eliminado de seguidos`,idJugadorSeguido: idJugadorSeguido, idJugadorSeguidor: idJugadorSeguidor})); 
                     }
                     res.status(resultadoEliminacion).json(
                         {

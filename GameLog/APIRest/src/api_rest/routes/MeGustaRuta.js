@@ -46,7 +46,7 @@ export const CrearRutaMeGusta = ({ModeloMeGusta}) =>
      *                 type: integer
      *                 description: ID del jugador que realiza el MeGusta
      *                 example: 5
-     *              nombreJuego:
+     *               nombreJuego:
      *                 type: string
      *                 description: nombre del juego a registrar el me gusta
      *                 example: Fortnite
