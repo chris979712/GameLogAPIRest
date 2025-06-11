@@ -16,7 +16,7 @@ export const CrearRutaNotificacion = ({ModeloNotificacion}) =>
 
     /**
      * @swagger
-     * /jugador/{idJugador}:
+     * /notificacion/jugador/{idJugador}:
      *   get:
      *     tags:
      *       - Notificaciones
@@ -119,7 +119,7 @@ export const CrearRutaNotificacion = ({ModeloNotificacion}) =>
     
     /**
      * @swagger
-     * /{idNotificacion}:
+     * /notificacion/{idNotificacion}:
      *   delete:
      *     tags:
      *       - Notificaciones
