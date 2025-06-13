@@ -6,7 +6,7 @@ export const GenerarJWT = (payload) => {
     {
         jwt.sign(payload,process.env.SECRETO_JWT,
             {
-                expiresIn: '2h'
+                expiresIn: '15m'
             },(err, token) => 
             {
                 if(err)
