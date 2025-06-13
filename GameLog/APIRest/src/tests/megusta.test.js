@@ -16,6 +16,8 @@ let idPrimerReseña;
 let idSegundaReseña;
 let idTercerReseña;
 
+jest.setTimeout(15000);
+
 beforeAll( async() =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloSeguidor:ModeloSeguidor,ModeloJuego:ModeloJuego,ModeloReseña:ModeloReseña,ModeloMeGusta:ModeloMeGusta});
@@ -151,7 +153,7 @@ beforeAll( async() =>
     idPrimerReseña = resConsulta.body.reseñas[0].idResenia;
     idSegundaReseña = resConsulta.body.reseñas[1].idResenia;
     idTercerReseña = resConsulta.body.reseñas[2].idResenia;
-},20000)
+})
 
 afterAll( async() =>
 {

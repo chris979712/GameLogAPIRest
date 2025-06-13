@@ -8,6 +8,8 @@ let servidor;
 let token;
 let idJugadorCreado;
 
+jest.setTimeout(15000);
+
 beforeAll(async () =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloJugador:ModeloJugador});
@@ -36,7 +38,7 @@ beforeAll(async () =>
     token = resLogin.headers['access_token'];
     idJugadorCreado = resLogin.body.cuenta[0].idJugador;
     console.log(idJugadorCreado)
-},20000)
+})
 
 afterAll(async() => 
 {

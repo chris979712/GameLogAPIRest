@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const Publicador = createClient({
+export const Publicador = createClient({
     url: process.env.REDIS_URL
 });
 
@@ -53,12 +53,14 @@ export const PublicarAccionSocial = async (idJugador,accion,datos = {}) =>
 export const EjecutarNotificacion = (fn) => 
 {
     try {
-        const promesa = fn();
-        if (promesa && typeof promesa.catch === 'function') {
-            promesa.catch(error =>
-                logger({ mensaje: `Error al notificar a redis: ${error.message}` })
-            );
-        }
+        setImmediate(() => {
+            const promesa = fn();
+            if (promesa && typeof promesa.catch === 'function') {
+                promesa.catch(error =>
+                    logger({ mensaje: `Error al notificar a redis: ${error.message}` })
+                );
+            }
+        });
     } catch (error) {
         logger({ mensaje: `Error al ejecutar función de notificación: ${error.message}` });
     }

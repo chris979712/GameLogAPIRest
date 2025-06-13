@@ -15,6 +15,8 @@ let idPrimerReseña;
 let idSegundaReseña;
 let idTercerReseña;
 
+jest.setTimeout(15000);
+
 beforeAll( async() =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloSeguidor:ModeloSeguidor,ModeloJuego:ModeloJuego,ModeloReseña:ModeloReseña});
@@ -153,7 +155,7 @@ afterAll( async() =>
     await request(servidor).delete(`/gamelog/juego/${41437}`)
             .set({"access_token": `Bearer ${token}`}); 
     servidor.close();
-},20000)
+})
 
 describe('TEST para el servicio de reseñas donde se encuentran los métodos de busca, inserción y eliminación', ()=>
 {

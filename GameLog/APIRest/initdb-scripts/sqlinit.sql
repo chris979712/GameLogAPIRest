@@ -891,6 +891,7 @@ GO
 CREATE PROCEDURE [dbo].[spd_MeGusta]
 	@idResenia INT,
 	@idJugador INT,
+	@mensajeNotificacion VARCHAR(255),
 	@estado INT OUTPUT,
 	@mensaje VARCHAR(MAX) OUTPUT
 AS
@@ -909,8 +910,7 @@ BEGIN
 						DECLARE @nombreDeUsuario VARCHAR(20);
 						DECLARE @idNotificacion INT;
 						SET @nombreDeUsuario = (SELECT TOP 1 nombreDeUsuario FROM Jugadores WHERE idJugador = @idJugador);
-						SET @idNotificacion = (SELECT TOP 1 idNotificacion FROM Notificaciones WHERE mensajeNotificacion = CONCAT('Le ha gustado tu reseña a ',@nombreDeUsuario) AND idJugadorNotificado = @idJugadorNotificado);
-						DELETE FROM Notificaciones WHERE idNotificacion = @idNotificacion;
+						DELETE FROM Notificaciones WHERE mensajeNotificacion = @mensajeNotificacion;
 					END
 				COMMIT TRANSACTION
 				SET @estado = 200;

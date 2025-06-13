@@ -74,12 +74,14 @@ export class MeGustaControlador
         {
             const {tipoDeUsuario,nombreDeUsuario} = req;
             const idJuego = parseInt(req.params.idJuego);
-            const {idResena,idJugadorAutor,idJugador} = req.body;
-            const Datos = {idJugador,idResena,idJugadorAutor,idJuego};
+            const {idResena,idJugadorAutor,idJugador,nombreJuego} = req.body;
+            const Datos = {idJugador,idResena,idJugadorAutor,idJuego,nombreJuego};
             const ResultadoValidacion = ValidarMeGusta(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoEliminacion = await this.modeloMeGusta.EliminarMeGustaDeReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
+                const {idJugadorAutor,idJuego,nombreJuego} = ResultadoValidacion.data;
+                const MensajeNotificacion = `${nombreDeUsuario} le ha dado me gusta a tu reseña sobre ${nombreJuego}`;
+                const ResultadoEliminacion = await this.modeloMeGusta.EliminarMeGustaDeReseña({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario, mensaje: MensajeNotificacion});
                 let resultadoEliminacion = parseInt(ResultadoEliminacion.estado);
                 if(resultadoEliminacion === 500)
                 {

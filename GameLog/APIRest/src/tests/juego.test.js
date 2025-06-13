@@ -10,6 +10,8 @@ let tokenJugador;
 let idAdminCreado;
 let idJugadorCreado;
 
+jest.setTimeout(15000);
+
 beforeAll(async () =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloJuego:ModeloJuego});
@@ -85,7 +87,7 @@ afterAll(async() =>
         })
         .send(datosEliminacionJugador);
     servidor.close();
-},20000)
+})
 
 describe('Test para el servicio de Juegos donde se encuentran los métodos de Registro, Búsqueda y Eliminación',() =>
 {

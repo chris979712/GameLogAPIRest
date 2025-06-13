@@ -219,25 +219,22 @@ export class LoginControlador
                             mensaje: 'El código ingresado ha expirado.'
                         })
                     }
+                    else if(SolicitudValidacion.codigo === parseInt(codigo))
+                    {
+                        res.status(200).json({
+                            error: false,
+                            estado: 200,
+                            mensaje: 'Código de verificación válido'
+                        })
+                        delete this.CodigosDeVerificacion[correo];
+                    }
                     else
                     {
-                        if(SolicitudValidacion.codigo === parseInt(codigo))
-                        {
-                            res.status(200).json({
-                                error: false,
-                                estado: 200,
-                                mensaje: 'Código de verificación válido'
-                            })
-                            delete this.CodigosDeVerificacion[correo];
-                        }
-                        else
-                        {
-                            res.status(404).json({
-                                error: true,
-                                estado: 404,
-                                mensaje: 'El código ingresado no es correcto.'
-                            });                            
-                        }
+                        res.status(404).json({
+                            error: true,
+                            estado: 404,
+                            mensaje: 'El código ingresado no es correcto.'
+                        });                            
                     }
                 }
                 else

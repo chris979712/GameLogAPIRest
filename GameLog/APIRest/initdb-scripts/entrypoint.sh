@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/opt/mssql/bin/sqlservr &
+exec /opt/mssql/bin/sqlservr &
 
 SQL_PID=$!
 

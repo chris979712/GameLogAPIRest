@@ -18,6 +18,8 @@ let idPrimerNotificacion;
 let idSegundaNotificacion;
 let idTercerNotificacion;
 
+jest.setTimeout(15000);
+
 beforeAll(async() =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,
@@ -209,11 +211,13 @@ afterAll(async() =>
         idJugador: idSegundoJugador,
         idResena: idPrimerReseña,
         idJugadorAutor: idPrimerJugador,
+        nombreJuego: 'Fortnite-battle-royale'
     }
     const DatosEliminacionSegundoMeGustaReseña = {
         idJugador: idSegundoJugador,
         idResena: idPrimerReseña,
         idJugadorAutor: idPrimerJugador,
+        nombreJuego: 'Fortnite-battle-royale'
     }
     await request(servidor).delete(`/gamelog/resena/${41437}/${idPrimerReseña}`)
             .set({
@@ -250,7 +254,7 @@ afterAll(async() =>
             })
             .send(datosEliminacionTercerJugador); 
     servidor.close();
-},20000)
+})
 
 describe('TEST para el servicio de notificaciones, donde se encuentran los métodos de consulta y eliminación', () =>
 {

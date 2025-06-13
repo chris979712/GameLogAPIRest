@@ -13,6 +13,8 @@ let idPrimerJugador;
 let idSegundoJugador;
 let idTercerJugador;
 
+jest.setTimeout(15000);
+
 beforeAll( async() =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,
@@ -407,7 +409,7 @@ afterAll( async() =>
     await request(servidor).delete(`/gamelog/juego/${50505}`)
         .set({"access_token": `Bearer ${token}`}); 
     servidor.close();
-},20000)
+})
 
 describe('TEST para el servicio de obtención de información para la generación de reportes',()=>
 {

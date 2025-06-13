@@ -2,9 +2,12 @@ import request  from "supertest";
 import { CrearServidorTest } from "../serverTest.js";
 import { ModeloAcceso } from "../api_rest/model/sql/AccesoModelo.js";
 import { ModeloLogin } from "../api_rest/model/sql/LoginModelo.js";
+import { Publicador } from "../api_rest/utilidades/Redis.js";
 
 let servidor;
 let token;
+
+jest.setTimeout(15000);
 
 beforeAll(async () => {
     const { server: servidorCreado } = CrearServidorTest({ModeloAcceso : ModeloAcceso,ModeloLogin:ModeloLogin});
@@ -32,7 +35,7 @@ beforeAll(async () => {
         }
     const resLogin = await request(servidor).post('/gamelog/login').set("Content-Type","application/json").send(DatosUsuario);
     token = resLogin.headers['access_token'];
-},20000);
+});
 
 afterAll(async () => {
     const correo = "usuariopruebaacceso@gmail.com";

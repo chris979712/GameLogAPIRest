@@ -7,6 +7,8 @@ let servidor;
 let token;
 let codigoDeVerificacion;
 
+jest.setTimeout(15000);
+
 beforeAll(async () => 
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloLogin:ModeloLogin,ModeloAcceso:ModeloAcceso});
@@ -39,7 +41,7 @@ beforeAll(async () =>
         tipoDeUsuario: "Administrador"
     };
     await request(servidor).post("/gamelog/acceso").set("Content-Type","application/json").send(datosUsuario);
-},20000)
+})
 
 afterAll(async() => 
 {

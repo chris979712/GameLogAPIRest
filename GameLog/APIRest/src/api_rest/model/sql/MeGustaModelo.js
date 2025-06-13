@@ -38,7 +38,7 @@ export class ModeloMeGusta
         return resultadoInsercion;
     }
 
-    static async EliminarMeGustaDeReseña({datos,tipoDeUsuario})
+    static async EliminarMeGustaDeReseña({datos,tipoDeUsuario,mensaje})
     {
         let resultadoEliminacion;
         let conexion;
@@ -47,9 +47,11 @@ export class ModeloMeGusta
             const ConfiguracionConexion = RetornarTipoDeConexion({tipoDeUsuario});
             conexion = await sql.connect(ConfiguracionConexion);
             const {idJugador,idResena} = datos;
+            const MensajeNotificacion = mensaje;
             const Solicitud = conexion.request();
             const ResultadoSolicitud = await Solicitud.input('idResenia',sql.Int,idResena)
                 .input('idJugador',sql.Int,idJugador)
+                .input('mensajeNotificacion',sql.VarChar,MensajeNotificacion)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
                 .execute('spd_MeGusta');

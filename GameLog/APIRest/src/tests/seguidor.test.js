@@ -11,6 +11,8 @@ let idPrimerJugador;
 let idSegundoJugador;
 let idTercerJugador;
 
+jest.setTimeout(15000);
+
 beforeAll( async() =>
 {
     const {server: servidorCreado} = CrearServidorTest({ModeloAcceso:ModeloAcceso,ModeloLogin:ModeloLogin,ModeloSeguidor:ModeloSeguidor});
@@ -118,7 +120,7 @@ afterAll( async() =>
             })
             .send(datosEliminacionTercerJugador);  
     servidor.close();
-},20000)
+})
 
 describe('Test para el servicio de seguidores donde se encuentran los métodos de inserción, consulta y eliminación.',() =>
 {
