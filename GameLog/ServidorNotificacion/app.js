@@ -1,5 +1,5 @@
 import express from 'express';
-import { CrearServidorWebSocket } from './websocket/Server.js';
+import { CrearServidorWebSocket } from './src/Server.js';
 import dotenv from 'dotenv';
 
 dotenv.config();

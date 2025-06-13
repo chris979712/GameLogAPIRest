@@ -24,7 +24,7 @@ export const ValidarJwt = (request,response, next) =>
             {
                 error: true,
                 estado: 401,
-                mensaje: 'No hay un token dentro de la solicitud'
+                mensaje: 'No hay un token de autenticación dentro de la solicitud'
             })
         }
     }
@@ -39,7 +39,7 @@ export const ValidarJwt = (request,response, next) =>
         response.status(401).json({
             error: true,
             estado: 401,
-            mensaje: 'Token inválido, será redirigido al menú principal. Por favor vuelva a iniciar sesión en la aplicación.'
+            mensaje: 'La sesión no es válida o ha expirado. Por favor, vuelva a iniciar sesión.'
         })
     }
 }
