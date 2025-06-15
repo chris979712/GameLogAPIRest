@@ -55,7 +55,7 @@ export class JuegoControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer registar el juego"
                 }
-            )
+            );
         }
     }
 
@@ -106,7 +106,7 @@ export class JuegoControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer registar el juego como favorito"
                 }
-            )
+            );
         }
     }
 
@@ -157,7 +157,7 @@ export class JuegoControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer registar el juego a la lista de reseñar más tarde."
                 }
-            )
+            );
         }
     }
 
@@ -180,7 +180,7 @@ export class JuegoControlador
                         ? {juego: ResultadoConsulta.juego}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -200,7 +200,7 @@ export class JuegoControlador
                 estado: 500,
                 mensaje: "Ha ocurrido un error al querer buscar el juego por ID"
             }
-            )
+            );
         }
     }
 
@@ -223,7 +223,7 @@ export class JuegoControlador
                         ? {juego: ResultadoConsulta.juego}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -243,7 +243,7 @@ export class JuegoControlador
                 estado: 500,
                 mensaje: "Ha ocurrido un error al querer buscar el juego por nombre"
             }
-            )
+            );
         }
     }
 
@@ -266,7 +266,7 @@ export class JuegoControlador
                         ? {juegos: ResultadoConsulta.juegos}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -329,7 +329,7 @@ export class JuegoControlador
                 estado: 500,
                 mensaje: "Ha ocurrido un error al querer buscar los juegos favoritos"
             }
-            )
+            );
         }
     }
 
@@ -382,7 +382,7 @@ export class JuegoControlador
                 estado: 500,
                 mensaje: "Ha ocurrido un error al querer eliminar el juego"
             }
-            )  
+            );
         }
     }
 
@@ -436,7 +436,7 @@ export class JuegoControlador
                 estado: 500,
                 mensaje: "Ha ocurrido un error al querer eliminar el juego de la lista de reseñar más tarde"
             }
-            )  
+            );
         }
     }
 
@@ -490,7 +490,7 @@ export class JuegoControlador
                 estado: 500,
                 mensaje: "Ha ocurrido un error al querer eliminar el juego como favorito"
             }
-            )  
+            );
         }
     }
 }

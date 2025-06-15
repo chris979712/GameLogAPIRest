@@ -23,7 +23,7 @@ export async function CrearServidorWebSocket(app)
         cookie: false,
         pingTimeout: 90000,
         pingInterval: 30000, 
-    })
+    });
     io.use((socket, next) => {
         console.log(`Nueva conexión entrante: ${socket.id}`);
         next();
@@ -33,7 +33,7 @@ export async function CrearServidorWebSocket(app)
     CrearSuscriptorRedis(io);
     io.on('connection',(socket) =>{
         console.log(`Cliente conectado ${socket.id}`);
-    })
+    });
     io.on('connection_error',(error) =>{
         logger({mensaje: `Error de conexion en Socket.io: ${error.message}`});
     });

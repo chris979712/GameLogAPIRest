@@ -184,7 +184,7 @@ export const CrearRutaNotificacion = ({ModeloNotificacion}) =>
      *                   type: string
      *                   example: Ha ocurrido un error al querer eliminar la notificacion
      */
-    NotificacionEnrutador.delete('/:idNotificacion',ValidarJwt,ControladorNotificacionEnrutador.EliminarNotificacion)
+    NotificacionEnrutador.delete('/:idNotificacion',ValidarJwt,ControladorNotificacionEnrutador.EliminarNotificacion);
 
     return NotificacionEnrutador;
 }

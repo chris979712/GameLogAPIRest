@@ -10,13 +10,13 @@ export const EnviarCorreoDeVerificacion = async(plantilla,correo,codigo) =>
             user: process.env.CORREO,
             pass: process.env.CONTRASENIA_APLICACION
         }
-    })
+    });
     const OpcionesDeCorreo = {
         from: '"GameLogRecovery" '+process.env.CORREO,
         to: correo,
         subject:'Código de verificación cambio de credenciales de acceso - GameLogRecovery',
         html: HTML
-    }
+    };
     try
     {
         await Transportador.sendMail(OpcionesDeCorreo);

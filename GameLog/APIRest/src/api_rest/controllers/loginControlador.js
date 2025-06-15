@@ -162,8 +162,7 @@ export class LoginControlador
                         error: false,
                         estado: 200,
                         mensaje: 'Se ha enviado un código de verificación al correo ingresado.',
-                        idAcceso: ResultadoConsulta.idAcceso,
-                        codigo: Codigo //El código se puso en la respuesta para fines de pruebas, en producción o despliegue, será eliminado del código
+                        idAcceso: ResultadoConsulta.idAcceso
                     })
                     
                 }
@@ -243,7 +242,7 @@ export class LoginControlador
                         error: true,
                         estado: 404,
                         mensaje: 'No se ha solicitado ningún código de verificación para el correo ingresado.'
-                    })
+                    });
                 }
             }
             else
@@ -263,7 +262,7 @@ export class LoginControlador
                 error: true,
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al verificar el código de verificación.'
-            })
+            });
         }
     }
 }

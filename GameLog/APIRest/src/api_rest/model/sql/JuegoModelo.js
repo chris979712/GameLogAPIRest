@@ -19,7 +19,7 @@ export class ModeloJuego
                 .input('fechaDeLanzamiento',sql.Date,fechaDeLanzamiento)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
-                .execute('spi_Juegos')
+                .execute('spi_Juegos');
             resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
@@ -117,7 +117,7 @@ export class ModeloJuego
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'};
             }
         }
         catch(error)
@@ -153,7 +153,7 @@ export class ModeloJuego
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el juego deseado a buscar.'};
             }
         }
         catch(error)
@@ -189,7 +189,7 @@ export class ModeloJuego
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'};
             }
         }
         catch(error)
@@ -225,7 +225,7 @@ export class ModeloJuego
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado juegos pendientes'};
             }
         }
         catch(error)
@@ -255,7 +255,7 @@ export class ModeloJuego
             const ResultadoSolicitud = await Solicitud.input('idJuego',sql.Int,idJuego)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
-                .execute('spd_Juego')
+                .execute('spd_Juego');
             resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)

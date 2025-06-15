@@ -328,7 +328,7 @@ export const CrearRutaLogin = ({ModeloLogin,ModeloAcceso}) =>
      *                   type: string
      *                   example: Ha ocurrido un error al verificar un código de verificación.
      */
-    LoginEnrutador.post('/recuperacionDeCuenta/validacion',ControladorLoginEnrutador.ValidarCodigoDeVerificacion)
+    LoginEnrutador.post('/recuperacionDeCuenta/validacion',ControladorLoginEnrutador.ValidarCodigoDeVerificacion);
 
     /**
      * @swagger

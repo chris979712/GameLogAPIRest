@@ -64,7 +64,7 @@ export class MeGustaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer registar el me gusta a la reseña"
                 }
-            )
+            );
         }
     }
 
@@ -125,7 +125,7 @@ export class MeGustaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer eliminar el me gusta a la reseña"
                 }
-            )
+            );
         }
     }
 }

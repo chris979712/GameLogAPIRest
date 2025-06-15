@@ -8,7 +8,7 @@ const ReseñaEsquemaInsercion = zod.object(
         opinion: zod.string({ invalid_type_error: 'La opinión ingresada no es válido'}).min(0).max(200).regex(SoloLetrasNumerosCaracteres).nullable(),
         calificacion: zod.number({ invalid_type_error: 'La calificacion ingresada no es válido',required_error: 'La calificacion es un campo requerido' }).min(0).max(5)
     }
-)
+);
 
 const ReseñaBusqueda = zod.object(
     {
@@ -17,7 +17,7 @@ const ReseñaBusqueda = zod.object(
         idJuego: zod.number({ invalid_type_error: 'El idJuego ingresado no es válido'}).int().positive(),
         idReseña: zod.number({ invalid_type_error: 'El idReseña ingresado no es válido'}).int().positive(),
     }
-)
+);
 
 export function ValidarDatosReseña(entrada)
 {

@@ -62,3 +62,4 @@ class FotosDePerfilControlador(Fotos_De_Perfil_pb2_grpc.FotosDePerfilServicer):
         context.set_code(grpc.StatusCode.OK)
         context.set_details(f"Foto actualizada de manera correcta")
         return Fotos_De_Perfil_pb2.FotoDePerfilRuta(rutaArchivo=rutaFinalArchivo)
+

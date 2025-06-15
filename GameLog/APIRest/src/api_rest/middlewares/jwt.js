@@ -25,7 +25,7 @@ export const ValidarJwt = (request,response, next) =>
                 error: true,
                 estado: 401,
                 mensaje: 'No hay un token de autenticación dentro de la solicitud'
-            })
+            });
         }
     }
     catch(error)
@@ -40,6 +40,6 @@ export const ValidarJwt = (request,response, next) =>
             error: true,
             estado: 401,
             mensaje: 'La sesión no es válida o ha expirado. Por favor, vuelva a iniciar sesión.'
-        })
+        });
     }
 }

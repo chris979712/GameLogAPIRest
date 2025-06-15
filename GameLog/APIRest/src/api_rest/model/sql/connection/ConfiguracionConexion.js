@@ -11,7 +11,7 @@ const conexionJugador = {
         encrypt: process.env.DB_ENCRIPTADO === 'true',
         trustServerCertificate: process.env.DB_CONFIAR_SERVIDOR === 'true'
     }
-}
+};
 
 const conexionAdmin = {
     user: process.env.DB_USUARIOADMIN,
@@ -23,7 +23,7 @@ const conexionAdmin = {
         encrypt: process.env.DB_ENCRIPTADO === 'true',
         trustServerCertificate: process.env.DB_CONFIAR_SERVIDOR === 'true'
     }
-}
+};
 
 export function RetornarTipoDeConexion({tipoDeUsuario})
 {
@@ -37,4 +37,4 @@ export function RetornarTipoDeConexion({tipoDeUsuario})
         conexion = conexionJugador;
     }
     return conexion;
-}
+};

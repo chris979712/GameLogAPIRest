@@ -17,7 +17,7 @@ export class AccesoControlador
             if(ResultadoValidacion.success)
             {
                 const ResultadoInsercion = await this.modeloAcceso.InsertarNuevaCuenta({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario})
-                let resultadoInsercion = parseInt(ResultadoInsercion.resultado)
+                let resultadoInsercion = parseInt(ResultadoInsercion.resultado);
                 if(resultadoInsercion === 500)
                 {
                     logger({mensaje: ResultadoInsercion.mensaje});
@@ -99,7 +99,7 @@ export class AccesoControlador
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al obtener los datos del usuario.'
             }
-            )
+            );
         }
 
     }
@@ -114,8 +114,8 @@ export class AccesoControlador
             const ResultadoValidacion = ValidarEdicionParcialAcceso(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoEdicion = await this.modeloAcceso.EditarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario})
-                let resultadoEdicion = parseInt(ResultadoEdicion.estado)
+                const ResultadoEdicion = await this.modeloAcceso.EditarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
+                let resultadoEdicion = parseInt(ResultadoEdicion.estado);
                 if(resultadoEdicion === 500)
                 {
                     logger({mensaje: ResultadoEdicion.mensaje});
@@ -154,7 +154,7 @@ export class AccesoControlador
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al editar el acceso del usuario.'
             }
-            )
+            );
         }
     }
 
@@ -170,7 +170,7 @@ export class AccesoControlador
             if(ResultadoValidacion.success)
             {
                 const ResultadoEdicion = await this.modeloAcceso.EditarEstadoAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: ResultadoValidacion.data.tipoDeUsuario});
-                let resultadoEdicion = parseInt(ResultadoEdicion.estado)
+                let resultadoEdicion = parseInt(ResultadoEdicion.estado);
                 if(resultadoEdicion === 500)
                 {
                     logger({mensaje: ResultadoEdicion.mensaje});
@@ -215,7 +215,7 @@ export class AccesoControlador
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al editar el estado de acceso'
             }
-            )
+            );
         }
     }
 
@@ -231,7 +231,7 @@ export class AccesoControlador
             if(ResultadoValidacion.success)
             {
                 const ResultadoEliminacion = await this.modeloAcceso.BorrarAcceso({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
-                let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
+                let resultadoEliminacion = parseInt(ResultadoEliminacion.estado);
                 if(resultadoEliminacion === 500)
                 {
                     logger({mensaje: ResultadoEliminacion.mensaje});
@@ -270,7 +270,7 @@ export class AccesoControlador
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al eliminar al usuario.'
             }
-            )
+            );
         }
     }
 }

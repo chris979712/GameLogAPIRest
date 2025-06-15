@@ -6,10 +6,8 @@ from API.controllers.FotosDePerfilControlador import FotosDePerfilControlador
 from API.ficheros.fotosDePerfil import Fotos_De_Perfil_pb2_grpc
 
 load_dotenv()
-
 if not os.path.exists(os.getenv("DIRECTORIO_FOTOS")):
     os.makedirs(os.getenv("DIRECTORIO_FOTOS"))
-
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10),
              options=[("grpc.max_send_message_length", 5 * 1024 * 1024), 

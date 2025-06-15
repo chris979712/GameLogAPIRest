@@ -61,7 +61,7 @@ export class ReseñaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer registar la reseña"
                 }
-            )
+            );
         }
     }
 
@@ -85,7 +85,7 @@ export class ReseñaControlador
                         ? {reseñas: ResultadoConsulta.reseñas}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -105,7 +105,7 @@ export class ReseñaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer obtener las reseñas de un jugador"
                 }
-            )
+            );
         }
     }
 
@@ -129,7 +129,7 @@ export class ReseñaControlador
                         ? {reseñas: ResultadoConsulta.reseñas}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -149,7 +149,7 @@ export class ReseñaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer obtener las reseñas del juego seleccionado"
                 }
-            )
+            );
         }
     }
 
@@ -173,7 +173,7 @@ export class ReseñaControlador
                         ? {reseñas: ResultadoConsulta.reseñas}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -193,7 +193,7 @@ export class ReseñaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer obtener las reseñas de los jugadores seguidos"
                 }
-            )
+            );
         }
     }
 
@@ -251,7 +251,7 @@ export class ReseñaControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer eliminar la reseña"
                 }
-            )
+            );
         }
     }
 }

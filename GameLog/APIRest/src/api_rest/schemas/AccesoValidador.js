@@ -14,7 +14,7 @@ const CuentaEsquema = zod.object(
     foto: zod.string({ invalid_type_error: 'La foto ingresada no es válida',required_error: 'La foto de usuario es un campo requerido'}).min(1).max(255).regex(SoloRutas),
     tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido',required_error: 'El tipo de acceso es un campo requerido'}).min(7).max(13).regex(SoloLetras)
 }
-)
+);
 
 const CuentaEliminacion = zod.object(
 {
@@ -22,7 +22,7 @@ const CuentaEliminacion = zod.object(
     correo: zod.string().email({ invalid_type_error: 'El correo ingresado no es válido',required_error: 'El correo es un campo requerido'}).nullable(),
     tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido'}).min(7).max(13).regex(SoloLetras)
 }
-)
+);
 
 const CuentaEsquemaEdicion = zod.object(
 {
@@ -32,7 +32,7 @@ const CuentaEsquemaEdicion = zod.object(
     estadoAcceso: zod.string({ invalid_type_error: 'El estado ingresado no es válido'}).min(7).max(13).regex(SoloLetras),
     tipoDeUsuario: zod.string({ invalid_type_error: 'El tipo de acceso ingresado no es válido'}).min(7).max(13).regex(SoloLetras)
 }
-)
+);
 
 export function ValidarInsercionAcceso(entrada)
 {

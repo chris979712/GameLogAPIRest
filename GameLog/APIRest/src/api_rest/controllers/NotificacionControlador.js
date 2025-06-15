@@ -27,7 +27,7 @@ export class NotificacionControlador
                         ? {notificaciones: ResultadoConsulta.notificaciones}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -47,7 +47,7 @@ export class NotificacionControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer obtener las notificacion del usuario"
                 }
-            )
+            );
         }
     }
 
@@ -100,7 +100,7 @@ export class NotificacionControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer eliminar la notificacion"
                 }
-            )
+            );
         }
     }
 }

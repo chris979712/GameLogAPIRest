@@ -22,11 +22,11 @@ export class ModeloReportesEstadisticos
             const ResultadoQueryJuegosEnTendencia = QueryJuegosEnTendencia.recordset;
             if(ResultadoQueryJuegosEnTendencia.length >= 1)
             {
-                resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosEnTendencia}
+                resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosEnTendencia};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado juegos reseñados en las fechas seleccionadas.'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado juegos reseñados en las fechas seleccionadas.'};
             }
         }
         catch(error)
@@ -62,11 +62,11 @@ export class ModeloReportesEstadisticos
             const ResultadoQueryJuegosRevivalRetro = QueryJuegosRevivalRetro.recordset;
             if(ResultadoQueryJuegosRevivalRetro.length >= 1)
             {
-                resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosRevivalRetro}
+                resultadoConsulta = {estado: 200, juegos: ResultadoQueryJuegosRevivalRetro};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado juegos retro que hayan sido reseñados en las fechas seleccionadas.'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado juegos retro que hayan sido reseñados en las fechas seleccionadas.'};
             }
         }
         catch(error)

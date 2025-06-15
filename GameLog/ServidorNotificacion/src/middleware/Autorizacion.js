@@ -5,7 +5,6 @@ export function AutenticarUsuarioSockets(socket,next)
     try
     {
         const {usuario,contrasenia} = socket.handshake.query;
-
         if(usuario && contrasenia)
         {
             if(usuario === process.env.USUARIO && contrasenia === process.env.CONTRASENIA)
@@ -14,7 +13,7 @@ export function AutenticarUsuarioSockets(socket,next)
             }
             else
             {
-                return next(new Error('Credenciales ingresadas incorrectas.'))
+                return next(new Error('Credenciales ingresadas incorrectas.'));
             }
         }
         else

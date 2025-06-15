@@ -19,11 +19,11 @@ export class ModeloNotificacion
             const ResultadoQueryNotificaciones = ResultadoConsulta.recordset;
             if(ResultadoQueryNotificaciones.length >= 1)
             {
-                resultadoConsulta = {estado: 200, notificaciones: ResultadoQueryNotificaciones}
+                resultadoConsulta = {estado: 200, notificaciones: ResultadoQueryNotificaciones};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado notificaciones por mostrar'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado notificaciones por mostrar'};
             }
         }
         catch(error)

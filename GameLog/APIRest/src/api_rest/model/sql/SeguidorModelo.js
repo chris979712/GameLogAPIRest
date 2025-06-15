@@ -50,11 +50,11 @@ export class ModeloSeguidor
             const ResultadoQuerySeguidores = Solicitud.recordset;
             if(ResultadoQuerySeguidores.length >= 1)
             {
-                resultadoConsulta = {estado: 200, seguidores: ResultadoQuerySeguidores}
+                resultadoConsulta = {estado: 200, seguidores: ResultadoQuerySeguidores};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: "No hay jugadores que lo siguen"}
+                resultadoConsulta = {estado: 404, mensaje: "No hay jugadores que lo siguen"};
             }
         }
         catch(error)
@@ -86,11 +86,11 @@ export class ModeloSeguidor
             const ResultadoQuerySeguidos = Solicitud.recordset;
             if(ResultadoQuerySeguidos.length >= 1)
             {
-                resultadoConsulta = {estado: 200, seguidos: ResultadoQuerySeguidos}
+                resultadoConsulta = {estado: 200, seguidos: ResultadoQuerySeguidos};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: "No hay jugadores a los que sigues"}
+                resultadoConsulta = {estado: 404, mensaje: "No hay jugadores a los que sigues"};
             }
         }
         catch(error)

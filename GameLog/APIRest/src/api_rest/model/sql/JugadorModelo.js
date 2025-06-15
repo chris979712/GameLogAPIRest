@@ -32,7 +32,7 @@ export class ModeloJugador
                 .input('foto',sql.VarChar,foto)
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
-                .execute('spa_Jugadores')
+                .execute('spa_Jugadores');
             resultadoModificacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
@@ -66,11 +66,11 @@ export class ModeloJugador
             const ResultadoQueryJugador = QueryJugador.recordset;
             if(ResultadoQueryJugador.length >= 1)
             {
-                resultadoConsulta = {estado: 200, cuenta: ResultadoQueryJugador}
+                resultadoConsulta = {estado: 200, cuenta: ResultadoQueryJugador};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el jugador deseado a buscar.'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se ha encontrado el jugador deseado a buscar.'};
             }
         }
         catch(error)

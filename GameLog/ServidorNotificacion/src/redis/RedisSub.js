@@ -29,7 +29,7 @@ async function inicializarSuscriptor(suscriptor,io) {
         await Promise.all(
             CanalesDeSuscripcion.map(patron =>
                 suscriptor.pSubscribe(patron,(message,channel) =>{
-                    ManejarMensajeRedis(io,channel,message)
+                    ManejarMensajeRedis(io,channel,message);
                 })
             )
         );
@@ -55,11 +55,11 @@ function ManejarMensajeRedis(io,channel,message)
         else if(CanalJugadorCoincide)
         {
             const IdJugador = CanalJugadorCoincide[1];
-            io.to(`jugador_${IdJugador}`).emit('notificacion_jugador',data)
+            io.to(`jugador_${IdJugador}`).emit('notificacion_jugador',data);
         }
     }
     catch(error)
     {
-        logger({mensaje:`Error al intentar manejar el mensaje recibido: ${error}`})
+        logger({mensaje:`Error al intentar manejar el mensaje recibido: ${error}`});
     }
 }

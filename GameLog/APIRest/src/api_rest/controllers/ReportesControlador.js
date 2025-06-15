@@ -47,7 +47,7 @@ export class ReportesEstadisticosControlador
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al obtener los datos para el reporte de juegos en tendencia.'
             }
-            )
+            );
         }
     }
 
@@ -61,7 +61,7 @@ export class ReportesEstadisticosControlador
             const ResultadoValidacion = ValidarFechasIngresadas(Datos);
             if(ResultadoValidacion.success)
             {
-                const ResultadoConsultaRetro = await this.modeloReportesEstadisticos.JuegosRevivalRetro({datos: ResultadoValidacion.data,tipoDeUsuario: tipoDeUsuario})
+                const ResultadoConsultaRetro = await this.modeloReportesEstadisticos.JuegosRevivalRetro({datos: ResultadoValidacion.data,tipoDeUsuario: tipoDeUsuario});
                 let resultadoEstadoConsultaRetro = parseInt(ResultadoConsultaRetro.estado);
                 res.status(resultadoEstadoConsultaRetro).json({
                     error: resultadoEstadoConsultaRetro !== 200,
@@ -90,7 +90,7 @@ export class ReportesEstadisticosControlador
                 estado: 500,
                 mensaje: 'Ha ocurrido un error al obtener los datos para el reporte de juegos retro más reseñados.'
             }
-            )
+            );
         }
     }
 }

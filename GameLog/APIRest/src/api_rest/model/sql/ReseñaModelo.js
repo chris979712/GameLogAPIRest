@@ -53,11 +53,11 @@ export class ModeloReseña
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugador.recordset;
             if(ResultadoQueryReseñas.length >= 1)
             {
-                resultadoConsulta = {estado: 200, reseñas: ResultadoQueryReseñas}
+                resultadoConsulta = {estado: 200, reseñas: ResultadoQueryReseñas};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado reseñas registradas'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado reseñas registradas'};
             }
         }
         catch(error)
@@ -90,11 +90,11 @@ export class ModeloReseña
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugadores.recordset;
             if(ResultadoQueryReseñas.length >= 1)
             {
-                resultadoConsulta = {estado: 200, reseñas: ResultadoQueryReseñas}
+                resultadoConsulta = {estado: 200, reseñas: ResultadoQueryReseñas};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado reseñas registradas por algún jugador'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado reseñas registradas por algún jugador'};
             }
         }
         catch(error)
@@ -127,11 +127,11 @@ export class ModeloReseña
             const ResultadoQueryReseñas = ResultadoConsultaReseñasJugadoresSeguidos.recordset;
             if(ResultadoQueryReseñas.length >= 1)
             {
-                resultadoConsulta = {estado: 200, reseñas: ResultadoQueryReseñas}
+                resultadoConsulta = {estado: 200, reseñas: ResultadoQueryReseñas};
             }
             else
             {
-                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado reseñas registradas por jugadores seguidos'}
+                resultadoConsulta = {estado: 404, mensaje: 'No se han encontrado reseñas registradas por jugadores seguidos'};
             }
         }
         catch(error)

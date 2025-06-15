@@ -4,7 +4,7 @@ log4js.configure(
 {
     appenders: { archivo: { type: 'file', filename: 'logs/error.log' } },
     categories: { default: { appenders: ['archivo'], level: 'error' } }
-})
+});
 
 const log = log4js.getLogger();
 

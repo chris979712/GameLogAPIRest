@@ -22,7 +22,7 @@ export class ModeloMeGusta
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
                 .execute('spi_MeGusta');
-            resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output})
+            resultadoInsercion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {
@@ -55,7 +55,7 @@ export class ModeloMeGusta
                 .output('estado',sql.Int)
                 .output('mensaje',sql.VarChar)
                 .execute('spd_MeGusta');
-            resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output})
+            resultadoEliminacion = MensajeDeRetornoBaseDeDatos({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {

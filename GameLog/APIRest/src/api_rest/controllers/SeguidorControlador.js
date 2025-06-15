@@ -17,7 +17,7 @@ export class SeguidorControlador
             const {tipoDeUsuario,nombreDeUsuario} = req;
             if(ResultadoValidacion.success)
             {
-                const ResultadoInsercion = await this.modeloSeguidor.RegistrarJugadorASeguir({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario})
+                const ResultadoInsercion = await this.modeloSeguidor.RegistrarJugadorASeguir({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
                 let resultadoInsercion = parseInt(ResultadoInsercion.estado);
                 if(resultadoInsercion === 500)
                 {
@@ -26,7 +26,7 @@ export class SeguidorControlador
                         error: true,
                         estado: resultadoInsercion,
                         mensaje: 'Ha ocurrido un error al querer seguir al jugador seleccionado.'
-                    })
+                    });
                 }
                 else
                 {
@@ -39,7 +39,7 @@ export class SeguidorControlador
                         error: resultadoInsercion !== 200,
                         estado: resultadoInsercion,
                         mensaje: ResultadoInsercion.mensaje
-                    })
+                    });
                 }
             }
             else
@@ -55,11 +55,11 @@ export class SeguidorControlador
         {
             logger({mensaje: error});
             res.status(500).json(
-                {
-                    error: true,
-                    estado: 500,
-                    mensaje: "Ha ocurrido un error al querer seguir al jugador seleccionado."
-                });
+            {
+                error: true,
+                estado: 500,
+                mensaje: "Ha ocurrido un error al querer seguir al jugador seleccionado."
+            });
         }
     }
 
@@ -82,7 +82,7 @@ export class SeguidorControlador
                         ? {seguidores: ResultadoConsulta.seguidores}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -102,7 +102,7 @@ export class SeguidorControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer consultar los seguidores."
                 }
-            )
+            );
         }
     }
 
@@ -125,7 +125,7 @@ export class SeguidorControlador
                         ? {seguidos: ResultadoConsulta.seguidos}
                         : {mensaje: ResultadoConsulta.mensaje}
                     )
-                })
+                });
             }
             else
             {
@@ -145,7 +145,7 @@ export class SeguidorControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer consultar los jugadores seguidos."
                 }
-            )
+            );
         }
     }
 
@@ -168,11 +168,11 @@ export class SeguidorControlador
                 {
                     logger({mensaje: ResultadoEliminacion.mensaje});
                     res.status(resultadoEliminacion).json(
-                        {
-                            error: true,
-                            estado: resultadoEliminacion,
-                            mensaje: 'Ha ocurrido un error al intentar eliminar el jugador seguido jugador seguido de la lista de seguidos.'
-                        });
+                    {
+                        error: true,
+                        estado: resultadoEliminacion,
+                        mensaje: 'Ha ocurrido un error al intentar eliminar el jugador seguido jugador seguido de la lista de seguidos.'
+                    });
                 }
                 else
                 {
@@ -209,7 +209,7 @@ export class SeguidorControlador
                     estado: 500,
                     mensaje: "Ha ocurrido un error al querer eliminar el jugador seguido de la lista de seguidos."
                 }
-            )
+            );
         }
     } 
 

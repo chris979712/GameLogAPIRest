@@ -38,7 +38,7 @@ export class ModeloAcceso{
                 .output('resultado',sql.Int)
                 .output('mensaje',sql.VarChar)
                 .execute('spi_Acceso');
-            resultadoInsercion = MensajeDeRetornoBaseDeDatosAcceso({datos: ResultadoSolicitud.output})
+            resultadoInsercion = MensajeDeRetornoBaseDeDatosAcceso({datos: ResultadoSolicitud.output});
         }
         catch(error)
         {

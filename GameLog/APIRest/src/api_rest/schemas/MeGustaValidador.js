@@ -7,7 +7,7 @@ const MeGustaEsquema = zod.object({
     idJugadorAutor: zod.number({ invalid_type_error: 'El idJugadorAutor ingresado no es válido',required_error: 'El ID de la reseña es un campo requerido'}).int().positive(),
     idJuego: zod.number({ invalid_type_error: 'El idJuego ingresado no es válido',required_error: 'El ID de la reseña es un campo requerido'}).int().positive(),
     nombreJuego: zod.string({ invalid_type_error: 'El nombre del juego ingresado no es válido',required_error: 'El nombre del videojuego es un campo requerido'}).min(1).max(100).regex(SoloLetrasNumerosCaracteres)
-})
+});
 
 
 export function ValidarMeGusta(entrada)

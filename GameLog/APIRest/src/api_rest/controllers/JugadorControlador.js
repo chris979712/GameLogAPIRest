@@ -115,7 +115,7 @@ export class JugadorControlador
             if(ResultadoValidacion.success)
             {
                 const ResultadoEliminacion = await this.modeloJugador.EliminarJugador({datos: ResultadoValidacion.data, tipoDeUsuario: tipoDeUsuario});
-                let resultadoEliminacion = parseInt(ResultadoEliminacion.estado)
+                let resultadoEliminacion = parseInt(ResultadoEliminacion.estado);
                 if(resultadoEliminacion === 500)
                 {
                     logger({mensaje: ResultadoEliminacion.mensaje});
