@@ -34,7 +34,7 @@ class FotosDePerfilControlador(Fotos_De_Perfil_pb2_grpc.FotosDePerfilServicer):
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("La imagen de perfil no fue encontrada.")
             return Fotos_De_Perfil_pb2.FotoDePerfilDatos(idJugador="Imagen no encontrada", datos=b"")
-        except Exception as e:
+        except Exception:
                 context.set_code(grpc.StatusCode.INTERNAL)
                 context.set_details(f"Error al leer la imagen")
                 return Fotos_De_Perfil_pb2.FotoDePerfilDatos(idJugador="Error al leer la imagen", datos=b"")
@@ -54,8 +54,7 @@ class FotosDePerfilControlador(Fotos_De_Perfil_pb2_grpc.FotosDePerfilServicer):
                     os.remove(rutaImagenAntigua)
             with open(rutaFinalArchivo,"wb") as archivo:
                 archivo.write(datosNuevaImagen)
-        except Exception as e:
-            print(e)
+        except Exception:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Error al querer actualizar la imagen en el servidor")
             return Fotos_De_Perfil_pb2.FotoDePerfilRuta(rutaArchivo="Error")
