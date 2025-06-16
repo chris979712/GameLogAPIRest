@@ -13,16 +13,19 @@ export function AutenticarUsuarioSockets(socket,next)
             }
             else
             {
+                setImmediate(() => socket.disconnect(true));
                 return next(new Error('Credenciales ingresadas incorrectas.'));
             }
         }
         else
         {
+            setImmediate(() => socket.disconnect(true));
             return next(new Error('Se requiere un usuario y contraseña para acceder al servidor.'));
         }
     }
     catch(error)
     {
+        setImmediate(() => socket.disconnect(true));
         logger({mensaje: `Error al querer autenticar el usuario: ${error}`});
         return next(new Error('Error al querer autenticar el usuario.'));
     }
