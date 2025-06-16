@@ -1597,7 +1597,7 @@ DECLARE	@resultadoPrimerInserscion int,
 EXEC	[dbo].[spi_Acceso]
 		@correo = N'oscar@gmail.com',
 		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
-		@estado = N'Baneado',
+		@estado = N'Desbaneado',
 		@nombre = N'Oscar Hizay',
 		@primerApellido = N'Apodaca',
 		@segundoApellido = N'Garcia',
@@ -1605,8 +1605,25 @@ EXEC	[dbo].[spi_Acceso]
 		@descripcion = N'Tercer usuario gamelog',
 		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
 		@tipoDeAcceso = N'Jugador',
-		@resultado = @mensajePrimerInsercion OUTPUT,
+		@resultado = @resultadoPrimerInserscion OUTPUT,
 		@mensaje = @mensajePrimerInsercion OUTPUT
 GO
 
+DECLARE	@resultadoCuartaInsercion int,
+		@mensajeCuartaInsercion nvarchar(max);
+
+EXEC	[dbo].[spi_Acceso]
+		@correo = N'jose@gmail.com',
+		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
+		@estado = N'Desbaneado',
+		@nombre = N'Jose Jose',
+		@primerApellido = N'Velasquez',
+		@segundoApellido = N'Murrieta',
+		@nombreDeUsuario = N'josejose',
+		@descripcion = N'Cuarto usuario gamelog',
+		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
+		@tipoDeAcceso = N'Administrador',
+		@resultado = @resultadoCuartaInsercion OUTPUT,
+		@mensaje = @mensajeCuartaInsercion OUTPUT
+GO
 
