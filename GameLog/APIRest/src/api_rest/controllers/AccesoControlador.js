@@ -174,7 +174,6 @@ export class AccesoControlador
                 if(resultadoEdicion === 500)
                 {
                     logger({mensaje: ResultadoEdicion.mensaje});
-                    console.log(resultadoEdicion);
                     res.status(resultadoEdicion).json(
                     {
                         error: true,

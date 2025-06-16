@@ -1458,7 +1458,7 @@ GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuego TO jugadorGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerReseñasDeUnJuegoReseñadoPorJugadoresSeguidos TO jugadorGameLog;
 GO
-GRANT EXECUTE ON dbo.fn_ObtenerMeGustaDeReseña TO jugadorGameLog;
+GRANT SELECT ON dbo.fn_ObtenerMeGustaDeReseña TO jugadorGameLog;
 GO
 GRANT EXECUTE ON dbo.spb_ObtenerNotificaciones TO jugadorGameLog;
 GO
@@ -1466,7 +1466,7 @@ GRANT EXECUTE ON dbo.spb_ObtenerNotificaciones TO adminGameLog;
 GO
 GRANT EXECUTE ON dbo.spd_Notificaciones TO jugadorGameLog;
 GO
-GRANT EXECUTE ON dbo.spd_NotificacionesO adminGameLog;
+GRANT EXECUTE ON dbo.spd_Notificaciones TO adminGameLog;
 GO
 GRANT EXECUTE ON OBJECT::dbo.spi_Acceso TO adminGameLog
 GO
@@ -1607,23 +1607,5 @@ EXEC	[dbo].[spi_Acceso]
 		@tipoDeAcceso = N'Jugador',
 		@resultado = @resultadoPrimerInserscion OUTPUT,
 		@mensaje = @mensajePrimerInsercion OUTPUT
-GO
-
-DECLARE	@resultadoCuartaInsercion int,
-		@mensajeCuartaInsercion nvarchar(max);
-
-EXEC	[dbo].[spi_Acceso]
-		@correo = N'jose@gmail.com',
-		@contrasenia = N'acd40c4aaf7edaae796f90aed30b55ec2cf7cc224a71a862774998d22fdd07f4',
-		@estado = N'Desbaneado',
-		@nombre = N'Jose Jose',
-		@primerApellido = N'Velasquez',
-		@segundoApellido = N'Murrieta',
-		@nombreDeUsuario = N'josejose',
-		@descripcion = N'Cuarto usuario gamelog',
-		@foto = N'/home/app/fotos/imagendeperfildefaultgamelog.png',
-		@tipoDeAcceso = N'Administrador',
-		@resultado = @resultadoCuartaInsercion OUTPUT,
-		@mensaje = @mensajeCuartaInsercion OUTPUT
 GO
 
