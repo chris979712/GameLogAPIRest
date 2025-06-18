@@ -1,35 +1,32 @@
-🖧 GameLog Backend
-Este proyecto contiene la parte del Backend del sistema desarrollado en la experiencia educativa Desarrollo de Sistemas en Red.
+# 🖧 GameLog Backend
+
+Este proyecto contiene la parte del **Backend** del sistema desarrollado en la experiencia educativa _Desarrollo de Sistemas en Red_.
 
 En este repositorio encontrarás los archivos de configuración necesarios para su despliegue tanto en máquina virtual como en contenedor Docker.
 
-📋 Requisitos
-Tener instalado Docker o VirtualBox (con Vagrant).
+---
 
-💻 Instalación en Máquina Virtual (Vagrant)
-Abre el proyecto en la carpeta GameLog.
+## 📋 Requisitos
 
-Ejecuta el siguiente comando:
+- Tener instalado **Docker** o **VirtualBox** (con **Vagrant**).
 
-bash
-Copy
-Edit
-vagrant ssh
-¡Listo! Estás dentro del entorno virtual.
+---
 
-🐳 Instalación con Docker
-Abre el proyecto en la carpeta GameLog.
+## 💻 Instalación en Máquina Virtual (Vagrant)
 
-Ejecuta uno de los siguientes comandos:
+1. Abre el proyecto en la carpeta `GameLog`.
+2. Ejecuta el siguiente comando:
+   ```bash
+   vagrant ssh
 
-bash
-Copy
-Edit
-docker compose up -d --build
-o
+## 💻 Instalación en Docker 
 
-bash
-Copy
-Edit
-docker-compose up -d --build
-¡Listo! El entorno se ha levantado con Docker.
+1. Abre el proyecto en la carpeta `GameLog`.
+2. Ejecuta el siguiente comando:
+   ```bash
+   docker-compose up -d --build
+
+   o
+
+   docker compose up -d --build
+
